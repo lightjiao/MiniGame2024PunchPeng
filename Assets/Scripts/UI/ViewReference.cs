@@ -15,20 +15,11 @@ namespace SimpleMetalMax
 {
     public partial class ViewReference : MonoBehaviour
     {
-        private const string UIViewPath = "/SimpleMetalMax/UI/View";
-        //private const string EntityViewPath = "/SimpleMetalMax/Entity/View";
-
-        //private enum Type { UI, Entity }
-
-        //[SerializeField]
-        //private Type m_Type = Type.UI;
-
         [SerializeField]
         [TableList] //
         [ChildGameObjectsOnly(IncludeSelf = true)]
         public ReferenceItem[] references;
 
-        private string CodePath => UIViewPath; // m_Type == Type.UI ? UIViewPath : EntityViewPath;
 
         [Button]
         private void GenerateCode()
@@ -41,7 +32,7 @@ namespace SimpleMetalMax
 
             var className = $"{trimmedName}View";
             var classCode = GenerateCodeByTemplate(className);
-            var classFileName = $"{Application.dataPath}{CodePath}/{className}.cs";
+            var classFileName = $"{Application.dataPath}/../{CodePath}/{className}.cs";
 
             if (!File.Exists(classFileName))
             {
@@ -52,6 +43,8 @@ namespace SimpleMetalMax
             File.WriteAllText(classFileName, classCode);
             Debug.Log($"Generate {className}.cs success.");
         }
+
+        private string CodePath => Path.GetDirectoryName(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(this)));
     }
 
     /// <summary>
