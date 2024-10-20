@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7600925904240093234}
   - component: {fileID: 5836380358365432582}
   - component: {fileID: 1546059258605977174}
+  - component: {fileID: 5966689011648006459}
   m_Layer: 7
   m_Name: PlayerAnimation
   m_TagString: Untagged
@@ -25,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3288794807767909256}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7123993437077822863}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5836380358365432582
 MonoBehaviour:
@@ -88,6 +89,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Animator: {fileID: 358999117585346398}
   _ActionOnDisable: 0
+--- !u!143 &5966689011648006459
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3288794807767909256}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1.4
+  m_Radius: 0.2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!1 &7123993437077822860
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +116,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7123993437077822863}
-  - component: {fileID: 5009630973417807524}
+  - component: {fileID: 7957451918599986601}
   m_Layer: 7
   m_Name: Pico
   m_TagString: Untagged
@@ -112,7 +131,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7123993437077822860}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -121,8 +139,9 @@ Transform:
   - {fileID: 7600925904240093234}
   - {fileID: 7851999816416133183}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5009630973417807524
+--- !u!114 &7957451918599986601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,17 +150,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7123993437077822860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7258769c9d3548ccb81f6bea6ba38ff2, type: 3}
+  m_Script: {fileID: 11500000, guid: 86d503cd274f80b41ad9ab428edf8d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimData: {fileID: 5836380358365432582}
-  Animancer: {fileID: 1546059258605977174}
+  m_CCT: {fileID: 5966689011648006459}
+  m_Animancer: {fileID: 1546059258605977174}
 --- !u!1001 &9122938920609454325
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 7123993437077822863}
     m_Modifications:
     - target: {fileID: 113093817449955690, guid: 83628a2e699576147adabb30587f44d4, type: 3}
@@ -837,9 +855,6 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83628a2e699576147adabb30587f44d4, type: 3}
 --- !u!95 &358999117585346398 stripped
 Animator:

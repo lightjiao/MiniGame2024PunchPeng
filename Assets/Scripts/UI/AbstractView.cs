@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SimpleMetalMax
+namespace PunchPeng
 {
     public abstract class AbstractView
     {

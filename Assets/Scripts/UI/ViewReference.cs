@@ -11,7 +11,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace SimpleMetalMax
+namespace PunchPeng
 {
     public partial class ViewReference : MonoBehaviour
     {

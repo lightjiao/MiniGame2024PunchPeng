@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace SimpleMetalMax
+namespace PunchPeng
 {
     public class GameControllerView : AbstractView
     {

@@ -1,7 +1,7 @@
 ﻿using Animancer;
 using UnityEngine;
 
-namespace SimpleMetalMax
+namespace PunchPeng
 {
     public class AnimationData : MonoBehaviour
     {
