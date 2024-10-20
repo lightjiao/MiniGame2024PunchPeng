@@ -2,6 +2,6 @@ namespace ConfigAuto
 {
     public partial class Config_Player
     {
-        public string PlayerPrefab = "Character/Pico";
+        public string PlayerPrefab = "Character/Kelly";
     }
 }

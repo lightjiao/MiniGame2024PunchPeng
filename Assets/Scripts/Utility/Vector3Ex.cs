@@ -23,6 +23,13 @@ public static class Vector3Ex
         return copy.sqrMagnitude;
     }
 
+    public static Vector3 SetY(this Vector3 self, float y = 0)
+    {
+        var copy = self;
+        copy.y = y;
+        return copy;
+    }
+
     /// <summary>
     /// 椭圆网格映射
     /// </summary>
@@ -45,5 +52,10 @@ public static class Vector3Ex
     {
         var output = SquareToCircle(new Vector2(input.x, input.z));
         return new Vector3(output.x, input.y, output.y);
+    }
+
+    public static string ToStringEx(this Vector3 self)
+    {
+        return string.Format("({0:N2}, {1:N2}, {2:N2})", self.x, self.y, self.z);
     }
 }

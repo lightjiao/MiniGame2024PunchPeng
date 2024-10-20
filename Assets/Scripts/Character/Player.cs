@@ -1,5 +1,7 @@
 using Animancer;
 using R3;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PunchPeng
@@ -7,66 +9,103 @@ namespace PunchPeng
     public enum PlayerLocomotionState
     {
         Locomotion,
+        HeadAttack,
+        PunchAttac,
         Dead,
         Ability,
     }
 
-    public class Player : MonoBehaviour
+    public class Player : MonoEntity
     {
-        private readonly float MaxMoveSpeed = 4.9f;
+        private readonly float MoveSpeed = 1.6f;
+        private readonly float RunSpeed = 3.2f;
         private readonly float MaxRotateDeg = 0.3f;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
-        [SerializeField] private AnimationData m_AnimData;
+        [SerializeField] public PlayerAnimData m_AnimData;
 
-        public Transform CachedTransform;
-        public ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
-        public ReactiveProperty<Vector3> Velocity = new(default, Vector3Comparer.Default);
+        public bool CanMove;
+        public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
+        private List<PlayerAbility> m_Abilities = new();
+
+        public readonly ReactiveProperty<Vector3> PlayerInputMoveDir = new();
+        public readonly ReactiveProperty<bool> PlayerInputRun = new();
+        public readonly ReactiveProperty<bool> PlayerInputAttack = new();
+
+        public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
+        public readonly ReactiveProperty<Vector3> Velocity = new(default, Vector3Comparer.Default);
+        public readonly ReactiveProperty<int> RecieveDamage = new();
+
+        private HashSet<IDisposable> m_R3Disposable;
 
         private void Awake()
         {
-            CachedTransform = transform;
+            //m_Abilities.Add(new PlayerHeadAttackAbility());
+            m_Abilities.Add(new PlayerPunchAttackAbility());
+
+            foreach (var ability in m_Abilities)
+            {
+                ability.Init(this);
+            }
 
             LocomotionState.Subscribe(OnLocomotionChange);
             Velocity.Subscribe(OnVelocityChange);
+            RecieveDamage.Subscribe(RevieveDamage);
+
+            m_R3Disposable = new HashSet<IDisposable>
+            {
+                PlayerInputMoveDir, PlayerInputRun, PlayerInputAttack, LocomotionState, Velocity, RecieveDamage
+            };
         }
 
         private void Start()
         {
+            CanMove = true;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
         }
 
         private void Update()
         {
-            PlayerInputMove();
+            SimpleMove(PlayerInputMoveDir.Value);
+            foreach (var ability in m_Abilities)
+            {
+                ability.Update(Time.deltaTime);
+            }
         }
 
         private void OnDestroy()
         {
-
+            foreach (var item in m_R3Disposable)
+            {
+                item.Dispose();
+            }
+            m_R3Disposable.Clear();
         }
 
-        private void PlayerInputMove()
+        public void PlayAnim(ClipTransition anim)
         {
-            var moveDir = Vector3Ex.SquareToCircle(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
-            SimpleMove(moveDir);
+            m_Animancer.Play(anim);
         }
 
         public void SimpleMove(Vector3 moveDir)
         {
-            var velocity = MaxMoveSpeed * moveDir;
-            Velocity.Value = velocity;
-            //if (Velocity.Value.Approximately(Vector3.zero))
-            //{
-            //    return;
-            //}
+            if (!CanMove) return;
 
+            var velocity = (PlayerInputRun.Value ? RunSpeed : MoveSpeed) * moveDir;
+
+            Velocity.Value = velocity;
             m_CCT.SimpleMove(velocity);
             if (!velocity.Approximately(Vector3.zero))
             {
                 CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(velocity), 10);
             }
+        }
+
+        public void RevieveDamage(int damageValue)
+        {
+            // TODO: play sfx and vfx
+            LocomotionState.Value = PlayerLocomotionState.Dead;
         }
 
         private void OnLocomotionChange(PlayerLocomotionState state)
@@ -78,7 +117,9 @@ namespace PunchPeng
                     break;
                 case PlayerLocomotionState.Dead:
                     // TODO: rag doll
-                    m_Animancer.Play(m_AnimData.Dead1);
+                    CanMove = false;
+                    var deadAnimIdx = UnityEngine.Random.Range(0, 100) & 1;
+                    m_Animancer.Play(deadAnimIdx == 0 ? m_AnimData.Dead1 : m_AnimData.Dead2);
                     break;
                 case PlayerLocomotionState.Ability:
                     Debug.Log("Ability");

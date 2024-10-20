@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a472a4806da7f9147a4a5cd7eee170df, type: 3}
+  m_Name: KellyLocomotion
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 8206999343192866832
+  references:
+    version: 2
+    RefIds:
+    - rid: 8206999343192866832
+      type: {class: LinearMixerTransition, ns: Animancer, asm: Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Speed: 1
+        _Animations:
+        - {fileID: 7400000, guid: 6bdeba2079db4994bb2343c5378a8c04, type: 3}
+        - {fileID: 7400000, guid: cf9379cc67f6a20498f2b7ca55efdf4f, type: 3}
+        - {fileID: 7400000, guid: b300f2664005ab44e8e41b0cdd51ea1b, type: 3}
+        _Speeds: []
+        _SynchronizeChildren: 00
+        _Thresholds:
+        - 0
+        - 1.6
+        - 3.2
+        _DefaultParameter: 0
+        _ExtrapolateSpeed: 1

@@ -10,8 +10,10 @@ namespace PunchPeng
         {
         }
 
-        public async UniTask<GameObject> InstantiateAsync(string path, Transform parent = null)
+        public async UniTask<T> InstantiateAsync<T>(string path, Transform parent = null) where T : Object
         {
+            // TODO: lock same res
+            //await UniTaskLock.Lock(path.GetHashCode());
             var prefab = await Resources.LoadAsync(path) as GameObject;
             if (prefab == null)
             {
@@ -19,7 +21,7 @@ namespace PunchPeng
             }
 
             var go = GameObject.Instantiate(prefab, parent);
-            return go;
+            return go.GetComponent<T>();
         }
 
         public async UniTask LoadSceneAsync(string sceneName)

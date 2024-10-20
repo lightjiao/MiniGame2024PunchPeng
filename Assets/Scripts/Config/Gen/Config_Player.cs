@@ -13,7 +13,7 @@ namespace ConfigAuto
 				if (_inst == null)
 					_inst = new()
 					{
-						PlayerPrefab = @"Character/Pico",
+						PlayerPrefab = @"Character/Kelly",
 					};
 				return _inst;
 			}
