@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ConfigAuto;
 
@@ -7,16 +5,13 @@ namespace PunchPeng
 {
     public class GameController : MonoBehaviour
     {
+        private GameObject m_player;
+
         // Start is called before the first frame update
-        void Start()
+        private async void Start()
         {
-            Resources.LoadAsync(Config_Player.Inst.PlayerPrefab);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            await LevelMgr.Inst.LoadLevelAsync(LevelMgr.TestLevelScene);
+            m_player = await ResourceMgr.Inst.InstantiateAsync(Config_Player.Inst.PlayerPrefab);
         }
     }
 }

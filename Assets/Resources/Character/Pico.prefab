@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7600925904240093234}
   - component: {fileID: 5836380358365432582}
-  - component: {fileID: 1546059258605977174}
-  - component: {fileID: 5966689011648006459}
   m_Layer: 7
   m_Name: PlayerAnimation
   m_TagString: Untagged
@@ -75,38 +73,6 @@ MonoBehaviour:
     _Clip: {fileID: 7400000, guid: 7f22343422a055a4583de3e99cd7204d, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
---- !u!114 &1546059258605977174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3288794807767909256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Animator: {fileID: 358999117585346398}
-  _ActionOnDisable: 0
---- !u!143 &5966689011648006459
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3288794807767909256}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.4
-  m_Radius: 0.2
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!1 &7123993437077822860
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +83,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7123993437077822863}
   - component: {fileID: 7957451918599986601}
+  - component: {fileID: 5517429912030599293}
   m_Layer: 7
   m_Name: Pico
   m_TagString: Untagged
@@ -153,8 +120,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d503cd274f80b41ad9ab428edf8d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CCT: {fileID: 5966689011648006459}
-  m_Animancer: {fileID: 1546059258605977174}
+  m_CCT: {fileID: 5517429912030599293}
+  m_Animancer: {fileID: 3928072048670021116}
+  m_AnimData: {fileID: 5836380358365432582}
+  CachedTransform: {fileID: 0}
+--- !u!143 &5517429912030599293
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123993437077822860}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1.4
+  m_Radius: 0.2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!1001 &9122938920609454325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -831,6 +818,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8818148501639231403, guid: 83628a2e699576147adabb30587f44d4, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 10038fdbf93c4dd43af9ce774d03a956, type: 3}
+    - target: {fileID: 8818148501639231403, guid: 83628a2e699576147adabb30587f44d4, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
@@ -861,6 +852,25 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 8818148501639231403, guid: 83628a2e699576147adabb30587f44d4, type: 3}
   m_PrefabInstance: {fileID: 9122938920609454325}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6435810664741597086 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2867569409786181483, guid: 83628a2e699576147adabb30587f44d4, type: 3}
+  m_PrefabInstance: {fileID: 9122938920609454325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3928072048670021116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435810664741597086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 358999117585346398}
+  _ActionOnDisable: 0
 --- !u!4 &7851999816416133183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1327674205686831306, guid: 83628a2e699576147adabb30587f44d4, type: 3}
