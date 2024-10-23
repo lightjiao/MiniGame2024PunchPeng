@@ -1,4 +1,5 @@
 using Animancer;
+using Cysharp.Threading.Tasks.Triggers;
 using R3;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ namespace PunchPeng
         [SerializeField] private AnimancerComponent m_Animancer;
         [SerializeField] public PlayerAnimData m_AnimData;
 
+        [SerializeField] public TriggerHelper m_PunchAttackTrigger;
+        [SerializeField] public TriggerHelper m_HeadAttackTrigger;
+
         public bool CanMove;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         private List<PlayerAbility> m_Abilities = new();
@@ -35,7 +39,6 @@ namespace PunchPeng
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new(default, Vector3Comparer.Default);
-        public readonly ReactiveProperty<int> RecieveDamage = new();
 
         private HashSet<IDisposable> m_R3Disposable;
 
@@ -51,12 +54,14 @@ namespace PunchPeng
 
             LocomotionState.Subscribe(OnLocomotionChange);
             Velocity.Subscribe(OnVelocityChange);
-            RecieveDamage.Subscribe(RevieveDamage);
 
             m_R3Disposable = new HashSet<IDisposable>
             {
-                PlayerInputMoveDir, PlayerInputRun, PlayerInputAttack, LocomotionState, Velocity, RecieveDamage
+                PlayerInputMoveDir, PlayerInputRun, PlayerInputAttack, LocomotionState, Velocity
             };
+
+            m_PunchAttackTrigger.SetActiveEx(false);
+            m_HeadAttackTrigger.SetActiveEx(false);
         }
 
         private void Start()
@@ -102,7 +107,7 @@ namespace PunchPeng
             }
         }
 
-        public void RevieveDamage(int damageValue)
+        public void RecieveDamage(int damageValue)
         {
             // TODO: play sfx and vfx
             LocomotionState.Value = PlayerLocomotionState.Dead;

@@ -1,3 +1,7 @@
+using Cysharp.Threading.Tasks;
+using Drawing;
+using UnityEngine;
+
 namespace PunchPeng
 {
     public class PlayerAttackAbility : PlayerAbility
@@ -21,6 +25,13 @@ namespace PunchPeng
             m_Player.CanMove = true;
             base.AbilityOnStop();
         }
+
+        protected void AttackOther(Collider other)
+        {
+            Debug.LogError($"@jiaohongbin AttackOther({other.name})");
+            var player = other.GetComponent<Player>();
+            player.RecieveDamage(999);
+        }
     }
 
     public class PlayerHeadAttackAbility : PlayerAttackAbility
@@ -32,11 +43,18 @@ namespace PunchPeng
             m_CfgDuration = m_CfgAnim.Length;
         }
 
-        protected override void OnUpdate(float elapseSeconds)
+        protected override void AbilityOnStart()
         {
-            base.OnUpdate(elapseSeconds);
+            base.AbilityOnStart();
+            m_Player.m_HeadAttackTrigger.SetActiveEx(true);
+            m_Player.m_HeadAttackTrigger.OnTriggerEnterAction += AttackOther;
+        }
 
-            // 第13 帧造成伤害
+        protected override void AbilityOnStop()
+        {
+            base.AbilityOnStop();
+            m_Player.m_HeadAttackTrigger.OnTriggerEnterAction -= AttackOther;
+            m_Player.m_HeadAttackTrigger.SetActiveEx(false);
         }
     }
 
@@ -49,11 +67,23 @@ namespace PunchPeng
             m_CfgDuration = m_CfgAnim.Length;
         }
 
-        protected override void OnUpdate(float elapseSeconds)
+        protected override void AbilityOnStart()
         {
-            base.OnUpdate(elapseSeconds);
+            base.AbilityOnStart();
+            m_Player.m_PunchAttackTrigger.SetActiveEx(true);
+            m_Player.m_PunchAttackTrigger.OnTriggerEnterAction += AttackOther;
+        }
 
-            // 第13 帧造成伤害
+        protected override void AbilityOnStop()
+        {
+            base.AbilityOnStop();
+            m_Player.m_PunchAttackTrigger.OnTriggerEnterAction -= AttackOther;
+            m_Player.m_PunchAttackTrigger.SetActiveEx(false);
+        }
+
+        private async UniTask DelayAttack()
+        {
+            await UniTask.DelayFrame(13);
         }
     }
 }
