@@ -107,9 +107,12 @@ namespace PunchPeng
             }
         }
 
-        public void RecieveDamage(int damageValue)
+        public void RecieveDamage(Player damager, int damageValue)
         {
             // TODO: play sfx and vfx
+            var dir = damager.Position - this.Position;
+            this.CachedTransform.rotation = Quaternion.LookRotation(dir);
+
             LocomotionState.Value = PlayerLocomotionState.Dead;
         }
 
@@ -123,8 +126,7 @@ namespace PunchPeng
                 case PlayerLocomotionState.Dead:
                     // TODO: rag doll
                     CanMove = false;
-                    var deadAnimIdx = UnityEngine.Random.Range(0, 100) & 1;
-                    m_Animancer.Play(deadAnimIdx == 0 ? m_AnimData.Dead1 : m_AnimData.Dead2);
+                    m_Animancer.Play(m_AnimData.Dead);
                     break;
                 case PlayerLocomotionState.Ability:
                     Debug.Log("Ability");

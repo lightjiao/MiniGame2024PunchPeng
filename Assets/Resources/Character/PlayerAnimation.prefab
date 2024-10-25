@@ -46,24 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LocomotionMixer:
     _Asset: {fileID: 11400000, guid: f34f870e806e9f04ba857e20f31d1352, type: 2}
-  Dead1:
-    _FadeDuration: 0.25
-    _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
-      _Names: []
-    _Clip: {fileID: 7400000, guid: d02c63d2e7382c045a4c9b78b80e506b, type: 2}
-    _Speed: 1
-    _NormalizedStartTime: NaN
-  Dead2:
-    _FadeDuration: 0.25
-    _Events:
-      _NormalizedTimes: []
-      _Callbacks: []
-      _Names: []
-    _Clip: {fileID: 7400000, guid: 7f22343422a055a4583de3e99cd7204d, type: 2}
-    _Speed: 1
-    _NormalizedStartTime: NaN
   HeadAttack:
     _FadeDuration: 0.25
     _Events:
@@ -89,5 +71,14 @@ MonoBehaviour:
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: b3837e5a7e7a3434487bff8aeef22192, type: 3}
+    _Speed: 1
+    _NormalizedStartTime: NaN
+  Dead:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Clip: {fileID: 7400000, guid: 2b404e95358df8147b53f3565413ac01, type: 3}
     _Speed: 1
     _NormalizedStartTime: NaN

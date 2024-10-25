@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Drawing;
 using UnityEngine;
 
 namespace PunchPeng
@@ -28,9 +27,11 @@ namespace PunchPeng
 
         protected void AttackOther(Collider other)
         {
-            Debug.LogError($"@jiaohongbin AttackOther({other.name})");
             var player = other.GetComponent<Player>();
-            player.RecieveDamage(999);
+            if (player != null)
+            {
+                player.RecieveDamage(m_Player, 999);
+            }
         }
     }
 
