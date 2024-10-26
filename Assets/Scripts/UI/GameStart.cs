@@ -1,10 +1,13 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class GameStart : MonoBehaviour
+namespace PunchPeng
 {
-    public void StartGame()
+    public class GameStart : MonoBehaviour
     {
-        SceneManager.LoadScene("TestLevel"); // 将"GameScene"替换为你的实际游戏场景名称
+        public void StartGame()
+        {
+            GameController.Inst.StartLevelAsync(LevelMgr.PunchPeng).Forget();
+        }
     }
 }

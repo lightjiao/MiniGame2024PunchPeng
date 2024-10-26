@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestLevel.unity
     guid: ac0aa1556b7d5684b9694aea637823a3
+  - enabled: 1
+    path: Assets/PunchPeng/PunchPeng.unity
+    guid: 2fa20def797906647ad595fa44d36c9e
   m_configObjects: {}

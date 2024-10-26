@@ -1,4 +1,9 @@
+using ConfigAuto;
 using Cysharp.Threading.Tasks;
+using Drawing;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace PunchPeng
@@ -6,6 +11,7 @@ namespace PunchPeng
     public class LevelMgr : Singleton<LevelMgr>
     {
         public const string TestLevelScene = "TestLevel";
+        public const string PunchPeng = "PunchPeng";
 
         protected override void OnInit()
         {

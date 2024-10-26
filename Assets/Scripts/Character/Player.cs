@@ -1,7 +1,5 @@
 using Animancer;
-using Cysharp.Threading.Tasks.Triggers;
 using R3;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,9 +16,10 @@ namespace PunchPeng
 
     public class Player : MonoEntity
     {
-        private readonly float MoveSpeed = 1.6f;
-        private readonly float RunSpeed = 3.2f;
-        private readonly float MaxRotateDeg = 0.3f;
+        [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f; // 这个速度好像再初始化的时候，对动画不生效
+        [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
+        [SerializeField] private float m_CfgAcceleration = 10f;
+        [SerializeField] private float m_CfgRotateDeg = 60f;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
@@ -29,8 +28,6 @@ namespace PunchPeng
         [SerializeField] public TriggerHelper m_PunchAttackTrigger;
         [SerializeField] public TriggerHelper m_HeadAttackTrigger;
 
-        public bool CanMove;
-        public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         private List<PlayerAbility> m_Abilities = new();
 
         public readonly ReactiveProperty<Vector3> PlayerInputMoveDir = new();
@@ -38,9 +35,10 @@ namespace PunchPeng
         public readonly ReactiveProperty<bool> PlayerInputAttack = new();
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
-        public readonly ReactiveProperty<Vector3> Velocity = new(default, Vector3Comparer.Default);
-
-        private HashSet<IDisposable> m_R3Disposable;
+        public readonly ReactiveProperty<Vector3> Velocity = new();
+        public float VelocityMagnitude { get; private set; }
+        public bool CanMove;
+        public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
 
         private void Awake()
         {
@@ -55,19 +53,12 @@ namespace PunchPeng
             LocomotionState.Subscribe(OnLocomotionChange);
             Velocity.Subscribe(OnVelocityChange);
 
-            m_R3Disposable = new HashSet<IDisposable>
-            {
-                PlayerInputMoveDir, PlayerInputRun, PlayerInputAttack, LocomotionState, Velocity
-            };
-
             m_PunchAttackTrigger.SetActiveEx(false);
             m_HeadAttackTrigger.SetActiveEx(false);
         }
 
         private void Start()
         {
-            
-            
             CanMove = true;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
         }
@@ -83,11 +74,6 @@ namespace PunchPeng
 
         private void OnDestroy()
         {
-            foreach (var item in m_R3Disposable)
-            {
-                item.Dispose();
-            }
-            m_R3Disposable.Clear();
         }
 
         public void PlayAnim(ClipTransition anim)
@@ -99,25 +85,32 @@ namespace PunchPeng
         {
             if (!CanMove) return;
 
-            var velocity = (PlayerInputRun.Value ? RunSpeed : MoveSpeed) * moveDir;
+            var curSpeed = VelocityMagnitude;
+            var targetSpeed = PlayerInputRun.Value ? m_CfgMaxRunSpeed : m_CfgMaxMoveSpeed;
+            var realSpeed = Mathf.Lerp(curSpeed, targetSpeed, m_CfgAcceleration * Time.deltaTime);
+            if (realSpeed < m_CfgMaxMoveSpeed) realSpeed = m_CfgMaxMoveSpeed;
 
-            Velocity.Value = velocity;
-            m_CCT.SimpleMove(velocity);
-            if (!velocity.Approximately(Vector3.zero))
+            var realVelocity = realSpeed * moveDir;
+            Velocity.Value = realVelocity;
+            m_CCT.SimpleMove(realVelocity);
+            if (!realVelocity.Approximately(Vector3.zero))
             {
-                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(velocity), 10);
+                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(realVelocity), m_CfgRotateDeg);
             }
         }
 
         public void RecieveDamage(Player damager, int damageValue)
         {
+            if (IsDead) return;
+
             // TODO: play sfx and vfx
             var dir = damager.Position - this.Position;
-            this.CachedTransform.rotation = Quaternion.LookRotation(dir);
+            CachedTransform.rotation = Quaternion.LookRotation(dir);
 
             LocomotionState.Value = PlayerLocomotionState.Dead;
-            
+
             // calculate player's score
+            ScoreboardManager.OnPlayerDead?.Invoke(1, 2);
         }
 
         private void OnLocomotionChange(PlayerLocomotionState state)
@@ -140,6 +133,7 @@ namespace PunchPeng
 
         private void OnVelocityChange(Vector3 velocity)
         {
+            VelocityMagnitude = velocity.magnitude;
             velocity.y = 0f;
             m_AnimData.LocomotionMixer.State.Parameter = velocity.magnitude;
         }

@@ -24,5 +24,9 @@ public class MonoEntity : MonoBehaviour
         set => CachedTransform.rotation = value;
     }
 
-    public Vector3 Forward => CachedTransform.forward;
+    public Vector3 Forward
+    {
+        get => CachedTransform.forward;
+        set => CachedTransform.forward = value;
+    }
 }

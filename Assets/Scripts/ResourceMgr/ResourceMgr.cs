@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,23 +11,25 @@ namespace PunchPeng
         {
         }
 
+        private Dictionary<string, UniTaskCompletionSource> m_LoadingTcs = new();
+        private Dictionary<string, GameObject> m_LoadedRes = new();
+
         public async UniTask<T> InstantiateAsync<T>(string path, Transform parent = null) where T : Object
         {
-            // TODO: lock same res
-            //await UniTaskLock.Lock(path.GetHashCode());
-            var prefab = await Resources.LoadAsync(path) as GameObject;
-            if (prefab == null)
+            // TODO loading res lock
+
+            if (!m_LoadedRes.TryGetValue(path, out var prefab))
             {
-                throw new System.Exception($"Prefab {path} is null");
+                prefab = await Resources.LoadAsync(path) as GameObject;
+                if (prefab == null)
+                {
+                    throw new System.Exception($"Prefab {path} is null");
+                }
+                m_LoadedRes[path] = prefab;
             }
 
             var go = GameObject.Instantiate(prefab, parent);
             return go.GetComponent<T>();
-        }
-
-        public async UniTask LoadSceneAsync(string sceneName)
-        {
-            await SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
     }
 }

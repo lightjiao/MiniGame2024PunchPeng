@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5558764472292020335}
   - component: {fileID: 3858365639734341551}
   - component: {fileID: 6155935286650649362}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PunchAttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 7123993437077822863}
   - component: {fileID: 7957451918599986601}
   - component: {fileID: 5517429912030599293}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Kelly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,6 +108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d503cd274f80b41ad9ab428edf8d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveSpeed: 2.4
+  RunSpeed: 3.5
+  MaxRotateDeg: 60
   m_CCT: {fileID: 5517429912030599293}
   m_Animancer: {fileID: 6112934464857105121}
   m_AnimData: {fileID: 839352894899362301}
@@ -143,7 +146,7 @@ GameObject:
   - component: {fileID: 1214215455536717984}
   - component: {fileID: 4922238255332038663}
   - component: {fileID: 6758802320795477583}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HeadAttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

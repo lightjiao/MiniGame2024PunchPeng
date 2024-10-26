@@ -1,32 +1,22 @@
-using UnityEngine;
 using ConfigAuto;
+using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace PunchPeng
 {
     public class GameController : MonoBehaviour
     {
-        private Player m_Player1;
-        private Player m_Player2;
-        private Player m_Player3;
-        private Player m_Player4;
+        [HideInInspector] public List<Player> PlayerList = new List<Player>();
 
-        private bool m_Init;
+        public static GameController Inst;
+        public Player m_Player1;
+        public Player m_Player2;
 
         private void Awake()
         {
             Application.targetFrameRate = 60;
-        }
-
-        private async void Start()
-        {
-            await LevelMgr.Inst.LoadLevelAsync(LevelMgr.TestLevelScene);
-
-            // TODO: rand pos
-            m_Player1 = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Player.Inst.PlayerPrefab);
-            m_Player2 = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Player.Inst.PlayerPrefab);
-            m_Player2.CachedTransform.position = (Vector3.one * 2).SetY(0);
-
-            m_Init = true;
+            Inst = this;
         }
 
         private void Update()
@@ -41,10 +31,7 @@ namespace PunchPeng
 
             var rawInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             var squreInput = Vector3Ex.SquareToCircle(rawInput);
-            //Debug.LogError(rawInput.ToStringEx() + squreInput.ToStringEx());
             m_Player1.PlayerInputMoveDir.Value = squreInput;
-            //m_Player1.PlayerInputRun.Value = Input.GetButton("Run");
-            //m_Player1.PlayerInputAttack.Value = Input.GetButtonDown("Attack");
             m_Player1.PlayerInputRun.Value = Input.GetKey(KeyCode.LeftShift);
             m_Player1.PlayerInputAttack.Value = Input.GetKey(KeyCode.Space);
         }
@@ -60,6 +47,41 @@ namespace PunchPeng
             //m_Player2.PlayerInputRun.Value = Input.GetButton("Run2");
             //m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Attack2");
             //m_Player2.PlayerInputAttack.Value = false;
+        }
+
+        public async UniTask StartLevelAsync(string levelName)
+        {
+            await LevelMgr.Inst.LoadLevelAsync(levelName);
+            await SpawnPlayersAsync();
+        }
+
+        private async UniTask SpawnPlayersAsync()
+        {
+            foreach (var player in PlayerList)
+            {
+                Destroy(player);
+            }
+            PlayerList.Clear();
+
+            var random = new System.Random();
+
+            for (int i = 0; i < 15; i++)
+            {
+                var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Player.Inst.PlayerPrefab);
+
+                var pox = Random.Range(LevelArea.Inst.MinX, LevelArea.Inst.MaxX);
+                var poz = Random.Range(LevelArea.Inst.MinZ, LevelArea.Inst.MaxZ);
+                player.Position = new Vector3(pox, 0, poz);
+                player.Forward = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1));
+
+                PlayerList.Add(player);
+            }
+
+            m_Player1 = PlayerList[Random.Range(0, PlayerList.Count)];
+            do
+            {
+                m_Player2 = PlayerList[Random.Range(0, PlayerList.Count)];
+            } while (m_Player1 != m_Player2);
         }
     }
 }
