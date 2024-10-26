@@ -10,7 +10,7 @@ public class ScoreboardManager : MonoBehaviour
 {
     public TextMeshProUGUI Player1ScoreText;
     public TextMeshProUGUI Player2ScoreText;
-    public TextMeshProUGUI[] playerScores;
+    //public TextMeshProUGUI[] playerScores;
 
     private int[] scores = new int[2];
     public static Action<int, int> OnPlayerDead;
@@ -24,7 +24,7 @@ public class ScoreboardManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             scores[i] = 0;
-            UpdateScore(i, scores[i]);
+            //UpdateScore(i, scores[i]);
         }
         UpdateScoreModules();
     }
@@ -37,12 +37,12 @@ public class ScoreboardManager : MonoBehaviour
             if (attacker == -1 && scores[deadPlayer] > 0)
             {
                 scores[deadPlayer]--;
-                UpdateScore(deadPlayer, scores[deadPlayer]);
+                //UpdateScore(deadPlayer, scores[deadPlayer]);
             }
             else if (attacker >= 0 && attacker < scores.Length)
             {
                 scores[attacker]++;
-                UpdateScore(attacker, scores[attacker]);
+                //UpdateScore(attacker, scores[attacker]);
             }
             UpdateScoreModules();
         }
@@ -68,8 +68,9 @@ public class ScoreboardManager : MonoBehaviour
         //playerNames[playerIndex].text = name;
     }
 
-    public void UpdateScore(int playerIndex, int score)
+    
+    /*public void UpdateScore(int playerIndex, int score)
     {
         playerScores[playerIndex].text = score.ToString();
-    }
+    }*/
 }
