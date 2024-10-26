@@ -21,7 +21,6 @@ namespace PunchPeng
         private readonly float MoveSpeed = 1.6f;
         private readonly float RunSpeed = 3.2f;
         private readonly float MaxRotateDeg = 0.3f;
-        private ScoreboardManager ScoreboardManager;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
@@ -45,12 +44,6 @@ namespace PunchPeng
 
         private void Awake()
         {
-            ScoreboardManager = FindObjectOfType<ScoreboardManager>();
-            if (ScoreboardManager == null)
-            {
-                Debug.LogError("ScoreboardManager not found in the scene.");
-            }
-            
             //m_Abilities.Add(new PlayerHeadAttackAbility());
             m_Abilities.Add(new PlayerPunchAttackAbility());
 
@@ -125,7 +118,6 @@ namespace PunchPeng
             LocomotionState.Value = PlayerLocomotionState.Dead;
             
             // calculate player's score
-            //ScoreboardManager.OnPlayerDeadToChangeScore()
         }
 
         private void OnLocomotionChange(PlayerLocomotionState state)

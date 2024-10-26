@@ -15,6 +15,11 @@ public class ScoreboardManager : MonoBehaviour
     private int[] scores = new int[2];
     public static Action<int, int> OnPlayerDead;
 
+    private void Awake()
+    {
+        OnPlayerDead += OnPlayerDeadToChangeScore;
+    }
+
     void Start()
     {
         SetPlayerName(0, "Player1");
