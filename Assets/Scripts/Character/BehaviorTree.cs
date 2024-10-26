@@ -74,7 +74,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(2, 4);
+            m_CfgDuration = Random.Range(2f, 4f);
         }
     }
 
@@ -85,7 +85,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(1, 3);
+            m_CfgDuration = Random.Range(1f, 3f);
             m_InputDir = Vector3Ex.Rand2DDir();
         }
 
@@ -115,7 +115,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(1, 4);
+            m_CfgDuration = Random.Range(1f, 4f);
         }
 
         protected override void InputMove()

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class CollectionEx
 {
-    private static Random s_Random = new Random();
-
     public static T RandomOne<T>(this IList<T> self)
     {
         if (self == null || self.Count == 0)
@@ -12,6 +10,6 @@ public static class CollectionEx
             return default;
         }
 
-        return self[s_Random.Next(self.Count)];
+        return self[Random.Range(0, self.Count)];
     }
 }
