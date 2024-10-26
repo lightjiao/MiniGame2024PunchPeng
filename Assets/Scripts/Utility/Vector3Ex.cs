@@ -58,4 +58,14 @@ public static class Vector3Ex
     {
         return string.Format("({0:N2}, {1:N2}, {2:N2})", self.x, self.y, self.z);
     }
+
+    public static Vector3 Rand2DDir()
+    {
+        return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+    }
+
+    public static Vector3 RandomRange(Vector3 min, Vector3 max)
+    {
+        return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
+    }
 }

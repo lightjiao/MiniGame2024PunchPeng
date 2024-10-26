@@ -29,6 +29,7 @@ namespace PunchPeng
         [SerializeField] public TriggerHelper m_HeadAttackTrigger;
 
         private List<PlayerAbility> m_Abilities = new();
+        private BehaviorTree m_BehaviorTree;
 
         public readonly ReactiveProperty<Vector3> PlayerInputMoveDir = new();
         public readonly ReactiveProperty<bool> PlayerInputRun = new();
@@ -39,6 +40,7 @@ namespace PunchPeng
         public float VelocityMagnitude { get; private set; }
         public bool CanMove;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
+        public bool IsAI => m_BehaviorTree != null;
 
         private void Awake()
         {
@@ -65,6 +67,8 @@ namespace PunchPeng
 
         private void Update()
         {
+            m_BehaviorTree?.OnUpdate(Time.deltaTime);
+
             SimpleMove(PlayerInputMoveDir.Value);
             foreach (var ability in m_Abilities)
             {
@@ -74,6 +78,12 @@ namespace PunchPeng
 
         private void OnDestroy()
         {
+        }
+
+        public void SetIsAI()
+        {
+            m_BehaviorTree = new BehaviorTree();
+            m_BehaviorTree.Init(this);
         }
 
         public void PlayAnim(ClipTransition anim)

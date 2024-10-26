@@ -11,10 +11,8 @@ namespace PunchPeng
 
         public Collider Area;
 
-        [ReadOnly] public float MinX;
-        [ReadOnly] public float MinZ;
-        [ReadOnly] public float MaxX;
-        [ReadOnly] public float MaxZ;
+        [ReadOnly] public Vector3 Min;
+        [ReadOnly] public Vector3 Max;
 
         private void Awake()
         {
@@ -39,16 +37,20 @@ namespace PunchPeng
             var boxPos = boxCollider.transform.position + boxCollider.center;
             var halfSize = boxCollider.size * 0.5f;
 
-            MinX = boxPos.x - halfSize.x;
-            MaxX = boxPos.x + halfSize.x;
-            MinZ = boxPos.z - halfSize.z;
-            MaxZ = boxPos.z + halfSize.z;
+            var MinX = boxPos.x - halfSize.x;
+            var MaxX = boxPos.x + halfSize.x;
+            var MinZ = boxPos.z - halfSize.z;
+            var MaxZ = boxPos.z + halfSize.z;
+            Min = new Vector3(MinX, 0, MinZ);
+            Max = new Vector3(MaxX, 0, MaxZ);
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.DrawLine(new Vector3(MinX, 0, MinZ), new Vector3(MinX, 10, MinZ));
-            Gizmos.DrawLine(new Vector3(MaxX, 0, MaxZ), new Vector3(MaxX, 10, MaxZ));
+            //Gizmos.DrawLine(new Vector3(MinX, 0, MinZ), new Vector3(MinX, 10, MinZ));
+            //Gizmos.DrawLine(new Vector3(MaxX, 0, MaxZ), new Vector3(MaxX, 10, MaxZ));
+            Gizmos.DrawLine(Min, Min.SetY(10));
+            Gizmos.DrawLine(Max, Max.SetY(10));
         }
     }
 }

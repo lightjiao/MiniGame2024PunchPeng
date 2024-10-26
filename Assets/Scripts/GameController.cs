@@ -1,5 +1,6 @@
 using ConfigAuto;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +8,11 @@ namespace PunchPeng
 {
     public class GameController : MonoBehaviour
     {
-        [HideInInspector] public List<Player> PlayerList = new List<Player>();
-
         public static GameController Inst;
-        public Player m_Player1;
-        public Player m_Player2;
+
+        [HideInInspector] public List<Player> PlayerList = new List<Player>();
+        [ReadOnly] public Player m_Player1;
+        [ReadOnly] public Player m_Player2;
 
         private void Awake()
         {
@@ -69,19 +70,25 @@ namespace PunchPeng
             {
                 var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Player.Inst.PlayerPrefab);
 
-                var pox = Random.Range(LevelArea.Inst.MinX, LevelArea.Inst.MaxX);
-                var poz = Random.Range(LevelArea.Inst.MinZ, LevelArea.Inst.MaxZ);
-                player.Position = new Vector3(pox, 0, poz);
-                player.Forward = new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1));
+                player.Position = Vector3Ex.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+                player.Forward = Vector3Ex.Rand2DDir();
 
                 PlayerList.Add(player);
             }
 
-            m_Player1 = PlayerList[Random.Range(0, PlayerList.Count)];
+            m_Player1 = PlayerList.RandomOne();
             do
             {
-                m_Player2 = PlayerList[Random.Range(0, PlayerList.Count)];
-            } while (m_Player1 != m_Player2);
+                m_Player2 = PlayerList.RandomOne();
+            } while (m_Player1 == m_Player2);
+
+            foreach (var item in PlayerList)
+            {
+                if (item != m_Player1 && item != m_Player2)
+                {
+                    item.SetIsAI();
+                }
+            }
         }
     }
 }
