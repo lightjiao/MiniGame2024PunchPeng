@@ -90,7 +90,7 @@ Material:
     - _FresnelInstensity: 0.3
     - _FresnelPow: 8
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.588
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
