@@ -8,7 +8,8 @@ namespace PunchPeng
         public GameObject gameStartPanel;
         public GameObject loadingPanel;
         public GameObject submitPanel;
-
+        public Camera uiCamera; // 添加 UI Camera 的引用
+        
         private void Start()
         {
             ShowGameStart();
@@ -44,6 +45,17 @@ namespace PunchPeng
             else if (submitPanel.activeSelf && Input.anyKeyDown)
             {
                 ShowGameStart();
+            }
+
+            // 如果有基于射线检测的 UI 交互，可以在这里进行调整
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = uiCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    // 处理按钮点击等交互
+                }
             }
         }
     }
