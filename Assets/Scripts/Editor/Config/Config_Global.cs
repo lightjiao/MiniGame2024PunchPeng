@@ -10,7 +10,6 @@ namespace ConfigAuto
 
             LevelTestScene = "TestLevel",
             LevelPunchPengScene = "PunchPeng",
-            LevelPunchPengCamera = "Level/PunchpengCamera",
 
             LevelConfig = new Dictionary<string, object>() {
             {

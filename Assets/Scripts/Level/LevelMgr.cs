@@ -1,8 +1,6 @@
 using ConfigAuto;
 using Cysharp.Threading.Tasks;
-using Drawing;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,26 +8,39 @@ namespace PunchPeng
 {
     public class LevelMgr : Singleton<LevelMgr>
     {
-        public const string TestLevelScene = "TestLevel";
-        public const string PunchPeng = "PunchPeng";
-        public const string Loading = "Loading";
-
         protected override void OnInit()
         {
         }
 
         private string m_CurLevelName;
+        private GameObject m_CurCamera;
 
         public async UniTask LoadLevelAsync(string levelName)
         {
             if (!string.IsNullOrEmpty(m_CurLevelName))
             {
-                await SceneManager.UnloadSceneAsync(m_CurLevelName);
-                m_CurLevelName = null;
+                await UnLoadCurLevel();
             }
 
             m_CurLevelName = levelName;
             await SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
+
+            var cameraRes = Config_Global.Inst.data.LevelConfig.GetValueOrDefault(levelName)?.Camera;
+            if (cameraRes != null)
+            {
+                m_CurCamera = await ResourceMgr.Inst.InstantiateAsync(cameraRes);
+            }
+        }
+
+        public async UniTask UnLoadCurLevel()
+        {
+            await SceneManager.UnloadSceneAsync(m_CurLevelName);
+            GameObject.Destroy(m_CurCamera);
+
+            m_CurLevelName = null;
+            m_CurCamera = null;
+
+            await UniTask.DelayFrame(1);
         }
     }
 }
