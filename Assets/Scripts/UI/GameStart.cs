@@ -1,3 +1,4 @@
+using ConfigAuto;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
