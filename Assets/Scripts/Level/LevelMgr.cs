@@ -10,9 +10,6 @@ namespace PunchPeng
 {
     public class LevelMgr : Singleton<LevelMgr>
     {
-        public const string TestLevelScene = "TestLevel";
-        public const string PunchPeng = "PunchPeng";
-
         protected override void OnInit()
         {
         }

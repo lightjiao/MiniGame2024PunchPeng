@@ -53,6 +53,12 @@ namespace PunchPeng
         public async UniTask StartLevelAsync(string levelName)
         {
             await LevelMgr.Inst.LoadLevelAsync(levelName);
+            var cameraRes = Config_Global.Inst.data.LevelConfig.GetValueOrDefault(levelName)?.Camera;
+            if (cameraRes != null)
+            {
+                await ResourceMgr.Inst.InstantiateAsync(cameraRes);
+            }
+
             await SpawnPlayersAsync();
         }
 
@@ -68,7 +74,7 @@ namespace PunchPeng
 
             for (int i = 0; i < 15; i++)
             {
-                var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Player.Inst.PlayerPrefab);
+                var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
 
                 player.Position = Vector3Ex.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
                 player.Forward = Vector3Ex.Rand2DDir();
