@@ -87,15 +87,14 @@ namespace PunchPeng
             base.Start();
             m_CfgDuration = Random.Range(1f, 3f);
             m_InputDir = Vector3Ex.Rand2DDir();
+            m_Player.PlayerInputMoveDir.Value = m_InputDir;
         }
 
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
-            InputMove();
 
             var predictPos = m_Player.Position + m_InputDir;
-
             // check obstacle to finish
             //if (predictPos.x < LevelArea.Inst.MinX || predictPos.x > LevelArea.Inst.MaxX || predictPos.z < LevelArea.Inst.MinZ || predictPos.z > LevelArea.Inst.MaxZ)
             //{
@@ -104,9 +103,10 @@ namespace PunchPeng
             //}
         }
 
-        protected virtual void InputMove()
+        public override void Finish()
         {
-            m_Player.PlayerInputMoveDir.Value = m_InputDir;
+            base.Finish();
+            m_Player.PlayerInputMoveDir.Value = Vector3.zero;
         }
     }
 
@@ -116,12 +116,13 @@ namespace PunchPeng
         {
             base.Start();
             m_CfgDuration = Random.Range(1f, 4f);
+            m_Player.PlayerInputRun.Value = true;
         }
 
-        protected override void InputMove()
+        public override void Finish()
         {
-            base.InputMove();
-            m_Player.PlayerInputRun.Value = true;
+            base.Finish();
+            m_Player.PlayerInputRun.Value = false;
         }
     }
 
