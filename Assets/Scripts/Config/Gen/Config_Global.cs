@@ -18,7 +18,6 @@ namespace ConfigAuto
 							PlayerPrefab = @"Character/Kelly",
 							LevelTestScene = @"TestLevel",
 							LevelPunchPengScene = @"PunchPeng",
-							LevelPunchPengCamera = @"Level/PunchpengCamera",
 							LevelConfig = new Dictionary<String, LevelConfig>
 							{
 								{@"PunchPeng", new LevelConfig {
@@ -36,7 +35,6 @@ namespace ConfigAuto
 			public String PlayerPrefab {get;set;}
 			public String LevelTestScene {get;set;}
 			public String LevelPunchPengScene {get;set;}
-			public String LevelPunchPengCamera {get;set;}
 			public Dictionary<String, LevelConfig> LevelConfig {get;set;}
 		}
 		public partial class LevelConfig

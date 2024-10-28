@@ -50,16 +50,24 @@ namespace PunchPeng
             //m_Player2.PlayerInputAttack.Value = false;
         }
 
-        public async UniTask StartLevelAsync(string levelName)
+        public async UniTask StartGame()
         {
+            var levelName = Config_Global.Inst.data.LevelPunchPengScene;
             await LevelMgr.Inst.LoadLevelAsync(levelName);
-            var cameraRes = Config_Global.Inst.data.LevelConfig.GetValueOrDefault(levelName)?.Camera;
-            if (cameraRes != null)
-            {
-                await ResourceMgr.Inst.InstantiateAsync(cameraRes);
-            }
-
             await SpawnPlayersAsync();
+        }
+
+        public async UniTask EndGame()
+        {
+            m_Player1 = null;
+            m_Player2 = null;
+            foreach (var item in PlayerList)
+            {
+                Destroy(item);
+            }
+            PlayerList.Clear();
+
+            await LevelMgr.Inst.UnLoadCurLevel();
         }
 
         private async UniTask SpawnPlayersAsync()
