@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class SceneSwitcher : MonoBehaviour
+    public class LoadingSwitcher : MonoBehaviour
     {
         void Update()
         {

@@ -12,6 +12,7 @@ namespace PunchPeng
     {
         public const string TestLevelScene = "TestLevel";
         public const string PunchPeng = "PunchPeng";
+        public const string Loading = "Loading";
 
         protected override void OnInit()
         {
