@@ -1,3 +1,6 @@
+using System;
+using ConfigAuto;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,10 +9,19 @@ namespace PunchPeng
     public class UIController : MonoBehaviour
     {
         public GameObject gameStartPanel;
+        public Button startBtn;
         public GameObject loadingPanel;
         public GameObject submitPanel;
         public Camera uiCamera; // 添加 UI Camera 的引用
         
+        public static Action OnGameEnd;
+
+        private void Awake()
+        {
+            OnGameEnd += ShowSubmit;
+            startBtn.onClick.AddListener(ClickStartGame);
+        }
+
         private void Start()
         {
             ShowGameStart();
@@ -40,7 +52,10 @@ namespace PunchPeng
         {
             if (loadingPanel.activeSelf && Input.anyKeyDown)
             {
-                ShowSubmit();
+                loadingPanel.SetActive(false);
+                GameController.Inst.StartGame();
+                
+                // ShowSubmit();
             }
             else if (submitPanel.activeSelf && Input.anyKeyDown)
             {
@@ -57,6 +72,11 @@ namespace PunchPeng
                     // 处理按钮点击等交互
                 }
             }
+        }
+        
+        public void ClickStartGame()
+        {
+            ShowLoading();
         }
     }
 }
