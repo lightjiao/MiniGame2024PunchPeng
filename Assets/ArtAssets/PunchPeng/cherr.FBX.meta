@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0fcf9ca259121e747bd3237401f973af
+guid: 5ada86c16fa99eb4782fc76b212026d9
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Bip001 Pelvis
+    100000: Bip001 Pelvis
+    100002: //RootNode
     100004: Head
     100006: Hips
     100008: LeftArm
@@ -36,8 +36,8 @@ ModelImporter:
     100060: Root
     100062: Spine
     100064: Spine1
-    400000: //RootNode
-    400002: Bip001 Pelvis
+    400000: Bip001 Pelvis
+    400002: //RootNode
     400004: Head
     400006: Hips
     400008: LeftArm
@@ -69,7 +69,7 @@ ModelImporter:
     400060: Root
     400062: Spine
     400064: Spine1
-    7400000: ATK_Punth
+    7400000: cherr
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -100,10 +100,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ATK_Punth
+      name: cherr
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 53
+      lastFrame: 66
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

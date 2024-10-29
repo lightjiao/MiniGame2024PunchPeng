@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0fcf9ca259121e747bd3237401f973af
+guid: 0be5b2fa44ca23b4da6deba9a9a99450
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -69,7 +69,7 @@ ModelImporter:
     400060: Root
     400062: Spine
     400064: Spine1
-    7400000: ATK_Punth
+    7400000: ATK_Idle
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -100,17 +100,17 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ATK_Punth
+      name: ATK_Idle
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 53
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
