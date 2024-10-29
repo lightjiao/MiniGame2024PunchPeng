@@ -12,7 +12,7 @@ namespace PunchPeng
         public void Init(Player player)
         {
             m_Player = player;
-            m_BevNodes = new List<BevNode> { new BevIdle(), new BevMove(), new BevRun() };
+            m_BevNodes = new List<BevNode> { new BevIdle(), new BevIdle(), new BevIdle(), new BevMove(), new BevMove(), new BevRun() };
             foreach (var node in m_BevNodes)
             {
                 node.Init(m_Player);
@@ -74,7 +74,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(2f, 4f);
+            m_CfgDuration = Random.Range(1f, 3f);
         }
     }
 
@@ -85,7 +85,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(1f, 3f);
+            m_CfgDuration = Random.Range(1f, 2f);
             m_InputDir = Vector3Ex.Rand2DDir();
             m_Player.PlayerInputMoveDir.Value = m_InputDir;
         }
@@ -115,7 +115,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_CfgDuration = Random.Range(1f, 4f);
+            m_CfgDuration = Random.Range(0.5f, 1f);
             m_Player.PlayerInputRun.Value = true;
         }
 
