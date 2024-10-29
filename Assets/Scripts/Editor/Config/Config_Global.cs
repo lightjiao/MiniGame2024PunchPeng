@@ -6,6 +6,8 @@ namespace ConfigAuto
     {
         public object data = new
         {
+            TargetFrameRate = 60,
+
             PlayerPrefab = "Character/Kelly",
 
             LevelTestScene = "TestLevel",

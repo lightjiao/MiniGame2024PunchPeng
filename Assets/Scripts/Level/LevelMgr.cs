@@ -40,7 +40,7 @@ namespace PunchPeng
             m_CurLevelName = null;
             m_CurCamera = null;
 
-            await UniTask.DelayFrame(1);
+            await UniTask.NextFrame();
         }
     }
 }

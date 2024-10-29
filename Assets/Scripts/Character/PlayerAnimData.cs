@@ -12,5 +12,7 @@ namespace PunchPeng
         public ClipTransition PunchAttack;
         public ClipTransition BeHit;
         public ClipTransition Dead;
+        public ClipTransition Cheer;
+        public ClipTransition AttackIdle;
     }
 }

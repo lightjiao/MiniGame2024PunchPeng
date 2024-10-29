@@ -68,4 +68,50 @@ public static class Vector3Ex
     {
         return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
     }
+
+    public static bool InRange(this Vector3 self, Vector3 min, Vector3 max)
+    {
+        return self.LessThan(max) && self.GreaterThan(min);
+    }
+
+    public static bool GreaterThan(this Vector3 self, Vector3 value, bool checkEqual = true)
+    {
+        if (checkEqual)
+        {
+            return self.x >= value.x && self.y >= value.y && self.z >= value.z;
+        }
+        return self.x > value.x && self.y > value.y && self.z > value.z;
+    }
+
+    public static bool LessThan(this Vector3 self, Vector3 value, bool checkEqual = true)
+    {
+        if (checkEqual)
+        {
+            return self.x <= value.x && self.y <= value.y && self.z <= value.z;
+        }
+        return self.x < value.x && self.y < value.y && self.z < value.z;
+    }
+
+    public static bool InRange2D(this Vector3 self, Vector3 min, Vector3 max)
+    {
+        return self.LessThan2D(max) && self.GreaterThan2D(min);
+    }
+
+    public static bool GreaterThan2D(this Vector3 self, Vector3 value, bool checkEqual = true)
+    {
+        if (checkEqual)
+        {
+            return self.x >= value.x && self.z >= value.z;
+        }
+        return self.x > value.x && self.z > value.z;
+    }
+
+    public static bool LessThan2D(this Vector3 self, Vector3 value, bool checkEqual = true)
+    {
+        if (checkEqual)
+        {
+            return self.x <= value.x && self.z <= value.z;
+        }
+        return self.x < value.x && self.z < value.z;
+    }
 }

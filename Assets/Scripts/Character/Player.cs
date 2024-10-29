@@ -1,5 +1,6 @@
 using Animancer;
 using R3;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ namespace PunchPeng
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
         public float VelocityMagnitude { get; private set; }
-        public bool CanMove;
+        [ReadOnly] public bool CanMove;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 

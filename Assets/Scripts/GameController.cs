@@ -16,7 +16,7 @@ namespace PunchPeng
 
         private void Awake()
         {
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             Inst = this;
         }
 
@@ -72,6 +72,9 @@ namespace PunchPeng
 
         private async UniTask SpawnPlayersAsync()
         {
+            Debug.Log($"SpawnPlayersAsync()");
+            Debug.Log($"222 Min:{LevelArea.Inst.Min.ToStringEx()}, Max:{LevelArea.Inst.Max.ToStringEx()}");
+
             foreach (var player in PlayerList)
             {
                 Destroy(player);
@@ -86,6 +89,7 @@ namespace PunchPeng
 
                 player.Position = Vector3Ex.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
                 player.Forward = Vector3Ex.Rand2DDir();
+                //Debug.Log("PlayerPos:" + player.Position.ToStringEx());
 
                 PlayerList.Add(player);
             }

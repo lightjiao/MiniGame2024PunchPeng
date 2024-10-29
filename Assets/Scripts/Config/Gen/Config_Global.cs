@@ -15,6 +15,7 @@ namespace ConfigAuto
 					{
 						data = new()
 						{
+							TargetFrameRate = 60,
 							PlayerPrefab = @"Character/Kelly",
 							LevelTestScene = @"TestLevel",
 							LevelPunchPengScene = @"PunchPeng",
@@ -32,6 +33,7 @@ namespace ConfigAuto
 		public Rootdata data {get;set;}
 		public partial class Rootdata
 		{
+			public Int32 TargetFrameRate {get;set;}
 			public String PlayerPrefab {get;set;}
 			public String LevelTestScene {get;set;}
 			public String LevelPunchPengScene {get;set;}

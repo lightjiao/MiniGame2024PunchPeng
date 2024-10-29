@@ -1,3 +1,7 @@
+using ConfigAuto;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -86,27 +90,64 @@ namespace PunchPeng
         {
             base.Start();
             m_CfgDuration = Random.Range(1f, 2f);
-            m_InputDir = Vector3Ex.Rand2DDir();
-            m_Player.PlayerInputMoveDir.Value = m_InputDir;
+
+            var i = 100;
+            while (i > 0)
+            {
+                m_InputDir = Vector3Ex.Rand2DDir();
+                if (CheckMoveInRange())
+                {
+                    break;
+                }
+                i--;
+            }
+            if (i == 0)
+            {
+                Debug.LogError($"行为树避障初始化检测计算了 {i} 次");
+            }
+            StartSmoothAsync().Forget();
         }
 
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
 
-            var predictPos = m_Player.Position + m_InputDir;
-            // check obstacle to finish
-            //if (predictPos.x < LevelArea.Inst.MinX || predictPos.x > LevelArea.Inst.MaxX || predictPos.z < LevelArea.Inst.MinZ || predictPos.z > LevelArea.Inst.MaxZ)
-            //{
-            //    Debug.Log("BevMove predict pos finish");
-            //    Finish();
-            //}
+            if (!CheckMoveInRange())
+            {
+                Finish();
+            }
         }
 
         public override void Finish()
         {
             base.Finish();
-            m_Player.PlayerInputMoveDir.Value = Vector3.zero;
+            StopSmoothAsync().Forget();
+        }
+
+        private bool CheckMoveInRange()
+        {
+            var predictPos = m_Player.Position + m_InputDir;
+            return predictPos.InRange2D(LevelArea.Inst.Min, LevelArea.Inst.Max);
+        }
+
+        private async UniTask StartSmoothAsync()
+        {
+            var smoothFrame = Config_Global.Inst.data.TargetFrameRate / 6;
+            for (var i = 0; i <= smoothFrame; i++)
+            {
+                m_Player.PlayerInputMoveDir.Value = m_InputDir * i / smoothFrame;
+                await UniTask.NextFrame();
+            }
+        }
+
+        private async UniTask StopSmoothAsync()
+        {
+            var smoothFrame = Config_Global.Inst.data.TargetFrameRate / 6;
+            for (var i = smoothFrame; i >= 0; i--)
+            {
+                m_Player.PlayerInputMoveDir.Value = m_InputDir * i / smoothFrame;
+                await UniTask.NextFrame();
+            }
         }
     }
 
