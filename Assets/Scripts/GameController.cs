@@ -30,24 +30,22 @@ namespace PunchPeng
         {
             if (m_Player1 == null) return;
 
-            var rawInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            var rawInput = new Vector3(Input.GetAxis("Player1_Horizontal"), 0, Input.GetAxis("Player1_Vertical"));
             var squreInput = Vector3Ex.SquareToCircle(rawInput);
             m_Player1.PlayerInputMoveDir.Value = squreInput;
-            m_Player1.PlayerInputRun.Value = Input.GetKey(KeyCode.LeftShift);
-            m_Player1.PlayerInputAttack.Value = Input.GetKey(KeyCode.Space);
+            m_Player1.PlayerInputRun.Value = Input.GetButton("Player1_Run");
+            m_Player1.PlayerInputAttack.Value = Input.GetButtonDown("Player1_Attack");
         }
 
         public void Check2PInput()
         {
             if (m_Player2 == null) return;
 
-            //var rawInput = new Vector3(Input.GetAxis("Horizontal2"), 0, Input.GetAxis("Vertical2"));
-            //var squreInput = Vector3Ex.SquareToCircle(rawInput);
-            ////Debug.LogError("Player2Input :" + rawInput.ToStringEx() + squreInput.ToStringEx());
-            //m_Player2.PlayerInputMoveDir.Value = squreInput;
-            //m_Player2.PlayerInputRun.Value = Input.GetButton("Run2");
-            //m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Attack2");
-            //m_Player2.PlayerInputAttack.Value = false;
+            var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
+            var squreInput = Vector3Ex.SquareToCircle(rawInput);
+            m_Player2.PlayerInputMoveDir.Value = squreInput;
+            m_Player2.PlayerInputRun.Value = Input.GetButton("Player2_Run");
+            m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Player2_Attack");
         }
 
         public async UniTask StartGame()
