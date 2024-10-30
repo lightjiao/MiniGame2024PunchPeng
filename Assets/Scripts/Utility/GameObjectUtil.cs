@@ -77,10 +77,23 @@ public static class GameObjectUtil
         return enumerable.Where(i => i != null);
     }
 
-    public static void DestroyRef<T>(ref T obj) where T : UnityObject
+    public static void DestroyRef<T>(ref T obj) where T : Component
+    {
+        if (obj == null) return;
+        GameObject.Destroy(obj.gameObject);
+        obj = null;
+    }
+
+    public static void DestroyRef(ref GameObject obj)
     {
         if (obj == null) return;
         GameObject.Destroy(obj);
         obj = null;
+    }
+
+    public static void DestroyGo(GameObject obj)
+    {
+        if (obj == null) return;
+        GameObject.Destroy(obj);
     }
 }

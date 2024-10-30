@@ -44,7 +44,8 @@ namespace PunchPeng
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
         public float VelocityMagnitude { get; private set; }
-        [ReadOnly] public bool CanMove;
+        [ReadOnly] public bool CanMove; // 攻击动画结束会让玩家 重新可以移动，这里 应该改成引用计数
+        [ReadOnly] public bool CanAttack;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
@@ -68,6 +69,7 @@ namespace PunchPeng
         private void Start()
         {
             CanMove = true;
+            CanAttack = true;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
         }
 
@@ -86,6 +88,13 @@ namespace PunchPeng
         {
         }
 
+        public void EndGameStop()
+        {
+            CanMove = false;
+            CanAttack = false;
+            Velocity.Value = Vector3.zero;
+        }
+
         public void SetIsAI()
         {
             m_BehaviorTree = new BehaviorTree();
@@ -97,7 +106,7 @@ namespace PunchPeng
             m_Animancer.Play(anim);
         }
 
-        public void SimpleMove(Vector3 moveDir)
+        private void SimpleMove(Vector3 moveDir)
         {
             if (!CanMove) return;
 
@@ -120,7 +129,7 @@ namespace PunchPeng
             if (IsDead) return;
 
             // TODO: play sfx and vfx
-            var dir = damager.Position - this.Position;
+            var dir = damager.Position - Position;
             CachedTransform.rotation = Quaternion.LookRotation(dir);
 
             LocomotionState.Value = PlayerLocomotionState.Dead;

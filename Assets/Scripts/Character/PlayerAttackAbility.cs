@@ -1,3 +1,4 @@
+using ConfigAuto;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -66,25 +67,22 @@ namespace PunchPeng
             base.OnInit();
             m_CfgAnim = m_Player.m_AnimData.PunchAttack;
             m_CfgDuration = m_CfgAnim.Length;
+            m_Player.m_PunchAttackTrigger.OnTriggerEnterAction += AttackOther;
         }
 
         protected override void AbilityOnStart()
         {
             base.AbilityOnStart();
+            PunchFrame().Forget();
+
+        }
+
+        private async UniTask PunchFrame()
+        {
+            await UniTask.DelayFrame(Config_Global.Inst.data.PlayerPunchFrame);
             m_Player.m_PunchAttackTrigger.SetActiveEx(true);
-            m_Player.m_PunchAttackTrigger.OnTriggerEnterAction += AttackOther;
-        }
-
-        protected override void AbilityOnStop()
-        {
-            base.AbilityOnStop();
-            m_Player.m_PunchAttackTrigger.OnTriggerEnterAction -= AttackOther;
+            await UniTask.DelayFrame(2);
             m_Player.m_PunchAttackTrigger.SetActiveEx(false);
-        }
-
-        private async UniTask DelayAttack()
-        {
-            await UniTask.DelayFrame(13);
         }
     }
 }

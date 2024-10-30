@@ -8,7 +8,7 @@ public class TriggerHelper : MonoBehaviour
     public Action<Collider> OnTriggerExitAction;
 
     [SerializeField]
-    private List<Collider> IgnoreObjs = new List<Collider>();
+    private List<Collider> IgnoreObjs = new();
 
     public void SetActiveEx(bool active)
     {

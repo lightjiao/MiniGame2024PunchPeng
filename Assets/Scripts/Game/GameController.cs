@@ -10,15 +10,20 @@ namespace PunchPeng
     {
         public static GameController Inst;
 
-        [HideInInspector] public List<Player> PlayerList = new List<Player>();
+        // 包含了AI与玩家的列表
+        [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
+
+        // 纯玩家
+        private Dictionary<int, Player> m_Players = new();
 
         private void Awake()
         {
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             Inst = this;
             GameEvent.Inst.OnGameStart += OnGameStartAsync;
+            GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
         }
 
         private void Update()
@@ -56,7 +61,7 @@ namespace PunchPeng
             await SpawnPlayersAsync();
         }
 
-        private async UniTask EndGame()
+        private async UniTask EndGameAsync()
         {
             GameEvent.Inst.OnGameEnd?.Invoke();
 
@@ -64,7 +69,7 @@ namespace PunchPeng
             m_Player2 = null;
             foreach (var item in PlayerList)
             {
-                Destroy(item);
+                GameObjectUtil.DestroyGo(item.gameObject);
             }
             PlayerList.Clear();
 
@@ -87,7 +92,6 @@ namespace PunchPeng
 
                 player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
                 player.Forward = Vector3Util.Rand2DDir();
-                //Debug.Log("PlayerPos:" + player.Position.ToStringEx());
 
                 PlayerList.Add(player);
             }
@@ -107,6 +111,37 @@ namespace PunchPeng
                     item.SetIsAI();
                 }
             }
+        }
+
+        private void OnPlayerDeadToFinishGame(int killer, int deadPlayer)
+        {
+            if (deadPlayer == 0) return;
+
+            foreach (var item in PlayerList)
+            {
+                item.EndGameStop();
+            }
+
+            Player winPlayer = null;
+            if (deadPlayer == m_Player1.PlayerId)
+            {
+                winPlayer = m_Player2;
+            }
+            if (deadPlayer == m_Player2.PlayerId)
+            {
+                winPlayer = m_Player1;
+            }
+
+            winPlayer.PlayAnim(winPlayer.m_AnimData.Cheer);
+
+            WaitToFinishGame().Forget();
+        }
+
+        private async UniTask WaitToFinishGame()
+        {
+            // Play win sfx and vfx ??
+            await UniTask.Delay(5000);
+            await EndGameAsync();
         }
     }
 }
