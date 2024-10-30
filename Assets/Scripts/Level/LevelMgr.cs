@@ -41,7 +41,7 @@ namespace PunchPeng
             await SceneManager.UnloadSceneAsync(m_CurLevelName);
             m_CurLevelName = null;
 
-            GameObjectEx.DestroyRef(ref m_CurCamera);
+            GameObjectUtil.DestroyRef(ref m_CurCamera);
 
             await UniTask.NextFrame();
         }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public static class Vector3Ex
+public static class Vector3Util
 {
-    public static bool Approximately(this Vector3 self, Vector3 other, float e = MathEx.Epsilon)
+    public static bool Approximately(this Vector3 self, Vector3 other, float e = MathUtil.Epsilon)
     {
         return self.x.Approximately(other.x, e) &&
             self.y.Approximately(other.y, e) &&

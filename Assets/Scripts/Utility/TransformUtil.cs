@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public static class TransformEx
+public static class TransformUtil
 {
     public static Transform FindRecursive(this Transform self, string name)
     {
@@ -41,7 +42,7 @@ public static class TransformEx
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(Transform))]
-public class TransformEditorEx : UnityEditor.Editor
+public class TransformEditorUtil : UnityEditor.Editor
 {
     public override void OnInspectorGUI()
     {

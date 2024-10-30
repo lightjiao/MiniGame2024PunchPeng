@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class MathEx
+public static class MathUtil
 {
     public const float Epsilon = 0.0001f;
 

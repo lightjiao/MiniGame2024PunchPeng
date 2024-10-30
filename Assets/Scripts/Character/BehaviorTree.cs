@@ -94,7 +94,7 @@ namespace PunchPeng
             var i = 100;
             while (i > 0)
             {
-                m_InputDir = Vector3Ex.Rand2DDir();
+                m_InputDir = Vector3Util.Rand2DDir();
                 if (CheckMoveInRange())
                 {
                     break;

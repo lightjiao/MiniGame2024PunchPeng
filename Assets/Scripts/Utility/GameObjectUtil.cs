@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-public static class GameObjectEx
+public static class GameObjectUtil
 {
     public static T GetOrAddComponent<T>(this GameObject self, T t) where T : Component
     {

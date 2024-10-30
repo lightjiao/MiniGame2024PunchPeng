@@ -32,7 +32,7 @@ namespace PunchPeng
             if (m_Player1 == null) return;
 
             var rawInput = new Vector3(Input.GetAxis("Player1_Horizontal"), 0, Input.GetAxis("Player1_Vertical"));
-            var squreInput = Vector3Ex.SquareToCircle(rawInput);
+            var squreInput = Vector3Util.SquareToCircle(rawInput);
             m_Player1.PlayerInputMoveDir.Value = squreInput;
             m_Player1.PlayerInputRun.Value = Input.GetButton("Player1_Run");
             m_Player1.PlayerInputAttack.Value = Input.GetButtonDown("Player1_Attack");
@@ -43,7 +43,7 @@ namespace PunchPeng
             if (m_Player2 == null) return;
 
             var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
-            var squreInput = Vector3Ex.SquareToCircle(rawInput);
+            var squreInput = Vector3Util.SquareToCircle(rawInput);
             m_Player2.PlayerInputMoveDir.Value = squreInput;
             m_Player2.PlayerInputRun.Value = Input.GetButton("Player2_Run");
             m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Player2_Attack");
@@ -85,8 +85,8 @@ namespace PunchPeng
             {
                 var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
 
-                player.Position = Vector3Ex.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
-                player.Forward = Vector3Ex.Rand2DDir();
+                player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+                player.Forward = Vector3Util.Rand2DDir();
                 //Debug.Log("PlayerPos:" + player.Position.ToStringEx());
 
                 PlayerList.Add(player);
