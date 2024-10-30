@@ -25,20 +25,23 @@ namespace PunchPeng
             m_CurLevelName = levelName;
             await SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
 
-            var cameraRes = Config_Global.Inst.data.LevelConfig.GetValueOrDefault(levelName)?.Camera;
-            if (cameraRes != null)
+            var cameras = GameObject.FindObjectsOfType<Camera>();
+            if (cameras.Length == 1)
             {
-                m_CurCamera = await ResourceMgr.Inst.InstantiateAsync(cameraRes);
+                var cameraRes = Config_Global.Inst.data.LevelConfig.GetValueOrDefault(levelName)?.Camera;
+                if (cameraRes != null)
+                {
+                    m_CurCamera = await ResourceMgr.Inst.InstantiateAsync(cameraRes);
+                }
             }
         }
 
         public async UniTask UnLoadCurLevel()
         {
             await SceneManager.UnloadSceneAsync(m_CurLevelName);
-            GameObject.Destroy(m_CurCamera);
-
             m_CurLevelName = null;
-            m_CurCamera = null;
+
+            GameObjectEx.DestroyRef(ref m_CurCamera);
 
             await UniTask.NextFrame();
         }

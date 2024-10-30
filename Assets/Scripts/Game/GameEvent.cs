@@ -11,6 +11,6 @@ namespace PunchPeng
 
         public Func<UniTask> OnGameStart;
         public Action OnGameEnd;
-        public Action OnPlayerDead;
+        public Action<int, int> OnPlayerDead; // <killerId, deadPlayerId>
     }
 }

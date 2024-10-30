@@ -76,4 +76,11 @@ public static class GameObjectEx
     {
         return enumerable.Where(i => i != null);
     }
+
+    public static void DestroyRef<T>(ref T obj) where T : UnityObject
+    {
+        if (obj == null) return;
+        GameObject.Destroy(obj);
+        obj = null;
+    }
 }

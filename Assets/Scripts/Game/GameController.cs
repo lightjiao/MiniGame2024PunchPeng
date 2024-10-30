@@ -81,7 +81,7 @@ namespace PunchPeng
 
             var random = new System.Random();
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
             {
                 var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
 
@@ -97,6 +97,8 @@ namespace PunchPeng
             {
                 m_Player2 = PlayerList.RandomOne();
             } while (m_Player1 == m_Player2);
+            m_Player1.PlayerId = 1;
+            m_Player2.PlayerId = 2;
 
             foreach (var item in PlayerList)
             {

@@ -7,6 +7,7 @@ namespace ConfigAuto
         public object data = new
         {
             TargetFrameRate = 60,
+            TotalPlayerCount = 30,
 
             PlayerPrefab = "Character/Kelly",
 
@@ -15,7 +16,7 @@ namespace ConfigAuto
 
             LevelConfig = new Dictionary<string, object>() {
             {
-                "PunchPeng" , new { Camera = "Level/PunchpengCamera"} },
+                "PunchPeng" , new { Camera = "Level/PunchpengCamera"}},
             }
         };
     }

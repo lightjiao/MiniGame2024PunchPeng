@@ -17,6 +17,11 @@ namespace PunchPeng
 
     public class Player : MonoEntity
     {
+        /// <summary>
+        /// 玩家ID, 正常玩家ID为 1 或者 2，0表示AI
+        /// </summary>
+        public int PlayerId;
+
         [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f; // 这个速度好像再初始化的时候，对动画不生效
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
         [SerializeField] private float m_CfgAcceleration = 10f;
@@ -121,7 +126,7 @@ namespace PunchPeng
             LocomotionState.Value = PlayerLocomotionState.Dead;
 
             // calculate player's score
-            ScoreboardManager.OnPlayerDead?.Invoke(1, 2);
+            GameEvent.Inst.OnPlayerDead?.Invoke(damager.PlayerId, PlayerId);
         }
 
         private void OnLocomotionChange(PlayerLocomotionState state)
