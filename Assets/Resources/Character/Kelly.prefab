@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d503cd274f80b41ad9ab428edf8d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerId: 0
   m_CfgMaxMoveSpeed: 2.4
   m_CfgMaxRunSpeed: 3.5
   m_CfgAcceleration: 10
@@ -263,6 +264,22 @@ PrefabInstance:
     - target: {fileID: 400080, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 13700000, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a170b2dc65d54ce4d959d38806c6326a, type: 2}
+    - target: {fileID: 6498214016367178019, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682666947841679604, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9060608707324249040, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
