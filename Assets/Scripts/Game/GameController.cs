@@ -18,6 +18,7 @@ namespace PunchPeng
         {
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             Inst = this;
+            GameEvent.Inst.OnGameStart += OnGameStartAsync;
         }
 
         private void Update()
@@ -48,15 +49,17 @@ namespace PunchPeng
             m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Player2_Attack");
         }
 
-        public async UniTask StartGame()
+        private async UniTask OnGameStartAsync()
         {
             var levelName = Config_Global.Inst.data.LevelPunchPengScene;
             await LevelMgr.Inst.LoadLevelAsync(levelName);
             await SpawnPlayersAsync();
         }
 
-        public async UniTask EndGame()
+        private async UniTask EndGame()
         {
+            GameEvent.Inst.OnGameEnd?.Invoke();
+
             m_Player1 = null;
             m_Player2 = null;
             foreach (var item in PlayerList)
@@ -70,9 +73,6 @@ namespace PunchPeng
 
         private async UniTask SpawnPlayersAsync()
         {
-            Debug.Log($"SpawnPlayersAsync()");
-            Debug.Log($"222 Min:{LevelArea.Inst.Min.ToStringEx()}, Max:{LevelArea.Inst.Max.ToStringEx()}");
-
             foreach (var player in PlayerList)
             {
                 Destroy(player);

@@ -1,6 +1,3 @@
-using System;
-using ConfigAuto;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +10,10 @@ namespace PunchPeng
         public GameObject loadingPanel;
         public GameObject submitPanel;
         public Camera uiCamera; // 添加 UI Camera 的引用
-        
-        public static Action OnGameEnd;
 
         private void Awake()
         {
-            OnGameEnd += ShowSubmit;
+            GameEvent.Inst.OnGameEnd += ShowSubmit;
             startBtn.onClick.AddListener(ClickStartGame);
         }
 
@@ -53,8 +48,8 @@ namespace PunchPeng
             if (loadingPanel.activeSelf && Input.anyKeyDown)
             {
                 loadingPanel.SetActive(false);
-                GameController.Inst.StartGame();
-                
+                GameEvent.Inst.OnGameStart?.Invoke();
+
                 // ShowSubmit();
             }
             else if (submitPanel.activeSelf && Input.anyKeyDown)
@@ -73,7 +68,7 @@ namespace PunchPeng
                 }
             }
         }
-        
+
         public void ClickStartGame()
         {
             ShowLoading();
