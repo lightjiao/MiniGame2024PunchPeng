@@ -1,4 +1,6 @@
 using Animancer;
+using ConfigAuto;
+using Cysharp.Threading.Tasks;
 using R3;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -108,7 +110,7 @@ namespace PunchPeng
 
         public void PlayAnim(ClipTransition anim)
         {
-            m_Animancer.Play(anim);
+            m_Animancer.Play(anim, fadeDuration: 0.15f, mode: FadeMode.FromStart);
         }
 
         private void UpdateMoveCommand(Vector3 moveDir)
@@ -133,7 +135,9 @@ namespace PunchPeng
         {
             if (IsDead) return;
 
-            // TODO: play sfx and vfx
+            var sfx = Random.Range(0, 10) % 1 == 0 ? Config_Global.Inst.data.PlayerBeHitSfx1 : Config_Global.Inst.data.PlayerBeHitSfx2;
+            PlaySfx(sfx).Forget();
+
             var dir = damager.Position - Position;
             CachedTransform.rotation = Quaternion.LookRotation(dir);
 
@@ -156,7 +160,6 @@ namespace PunchPeng
                     m_Animancer.Play(m_AnimData.Dead);
                     break;
                 case PlayerLocomotionState.Ability:
-                    Debug.Log("Ability");
                     break;
             }
         }
@@ -166,6 +169,14 @@ namespace PunchPeng
             VelocityMagnitude = velocity.magnitude;
             velocity.y = 0f;
             m_AnimData.LocomotionMixer.State.Parameter = velocity.magnitude;
+        }
+
+        public async UniTask PlaySfx(string res)
+        {
+            var audioClip = await ResourceMgr.Inst.LoadAsync<AudioClip>(res);
+            m_AudioSource.clip = audioClip;
+            m_AudioSource.loop = false;
+            m_AudioSource.Play();
         }
     }
 }

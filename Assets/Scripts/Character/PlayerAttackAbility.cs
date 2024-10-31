@@ -18,6 +18,7 @@ namespace PunchPeng
         {
             base.AbilityOnStart();
             m_Player.CanMove = false;
+            m_Player.PlaySfx(Config_Global.Inst.data.PlayerPunchSfx).Forget();
         }
 
         protected override void AbilityOnStop()
@@ -74,7 +75,6 @@ namespace PunchPeng
         {
             base.AbilityOnStart();
             PunchFrame().Forget();
-
         }
 
         private async UniTask PunchFrame()
