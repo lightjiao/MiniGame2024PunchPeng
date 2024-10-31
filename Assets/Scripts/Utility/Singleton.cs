@@ -21,12 +21,15 @@ public abstract class Singleton<T> where T : class, new()
     protected abstract void OnInit();
 }
 
-public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Inst;
 
-    protected virtual void Awake()
+    private void Awake()
     {
         Inst = GetComponent<T>();
+        OnAwake();
     }
+
+    protected abstract void OnAwake();
 }

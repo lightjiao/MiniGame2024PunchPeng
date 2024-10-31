@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class GameController : MonoBehaviour
+    public class GameController : SingletonMono<GameController>
     {
-        public static GameController Inst;
-
         // 包含了AI与玩家的列表
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
@@ -18,7 +16,7 @@ namespace PunchPeng
         // 纯玩家
         private Dictionary<int, Player> m_Players = new();
 
-        private void Awake()
+        protected override void OnAwake()
         {
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             Inst = this;
@@ -50,15 +48,19 @@ namespace PunchPeng
             var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
             var squreInput = Vector3Util.SquareToCircle(rawInput);
             m_Player2.PlayerInputMoveDir.Value = squreInput;
-            m_Player2.PlayerInputRun.Value = Input.GetButton("Player2_Run");
+            m_Player2.PlayerInputRun.Value = !Input.GetAxis("Player2_Run").Approximately(0);
             m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Player2_Attack");
         }
 
         private async UniTask OnGameStartAsync()
         {
             var levelName = Config_Global.Inst.data.LevelPunchPengScene;
+
+            var playBGM = GameBGMManager.Inst.PlayLevelBGM(levelName);
             await LevelMgr.Inst.LoadLevelAsync(levelName);
             await SpawnPlayersAsync();
+
+            await playBGM;
         }
 
         private async UniTask EndGameAsync()
@@ -119,6 +121,7 @@ namespace PunchPeng
 
             foreach (var item in PlayerList)
             {
+                // attack 结束之后，又把can attack 置为 true 了
                 item.EndGameStop();
             }
 
@@ -132,6 +135,8 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
+            // wait attack anim to finish
+            // 来点慢镜头？
             winPlayer.PlayAnim(winPlayer.m_AnimData.Cheer);
 
             WaitToFinishGame().Forget();

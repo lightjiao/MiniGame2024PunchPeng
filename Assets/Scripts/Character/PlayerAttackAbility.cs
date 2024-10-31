@@ -79,9 +79,12 @@ namespace PunchPeng
 
         private async UniTask PunchFrame()
         {
-            await UniTask.DelayFrame(Config_Global.Inst.data.PlayerPunchFrame);
+            var punchFrame = (int)(Config_Global.Inst.data.PlayerPunchFrame / Time.timeScale);
+            var damageFrame = (int)(5 / Time.timeScale);
+
+            await UniTask.DelayFrame(punchFrame);
             m_Player.m_PunchAttackTrigger.SetActiveEx(true);
-            await UniTask.DelayFrame(2);
+            await UniTask.DelayFrame(damageFrame);
             m_Player.m_PunchAttackTrigger.SetActiveEx(false);
         }
     }

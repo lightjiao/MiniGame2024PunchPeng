@@ -17,11 +17,25 @@ namespace ConfigAuto
 
             LevelTestScene = "TestLevel",
             LevelPunchPengScene = "PunchPeng",
-            LevelPunchPengBGM = "Music/动感.wav",
 
-            LevelConfig = new Dictionary<string, object>() {
+            LevelBGMTownMMBar = "Music/MM/Town.Bar",
+
+            LevelConfig = new Dictionary<string, object>()
             {
-                "PunchPeng" , new { Camera = "Level/PunchpengCamera"}},
+                {
+                    "PunchPeng" , new
+                    {
+                        Camera = "Level/PunchpengCamera",
+                        BGMRes = "Music/MM/Town.Bar",
+                    }
+                },
+                {
+                    "PunchPeng_Caodi" , new
+                    {
+                        Camera = "Level/PunchpengCamera",
+                        BGMRes = "Music/MM/Town.Village",
+                    }
+                },
             },
         };
     }

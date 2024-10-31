@@ -11,7 +11,27 @@ namespace PunchPeng
         }
 
         private Dictionary<string, UniTaskCompletionSource> m_LoadingTcs = new();
-        private Dictionary<string, GameObject> m_LoadedRes = new();
+        private Dictionary<string, Object> m_LoadedRes = new();
+
+        public async UniTask<T> LoadAsync<T>(string resPath) where T : Object
+        {
+            if (string.IsNullOrEmpty(resPath))
+            {
+                return null;
+            }
+            // TODO loading res lock
+            if (!m_LoadedRes.TryGetValue(resPath, out var resObj))
+            {
+                resObj = await Resources.LoadAsync<T>(resPath);
+                if (resObj == null)
+                {
+                    throw new System.Exception($"ResAsset `{resPath}` is null");
+                }
+                m_LoadedRes[resPath] = resObj;
+            }
+
+            return (T)resObj;
+        }
 
         public async UniTask<GameObject> InstantiateAsync(string path, Transform parent = null)
         {
@@ -21,22 +41,10 @@ namespace PunchPeng
 
         public async UniTask<T> InstantiateAsync<T>(string path, Transform parent = null) where T : Object
         {
-            // TODO loading res lock
-
-            if (!m_LoadedRes.TryGetValue(path, out var prefab))
-            {
-                prefab = await Resources.LoadAsync(path) as GameObject;
-                if (prefab == null)
-                {
-                    throw new System.Exception($"Prefab {path} is null");
-                }
-                m_LoadedRes[path] = prefab;
-            }
+            var prefab = await LoadAsync<GameObject>(path);
 
             var go = GameObject.Instantiate(prefab, parent);
-
-            go.transform.position = Vector3.zero;
-            go.transform.rotation = Quaternion.identity;
+            go.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             go.transform.localScale = Vector3.one;
 
             return go.GetComponent<T>();

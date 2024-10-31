@@ -24,11 +24,16 @@ namespace ConfigAuto
 							PlayerBeHitSfx2 = @"Music/受击2",
 							LevelTestScene = @"TestLevel",
 							LevelPunchPengScene = @"PunchPeng",
-							LevelPunchPengBGM = @"Music/动感.wav",
+							LevelBGMTownMMBar = @"Music/MM/Town.Bar",
 							LevelConfig = new Dictionary<String, LevelConfig>
 							{
 								{@"PunchPeng", new LevelConfig {
 									Camera = @"Level/PunchpengCamera",
+									BGMRes = @"Music/MM/Town.Bar",
+								}},
+								{@"PunchPeng_Caodi", new LevelConfig {
+									Camera = @"Level/PunchpengCamera",
+									BGMRes = @"Music/MM/Town.Village",
 								}},
 							},
 						},
@@ -48,12 +53,13 @@ namespace ConfigAuto
 			public String PlayerBeHitSfx2 {get;set;}
 			public String LevelTestScene {get;set;}
 			public String LevelPunchPengScene {get;set;}
-			public String LevelPunchPengBGM {get;set;}
+			public String LevelBGMTownMMBar {get;set;}
 			public Dictionary<String, LevelConfig> LevelConfig {get;set;}
 		}
 		public partial class LevelConfig
 		{
 			public String Camera {get;set;}
+			public String BGMRes {get;set;}
 		}
 
     }

@@ -3,6 +3,7 @@ using R3;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace PunchPeng
 {
@@ -33,6 +34,7 @@ namespace PunchPeng
 
         [SerializeField] public TriggerHelper m_PunchAttackTrigger;
         [SerializeField] public TriggerHelper m_HeadAttackTrigger;
+        [SerializeField] private AudioSource m_AudioSource;
 
         private List<PlayerAbility> m_Abilities = new();
         private BehaviorTree m_BehaviorTree;
@@ -45,12 +47,14 @@ namespace PunchPeng
         public readonly ReactiveProperty<Vector3> Velocity = new();
         public float VelocityMagnitude { get; private set; }
         [ReadOnly] public bool CanMove; // 攻击动画结束会让玩家 重新可以移动，这里 应该改成引用计数
-        [ReadOnly] public bool CanAttack;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
         private void Awake()
         {
+            m_AudioSource = GetComponent<AudioSource>();
+            Assert.IsNotNull(m_AudioSource);
+
             //m_Abilities.Add(new PlayerHeadAttackAbility());
             m_Abilities.Add(new PlayerPunchAttackAbility());
 
@@ -69,18 +73,20 @@ namespace PunchPeng
         private void Start()
         {
             CanMove = true;
-            CanAttack = true;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
         }
 
         private void Update()
         {
-            m_BehaviorTree?.OnUpdate(Time.deltaTime);
-
-            SimpleMove(PlayerInputMoveDir.Value);
-            foreach (var ability in m_Abilities)
+            if (!IsDead)
             {
-                ability.Update(Time.deltaTime);
+                m_BehaviorTree?.OnUpdate(Time.deltaTime);
+                foreach (var ability in m_Abilities)
+                {
+                    ability.Update(Time.deltaTime);
+                }
+
+                UpdateMoveCommand(PlayerInputMoveDir.Value);
             }
         }
 
@@ -91,7 +97,6 @@ namespace PunchPeng
         public void EndGameStop()
         {
             CanMove = false;
-            CanAttack = false;
             Velocity.Value = Vector3.zero;
         }
 
@@ -106,7 +111,7 @@ namespace PunchPeng
             m_Animancer.Play(anim);
         }
 
-        private void SimpleMove(Vector3 moveDir)
+        private void UpdateMoveCommand(Vector3 moveDir)
         {
             if (!CanMove) return;
 
