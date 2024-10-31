@@ -9,7 +9,7 @@ namespace PunchPeng
         private List<BevNode> m_BevNodes = new();
         private BevNode m_CurNode;
 
-        private float m_CfgAtkCd = 4;
+        private float m_CfgAtkCd = 5;
         private float m_AtkTime = 0;
 
         public void Init(Player player)
@@ -46,7 +46,7 @@ namespace PunchPeng
             if (AttackPlayerInFrontOfYou() && Time.time - m_AtkTime > m_CfgAtkCd)
             {
                 m_AtkTime = Time.time;
-                if (MathUtil.InPercent(0.2f))
+                if (MathUtil.InPercent(0.1f))
                 {
                     m_Player.InputAttack.Value = true;
                 }
@@ -114,17 +114,18 @@ namespace PunchPeng
 
     public class BevMove : BevNode
     {
+        private float m_CfgSpeedUpDuration = 0.2f;
+        private float m_CfgSpeedDownDuration = 0.2f;
+
         protected Vector3 m_InputDir;
         protected Vector3 m_RealInput;
-        private float m_ObstacleStopTime;
-
-        private float m_CfgMoveStartTime = 0.2f;
-        private float m_CfgMoveEndTime = 0.2f;
+        private float m_ReduceSpeedElapesdMoment;
 
         public override void Start()
         {
             base.Start();
             m_CfgDuration = Random.Range(1f, 2f);
+            m_ReduceSpeedElapesdMoment = m_CfgDuration - m_CfgSpeedDownDuration;
 
             var i = 100;
             while (i > 0)
@@ -146,40 +147,31 @@ namespace PunchPeng
         {
             base.OnUpdate(deltaTime);
 
-            if (m_ElapsedTime < m_CfgMoveStartTime)
+            if (m_ElapsedTime < m_CfgSpeedUpDuration)
             {
-                m_RealInput = m_InputDir * (m_ElapsedTime / m_CfgMoveStartTime);
+                m_RealInput = m_InputDir * Mathf.Clamp01(m_ElapsedTime / m_CfgSpeedUpDuration);
             }
-            else if (m_ElapsedTime > m_CfgDuration - m_CfgMoveEndTime)
+            else if (m_ElapsedTime > m_ReduceSpeedElapesdMoment)
             {
-                var stopElapesTime = m_ElapsedTime - (m_CfgDuration - m_CfgMoveEndTime);
-                m_RealInput = stopElapesTime < 0 ? Vector3.zero : m_InputDir * stopElapesTime / m_CfgMoveEndTime;
+                var speedDownPct = Mathf.Clamp01((m_ElapsedTime - m_ReduceSpeedElapesdMoment) / m_CfgSpeedDownDuration);
+                m_RealInput = m_InputDir * (1 - speedDownPct);
             }
             else
             {
                 m_RealInput = m_InputDir;
             }
 
-            if (m_ObstacleStopTime == 0 && !PredictMoveInRange())
+            if (m_ElapsedTime < m_ReduceSpeedElapesdMoment && !PredictMoveInRange())
             {
-                m_ObstacleStopTime = m_ElapsedTime;
-            }
-            if (m_ObstacleStopTime != 0)
-            {
-                var stopElapesTime = m_ElapsedTime - m_ObstacleStopTime;
-                m_RealInput = stopElapesTime < 0 ? Vector3.zero : m_InputDir * stopElapesTime / m_CfgMoveEndTime;
+                m_ReduceSpeedElapesdMoment = m_ElapsedTime;
             }
 
             m_Player.InputMoveDir.Value = m_RealInput;
-            if (m_ObstacleStopTime != 0 && m_RealInput.ApproximatelyZero())
+
+            if (m_ElapsedTime >= m_ReduceSpeedElapesdMoment && m_RealInput.ApproximatelyZero())
             {
                 Finish();
             }
-        }
-
-        public override void Finish()
-        {
-            base.Finish();
         }
 
         private bool PredictMoveInRange()
