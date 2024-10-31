@@ -54,6 +54,8 @@ namespace PunchPeng
 
         private async UniTask OnGameStartAsync()
         {
+            VfxManager.Inst.ReleaseAll();
+
             var levelName = Config_Global.Inst.data.LevelPunchPengScene;
 
             var playBGM = AudioManager.Inst.PlayLevelBGM(levelName);
@@ -121,7 +123,6 @@ namespace PunchPeng
 
             foreach (var item in PlayerList)
             {
-                // attack 结束之后，又把can attack 置为 true 了
                 item.EndGameStop();
             }
 
@@ -135,17 +136,20 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
-            // wait attack anim to finish
-            // 来点慢镜头？
-            winPlayer.PlayAnim(winPlayer.m_AnimData.Cheer);
+            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.WinnderVfx, winPlayer.Position, 10).Forget();
+            // TODO sfx
+            // TODO 来点慢镜头 + 镜头动画??
 
-            WaitToFinishGame().Forget();
+            WaitToFinishGame(winPlayer).Forget();
         }
 
-        private async UniTask WaitToFinishGame()
+        private async UniTask WaitToFinishGame(Player winPlayer)
         {
-            // Play win sfx and vfx ??
-            await UniTask.Delay(5000);
+            // wait attack anim to finish
+            await UniTask.Delay(0.5f.ToMilliSec());
+            winPlayer.PlayAnim(winPlayer.m_AnimData.Cheer);
+
+            await UniTask.Delay(5f.ToMilliSec());
             await EndGameAsync();
         }
     }

@@ -137,6 +137,7 @@ namespace PunchPeng
 
             var sfx = Random.Range(0, 10) % 1 == 0 ? Config_Global.Inst.data.PlayerBeHitSfx1 : Config_Global.Inst.data.PlayerBeHitSfx2;
             PlaySfx(sfx).Forget();
+            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.BeHitVfx, CachedTransform, 2f).Forget();
 
             var dir = damager.Position - Position;
             CachedTransform.rotation = Quaternion.LookRotation(dir);

@@ -44,7 +44,7 @@ namespace PunchPeng
             var prefab = await LoadAsync<GameObject>(path);
 
             var go = GameObject.Instantiate(prefab, parent);
-            go.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            go.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             go.transform.localScale = Vector3.one;
 
             return go.GetComponent<T>();

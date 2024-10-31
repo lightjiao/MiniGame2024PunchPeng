@@ -7,7 +7,7 @@ namespace ConfigAuto
         public object data = new
         {
             TargetFrameRate = 60,
-            TotalPlayerCount = 30,
+            TotalPlayerCount = 20,
 
             PlayerPrefab = "Character/Kelly",
             PlayerPunchFrame = 8, // 动画资源是按照30帧的第4帧算伤害
@@ -23,20 +23,23 @@ namespace ConfigAuto
             LevelConfig = new Dictionary<string, object>()
             {
                 {
-                    "PunchPeng" , new
+                    "PunchPeng", new
                     {
                         Camera = "Level/PunchpengCamera",
                         BGMRes = "Music/MM/Town.Bar",
                     }
                 },
                 {
-                    "PunchPeng_Caodi" , new
+                    "PunchPeng_Caodi", new
                     {
                         Camera = "Level/PunchpengCamera",
                         BGMRes = "Music/MM/Town.Village",
                     }
                 },
             },
+
+            BeHitVfx = "Vfx/BeHitVfx",
+            WinnderVfx = "Vfx/WinnderVfx",
         };
     }
 }

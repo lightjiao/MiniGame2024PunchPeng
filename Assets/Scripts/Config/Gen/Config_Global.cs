@@ -16,7 +16,7 @@ namespace ConfigAuto
 						data = new()
 						{
 							TargetFrameRate = 60,
-							TotalPlayerCount = 30,
+							TotalPlayerCount = 20,
 							PlayerPrefab = @"Character/Kelly",
 							PlayerPunchFrame = 8,
 							PlayerPunchSfx = @"Music/Punch",
@@ -36,6 +36,8 @@ namespace ConfigAuto
 									BGMRes = @"Music/MM/Town.Village",
 								}},
 							},
+							BeHitVfx = @"Vfx/BeHitVfx",
+							WinnderVfx = @"Vfx/WinnderVfx",
 						},
 					};
 				return _inst;
@@ -55,6 +57,8 @@ namespace ConfigAuto
 			public String LevelPunchPengScene {get;set;}
 			public String LevelBGMTownMMBar {get;set;}
 			public Dictionary<String, LevelConfig> LevelConfig {get;set;}
+			public String BeHitVfx {get;set;}
+			public String WinnderVfx {get;set;}
 		}
 		public partial class LevelConfig
 		{
