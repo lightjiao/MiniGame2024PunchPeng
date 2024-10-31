@@ -21,6 +21,7 @@ namespace PunchPeng
         public ReferenceItem[] references;
 
 
+#if UNITY_EDITOR
         [Button]
         private void GenerateCode()
         {
@@ -45,6 +46,7 @@ namespace PunchPeng
         }
 
         private string CodePath => Path.GetDirectoryName(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(this)));
+#endif
     }
 
     /// <summary>
