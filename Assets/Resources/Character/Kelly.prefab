@@ -120,8 +120,8 @@ MonoBehaviour:
   m_AnimData: {fileID: 4078643856851147666}
   m_PunchAttackTrigger: {fileID: 6164739117820392807}
   m_HeadAttackTrigger: {fileID: 6758802320795477583}
+  m_AudioSource: {fileID: 0}
   CanMove: 0
-  CanAttack: 0
 --- !u!143 &5517429912030599293
 CharacterController:
   m_ObjectHideFlags: 0
