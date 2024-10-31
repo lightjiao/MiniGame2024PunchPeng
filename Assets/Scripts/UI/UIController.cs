@@ -10,6 +10,9 @@ namespace PunchPeng
         public GameObject loadingPanel;
         public GameObject submitPanel;
         public Camera uiCamera; // 添加 UI Camera 的引用
+        
+        private float inputCooldown = 0.5f; // 输入间隔时间，单位为秒
+        private float timeSinceLastInput = 0;
 
         private void Awake()
         {
@@ -45,15 +48,34 @@ namespace PunchPeng
 
         void Update()
         {
-            if (loadingPanel.activeSelf && Input.anyKeyDown)
+            timeSinceLastInput += Time.deltaTime;
+            
+            if (gameStartPanel.activeSelf)
             {
+                if (Input.GetKeyDown(KeyCode.Return) && timeSinceLastInput >= inputCooldown)
+                {
+                    timeSinceLastInput = 0;
+                    ShowLoading();
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape) && timeSinceLastInput >= inputCooldown)
+                {
+                    timeSinceLastInput = 0;
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+                }
+            }
+            if (loadingPanel.activeSelf && Input.anyKeyDown && timeSinceLastInput >= inputCooldown)
+            {
+                timeSinceLastInput = 0;
                 loadingPanel.SetActive(false);
                 GameEvent.Inst.OnGameStart?.Invoke();
-
-                // ShowSubmit();
             }
-            else if (submitPanel.activeSelf && Input.anyKeyDown)
+            else if (submitPanel.activeSelf && Input.anyKeyDown && timeSinceLastInput >= inputCooldown)
             {
+                timeSinceLastInput = 0;
                 ShowGameStart();
             }
 
