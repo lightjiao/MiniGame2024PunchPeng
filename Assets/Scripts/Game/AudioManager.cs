@@ -32,6 +32,21 @@ namespace PunchPeng
             m_BGMSource.volume = 0.15f;
         }
 
+        public async UniTask PauseBGMPlaySfx(string res)
+        {
+            var clip = await ResourceMgr.Inst.LoadAsync<AudioClip>(res);
+            var oldClip = m_BGMSource.clip;
+            m_BGMSource.clip = clip;
+            m_BGMSource.loop = false;
+            m_BGMSource.Play();
+
+            await UniTask.Delay(3f.ToMilliSec());
+
+            m_BGMSource.clip = oldClip;
+            m_BGMSource.loop = true;
+            m_BGMSource.Play();
+        }
+
         // TODO: play audio clip by pooled audio source
     }
 }

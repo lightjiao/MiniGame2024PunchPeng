@@ -56,10 +56,9 @@ namespace PunchPeng
         {
             VfxManager.Inst.ReleaseAll();
 
-            var levelName = Config_Global.Inst.data.LevelPunchPengScene;
-
-            var playBGM = AudioManager.Inst.PlayLevelBGM(levelName);
-            await LevelMgr.Inst.LoadLevelAsync(levelName);
+            var randomLevel = Config_Global.Inst.data.LevelNames.RandomOne();
+            var playBGM = AudioManager.Inst.PlayLevelBGM(randomLevel);
+            await LevelMgr.Inst.LoadLevelAsync(randomLevel);
             await SpawnPlayersAsync();
 
             await playBGM;
@@ -136,9 +135,8 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
-            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.WinnderVfx, winPlayer.Position, 10).Forget();
-            // TODO sfx
-            // TODO 来点慢镜头 + 镜头动画??
+            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.WinnerVfx, winPlayer.Position, 10).Forget();
+            AudioManager.Inst.PauseBGMPlaySfx(Config_Global.Inst.data.WinSfx).Forget();
 
             WaitToFinishGame(winPlayer).Forget();
         }

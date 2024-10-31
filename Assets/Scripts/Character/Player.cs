@@ -135,8 +135,7 @@ namespace PunchPeng
         {
             if (IsDead) return;
 
-            var sfx = Random.Range(0, 10) % 1 == 0 ? Config_Global.Inst.data.PlayerBeHitSfx1 : Config_Global.Inst.data.PlayerBeHitSfx2;
-            PlaySfx(sfx).Forget();
+            PlaySfx(Config_Global.Inst.data.PlayerBeHitSfxs.RandomOne()).Forget();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.BeHitVfx, CachedTransform, 2f).Forget();
 
             var dir = damager.Position - Position;

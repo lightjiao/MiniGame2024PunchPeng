@@ -12,13 +12,9 @@ namespace ConfigAuto
             PlayerPrefab = "Character/Kelly",
             PlayerPunchFrame = 8, // 动画资源是按照30帧的第4帧算伤害
             PlayerPunchSfx = "Music/Punch",
-            PlayerBeHitSfx1 = "Music/受击1",
-            PlayerBeHitSfx2 = "Music/受击2",
+            PlayerBeHitSfxs = new[] { "Music/受击1", "Music/受击2" },
 
-            LevelTestScene = "TestLevel",
-            LevelPunchPengScene = "PunchPeng",
-
-            LevelBGMTownMMBar = "Music/MM/Town.Bar",
+            LevelNames = new[] { "PunchPeng", "PunchPeng_Caodi" },
 
             LevelConfig = new Dictionary<string, object>()
             {
@@ -39,7 +35,8 @@ namespace ConfigAuto
             },
 
             BeHitVfx = "Vfx/BeHitVfx",
-            WinnderVfx = "Vfx/WinnderVfx",
+            WinnerVfx = "Vfx/WinnderVfx",
+            WinSfx = "Music/MM/Battle.Win",
         };
     }
 }
