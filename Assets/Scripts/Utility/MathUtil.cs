@@ -25,6 +25,11 @@ public static class MathUtil
     {
         return self * Mathf.Deg2Rad;
     }
+
+    public static bool InPercent(float pct)
+    {
+        return UnityEngine.Random.Range(0, 1f) < pct;
+    }
 }
 
 public class FloatComparer : IEqualityComparer<float>

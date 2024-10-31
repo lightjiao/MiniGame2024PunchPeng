@@ -41,14 +41,14 @@ namespace PunchPeng
         private List<PlayerAbility> m_Abilities = new();
         private BehaviorTree m_BehaviorTree;
 
-        public readonly ReactiveProperty<Vector3> PlayerInputMoveDir = new();
-        public readonly ReactiveProperty<bool> PlayerInputRun = new();
-        public readonly ReactiveProperty<bool> PlayerInputAttack = new();
+        public readonly ReactiveProperty<Vector3> InputMoveDir = new();
+        public readonly ReactiveProperty<bool> InputRun = new();
+        public readonly ReactiveProperty<bool> InputAttack = new();
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
         public float VelocityMagnitude { get; private set; }
-        [ReadOnly] public bool CanMove; // 攻击动画结束会让玩家 重新可以移动，这里 应该改成引用计数
+        [ReadOnly] public ReferenceBool CanMove;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
@@ -74,7 +74,7 @@ namespace PunchPeng
 
         private void Start()
         {
-            CanMove = true;
+            CanMove.RefCnt++;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
         }
 
@@ -88,8 +88,17 @@ namespace PunchPeng
                     ability.Update(Time.deltaTime);
                 }
 
-                UpdateMoveCommand(PlayerInputMoveDir.Value);
+                UpdateMoveCommand(InputMoveDir.Value);
+
+                InputAttack.Value = false;
+                InputRun.Value = false;
+                InputMoveDir.Value = Vector3.zero;
             }
+        }
+
+        private void LateUpdate()
+        {
+
         }
 
         private void OnDestroy()
@@ -98,7 +107,7 @@ namespace PunchPeng
 
         public void EndGameStop()
         {
-            CanMove = false;
+            CanMove.RefCnt--;
             Velocity.Value = Vector3.zero;
         }
 
@@ -118,7 +127,7 @@ namespace PunchPeng
             if (!CanMove) return;
 
             var curSpeed = VelocityMagnitude;
-            var targetSpeed = PlayerInputRun.Value ? m_CfgMaxRunSpeed : m_CfgMaxMoveSpeed;
+            var targetSpeed = InputRun.Value ? m_CfgMaxRunSpeed : m_CfgMaxMoveSpeed;
             var realSpeed = Mathf.Lerp(curSpeed, targetSpeed, m_CfgAcceleration * Time.deltaTime);
             if (realSpeed < m_CfgMaxMoveSpeed) realSpeed = m_CfgMaxMoveSpeed;
 
@@ -156,7 +165,7 @@ namespace PunchPeng
                     break;
                 case PlayerLocomotionState.Dead:
                     // TODO: rag doll
-                    CanMove = false;
+                    CanMove.RefCnt--;
                     m_Animancer.Play(m_AnimData.Dead);
                     break;
                 case PlayerLocomotionState.Ability:

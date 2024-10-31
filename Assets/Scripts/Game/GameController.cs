@@ -36,9 +36,9 @@ namespace PunchPeng
 
             var rawInput = new Vector3(Input.GetAxis("Player1_Horizontal"), 0, Input.GetAxis("Player1_Vertical"));
             var squreInput = Vector3Util.SquareToCircle(rawInput);
-            m_Player1.PlayerInputMoveDir.Value = squreInput;
-            m_Player1.PlayerInputRun.Value = Input.GetButton("Player1_Run");
-            m_Player1.PlayerInputAttack.Value = Input.GetButtonDown("Player1_Attack");
+            m_Player1.InputMoveDir.Value = squreInput;
+            m_Player1.InputRun.Value = Input.GetButton("Player1_Run");
+            m_Player1.InputAttack.Value = Input.GetButtonDown("Player1_Attack");
         }
 
         public void Check2PInput()
@@ -47,9 +47,9 @@ namespace PunchPeng
 
             var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
             var squreInput = Vector3Util.SquareToCircle(rawInput);
-            m_Player2.PlayerInputMoveDir.Value = squreInput;
-            m_Player2.PlayerInputRun.Value = !Input.GetAxis("Player2_Run").Approximately(0);
-            m_Player2.PlayerInputAttack.Value = Input.GetButtonDown("Player2_Attack");
+            m_Player2.InputMoveDir.Value = squreInput;
+            m_Player2.InputRun.Value = !Input.GetAxis("Player2_Run").Approximately(0);
+            m_Player2.InputAttack.Value = Input.GetButtonDown("Player2_Attack");
         }
 
         private async UniTask OnGameStartAsync()
@@ -87,30 +87,49 @@ namespace PunchPeng
             }
             PlayerList.Clear();
 
-            var random = new System.Random();
+            var testOneAI = true;
+            //if (testOneAI)
+            //{
+            //    for (int i = 0; i < 2; i++)
+            //    {
+            //        var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
 
-            for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
+            //        player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+            //        player.Forward = Vector3Util.Rand2DDir();
+
+            //        PlayerList.Add(player);
+            //    }
+            //}
+            //else
             {
-                var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
+                for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
+                {
+                    var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
 
-                player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
-                player.Forward = Vector3Util.Rand2DDir();
+                    player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+                    player.Forward = Vector3Util.Rand2DDir();
 
-                PlayerList.Add(player);
+                    PlayerList.Add(player);
+                }
+
+                m_Player1 = PlayerList.RandomOne();
+                do
+                {
+                    m_Player2 = PlayerList.RandomOne();
+                } while (m_Player1 == m_Player2);
+                m_Player1.PlayerId = 1;
+                m_Player2.PlayerId = 2;
             }
 
-            m_Player1 = PlayerList.RandomOne();
-            do
-            {
-                m_Player2 = PlayerList.RandomOne();
-            } while (m_Player1 == m_Player2);
-            m_Player1.PlayerId = 1;
-            m_Player2.PlayerId = 2;
 
+            var aiId = -1;
             foreach (var item in PlayerList)
             {
                 if (item != m_Player1 && item != m_Player2)
                 {
+                    item.PlayerId = aiId;
+                    aiId--;
+                    item.name += $" [{aiId}]";
                     item.SetIsAI();
                 }
             }
@@ -118,7 +137,7 @@ namespace PunchPeng
 
         private void OnPlayerDeadToFinishGame(int killer, int deadPlayer)
         {
-            if (deadPlayer == 0) return;
+            if (deadPlayer <= 0) return;
 
             foreach (var item in PlayerList)
             {

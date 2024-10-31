@@ -1,7 +1,3 @@
-using ConfigAuto;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using Drawing;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,10 +9,19 @@ namespace PunchPeng
         private List<BevNode> m_BevNodes = new();
         private BevNode m_CurNode;
 
+        private float m_CfgAtkCd = 4;
+        private float m_AtkTime = 0;
+
         public void Init(Player player)
         {
             m_Player = player;
-            m_BevNodes = new List<BevNode> { new BevIdle(), new BevIdle(), new BevIdle(), new BevMove(), new BevMove(), new BevRun() };
+
+            m_BevNodes = new List<BevNode> {
+                new BevIdle(), new BevIdle(), new BevIdle(),
+                new BevMove(), new BevMove(),
+                new BevRun()
+            };
+
             foreach (var node in m_BevNodes)
             {
                 node.Init(m_Player);
@@ -37,6 +42,31 @@ namespace PunchPeng
             {
                 m_CurNode = null;
             }
+
+            if (AttackPlayerInFrontOfYou() && Time.time - m_AtkTime > m_CfgAtkCd)
+            {
+                m_AtkTime = Time.time;
+                if (MathUtil.InPercent(0.2f))
+                {
+                    m_Player.InputAttack.Value = true;
+                }
+            }
+        }
+
+        private bool AttackPlayerInFrontOfYou()
+        {
+            var predictPos = (m_Player.Position + m_Player.Forward);
+
+            foreach (var player in GameController.Inst.PlayerList)
+            {
+                if (m_Player == player || player.IsDead) continue;
+                if ((player.Position - predictPos).SetY(0).magnitude < 0.5f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -85,6 +115,11 @@ namespace PunchPeng
     public class BevMove : BevNode
     {
         protected Vector3 m_InputDir;
+        protected Vector3 m_RealInput;
+        private float m_ObstacleStopTime;
+
+        private float m_CfgMoveStartTime = 0.2f;
+        private float m_CfgMoveEndTime = 0.2f;
 
         public override void Start()
         {
@@ -95,7 +130,7 @@ namespace PunchPeng
             while (i > 0)
             {
                 m_InputDir = Vector3Util.Rand2DDir();
-                if (CheckMoveInRange())
+                if (PredictMoveInRange())
                 {
                     break;
                 }
@@ -103,16 +138,40 @@ namespace PunchPeng
             }
             if (i == 0)
             {
-                Debug.LogError($"行为树避障初始化检测计算了 {i} 次");
+                Debug.LogError($"行为树避障初始化检测计算了 100 次");
             }
-            StartSmoothAsync().Forget();
         }
 
         public override void OnUpdate(float deltaTime)
         {
             base.OnUpdate(deltaTime);
 
-            if (!CheckMoveInRange())
+            if (m_ElapsedTime < m_CfgMoveStartTime)
+            {
+                m_RealInput = m_InputDir * (m_ElapsedTime / m_CfgMoveStartTime);
+            }
+            else if (m_ElapsedTime > m_CfgDuration - m_CfgMoveEndTime)
+            {
+                var stopElapesTime = m_ElapsedTime - (m_CfgDuration - m_CfgMoveEndTime);
+                m_RealInput = stopElapesTime < 0 ? Vector3.zero : m_InputDir * stopElapesTime / m_CfgMoveEndTime;
+            }
+            else
+            {
+                m_RealInput = m_InputDir;
+            }
+
+            if (m_ObstacleStopTime == 0 && !PredictMoveInRange())
+            {
+                m_ObstacleStopTime = m_ElapsedTime;
+            }
+            if (m_ObstacleStopTime != 0)
+            {
+                var stopElapesTime = m_ElapsedTime - m_ObstacleStopTime;
+                m_RealInput = stopElapesTime < 0 ? Vector3.zero : m_InputDir * stopElapesTime / m_CfgMoveEndTime;
+            }
+
+            m_Player.InputMoveDir.Value = m_RealInput;
+            if (m_ObstacleStopTime != 0 && m_RealInput.ApproximatelyZero())
             {
                 Finish();
             }
@@ -121,33 +180,12 @@ namespace PunchPeng
         public override void Finish()
         {
             base.Finish();
-            StopSmoothAsync().Forget();
         }
 
-        private bool CheckMoveInRange()
+        private bool PredictMoveInRange()
         {
             var predictPos = m_Player.Position + m_InputDir;
             return predictPos.InRange2D(LevelArea.Inst.Min, LevelArea.Inst.Max);
-        }
-
-        private async UniTask StartSmoothAsync()
-        {
-            var smoothFrame = Config_Global.Inst.data.TargetFrameRate / 6;
-            for (var i = 0; i <= smoothFrame; i++)
-            {
-                m_Player.PlayerInputMoveDir.Value = m_InputDir * i / smoothFrame;
-                await UniTask.NextFrame();
-            }
-        }
-
-        private async UniTask StopSmoothAsync()
-        {
-            var smoothFrame = Config_Global.Inst.data.TargetFrameRate / 6;
-            for (var i = smoothFrame; i >= 0; i--)
-            {
-                m_Player.PlayerInputMoveDir.Value = m_InputDir * i / smoothFrame;
-                await UniTask.NextFrame();
-            }
         }
     }
 
@@ -157,18 +195,22 @@ namespace PunchPeng
         {
             base.Start();
             m_CfgDuration = Random.Range(0.5f, 1f);
-            m_Player.PlayerInputRun.Value = true;
+            m_Player.InputRun.Value = true;
         }
 
         public override void Finish()
         {
             base.Finish();
-            m_Player.PlayerInputRun.Value = false;
+            m_Player.InputRun.Value = false;
         }
     }
 
     public class BevAttack : BevNode
     {
-
+        public override void Start()
+        {
+            base.Start();
+            m_Player.InputAttack.Value = true;
+        }
     }
 }

@@ -9,6 +9,11 @@ public static class Vector3Util
             self.z.Approximately(other.z, e);
     }
 
+    public static bool ApproximatelyZero(this Vector3 self, float e = MathUtil.Epsilon)
+    {
+        return self.Approximately(Vector3.zero, e);
+    }
+
     public static float HorizontalMagnitude(this Vector3 self)
     {
         var copy = self;

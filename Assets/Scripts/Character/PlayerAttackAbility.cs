@@ -8,8 +8,7 @@ namespace PunchPeng
     {
         protected override bool AbilityCanStart()
         {
-            var can = m_Player.PlayerInputAttack.Value && base.AbilityCanStart();
-            m_Player.PlayerInputAttack.Value = false;
+            var can = m_Player.InputAttack.Value && base.AbilityCanStart();
 
             return can; ;
         }
@@ -17,20 +16,20 @@ namespace PunchPeng
         protected override void AbilityOnStart()
         {
             base.AbilityOnStart();
-            m_Player.CanMove = false;
+            m_Player.CanMove.RefCnt--;
             m_Player.PlaySfx(Config_Global.Inst.data.PlayerPunchSfx).Forget();
         }
 
         protected override void AbilityOnStop()
         {
-            m_Player.CanMove = true;
+            m_Player.CanMove.RefCnt++;
             base.AbilityOnStop();
         }
 
         protected void AttackOther(Collider other)
         {
             var player = other.GetComponent<Player>();
-            if (player != null)
+            if (player != null && !m_Player.IsDead)
             {
                 player.RecieveDamage(m_Player, 999);
             }
