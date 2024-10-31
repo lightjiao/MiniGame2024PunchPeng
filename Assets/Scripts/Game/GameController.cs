@@ -28,6 +28,7 @@ namespace PunchPeng
         {
             Check1PInput();
             Check2PInput();
+            VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 
         public void Check1PInput()

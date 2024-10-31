@@ -6,21 +6,38 @@ namespace PunchPeng
 {
     public class VfxManager : Singleton<VfxManager>
     {
-        //private Dictionary</>
         private class VfxHolder
         {
             public int Uuid;
             public string ResName;
             public GameObject Go;
             public float Duration;
+            public float ElapsedTime;
         }
 
         private int m_UUID;
         private Dictionary<int, VfxHolder> m_VfxHolderDic = new();
+        private List<int> m_KeysCache = new();
 
         protected override void OnInit()
         {
 
+        }
+
+        public void OnUpdate(float deltaTime)
+        {
+            m_VfxHolderDic.KeysCopyTo(m_KeysCache);
+            foreach (var uid in m_KeysCache)
+            {
+                var holder = m_VfxHolderDic[uid];
+                if (holder.Duration <= 0) continue;
+
+                holder.ElapsedTime += deltaTime;
+                if (holder.ElapsedTime >= holder.Duration)
+                {
+                    DestroyVfx(uid);
+                }
+            }
         }
 
         public void ReleaseAll()
@@ -41,10 +58,6 @@ namespace PunchPeng
             holder.Go = go;
 
             m_VfxHolderDic[holder.Uuid] = holder;
-            if (duration > 0)
-            {
-                DelayToDestroyVfx(holder).Forget();
-            }
 
             return holder.Uuid;
         }
@@ -58,12 +71,6 @@ namespace PunchPeng
             }
 
             return uuid;
-        }
-
-        private async UniTask DelayToDestroyVfx(VfxHolder holder)
-        {
-            await UniTask.Delay(holder.Duration.ToMilliSec());
-            DestroyVfx(holder.Uuid);
         }
 
         public void DestroyVfx(int id)
