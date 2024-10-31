@@ -56,7 +56,7 @@ namespace PunchPeng
         {
             var levelName = Config_Global.Inst.data.LevelPunchPengScene;
 
-            var playBGM = GameBGMManager.Inst.PlayLevelBGM(levelName);
+            var playBGM = AudioManager.Inst.PlayLevelBGM(levelName);
             await LevelMgr.Inst.LoadLevelAsync(levelName);
             await SpawnPlayersAsync();
 

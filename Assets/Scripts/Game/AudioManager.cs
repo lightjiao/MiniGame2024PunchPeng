@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace PunchPeng
 {
-    public class GameBGMManager : SingletonMono<GameBGMManager>
+    public class AudioManager : SingletonMono<AudioManager>
     {
         [SerializeField]
         private AudioSource m_BGMSource;
@@ -30,5 +30,7 @@ namespace PunchPeng
             m_BGMSource.loop = true;
             m_BGMSource.Play();
         }
+
+        // TODO: play audio clip by pooled audio source
     }
 }
