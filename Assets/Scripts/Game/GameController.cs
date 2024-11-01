@@ -94,10 +94,6 @@ namespace PunchPeng
             //    for (int i = 0; i < 2; i++)
             //    {
             //        var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
-
-            //        player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
-            //        player.Forward = Vector3Util.Rand2DDir();
-
             //        PlayerList.Add(player);
             //    }
             //}
@@ -106,10 +102,6 @@ namespace PunchPeng
                 for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
-
-                    player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
-                    player.Forward = Vector3Util.Rand2DDir();
-
                     PlayerList.Add(player);
                 }
 
@@ -122,16 +114,22 @@ namespace PunchPeng
                 m_Player2.PlayerId = 2;
             }
 
-
             var aiId = -1;
-            foreach (var item in PlayerList)
+            foreach (var player in PlayerList)
             {
-                if (item != m_Player1 && item != m_Player2)
+                player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+                player.Forward = Vector3Util.Rand2DDir();
+
+                if (player != m_Player1 && player != m_Player2)
                 {
-                    item.PlayerId = aiId;
+                    player.PlayerId = aiId;
                     aiId--;
-                    item.name += $" [{aiId}]";
-                    item.SetIsAI();
+                    player.name += $" AI:[{aiId}]";
+                    player.SetIsAI();
+                }
+                else
+                {
+                    player.name += $" Player:[{player.PlayerId}]";
                 }
             }
         }

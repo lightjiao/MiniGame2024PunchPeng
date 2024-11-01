@@ -12,19 +12,19 @@ public class MonoEntity : MonoBehaviour
         }
     }
 
-    public Vector3 Position
+    public virtual Vector3 Position
     {
         get => CachedTransform.position;
         set => CachedTransform.position = value;
     }
 
-    public Quaternion Rotation
+    public virtual Quaternion Rotation
     {
         get => CachedTransform.rotation;
         set => CachedTransform.rotation = value;
     }
 
-    public Vector3 Forward
+    public virtual Vector3 Forward
     {
         get => CachedTransform.forward;
         set => CachedTransform.forward = value;

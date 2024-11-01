@@ -52,6 +52,18 @@ namespace PunchPeng
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
+        public override Vector3 Position
+        {
+            get => base.Position;
+            set
+            {
+                var cctOldEnable = m_CCT.enabled;
+                m_CCT.enabled = false;
+                base.Position = value;
+                m_CCT.enabled = cctOldEnable;
+            }
+        }
+
         private void Awake()
         {
             m_AudioSource = GetComponent<AudioSource>();
