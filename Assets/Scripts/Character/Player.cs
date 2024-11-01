@@ -40,6 +40,7 @@ namespace PunchPeng
 
         private List<PlayerAbility> m_Abilities = new();
         private BehaviorTree m_BehaviorTree;
+        private CopyPlayerInputAI m_CopyAI;
 
         public readonly ReactiveProperty<Vector3> InputMoveDir = new();
         public readonly ReactiveProperty<bool> InputRun = new();
@@ -94,23 +95,29 @@ namespace PunchPeng
         {
             if (!IsDead)
             {
-                m_BehaviorTree?.OnUpdate(Time.deltaTime);
+                if (m_CopyAI != null)
+                {
+                    m_CopyAI.OnUpdate();
+                }
+                else
+                {
+                    m_BehaviorTree?.OnUpdate(Time.deltaTime);
+                }
+
                 foreach (var ability in m_Abilities)
                 {
                     ability.Update(Time.deltaTime);
                 }
 
                 UpdateMoveCommand(InputMoveDir.Value);
-
-                InputAttack.Value = false;
-                InputRun.Value = false;
-                InputMoveDir.Value = Vector3.zero;
             }
         }
 
         private void LateUpdate()
         {
-
+            InputAttack.Value = false;
+            InputRun.Value = false;
+            InputMoveDir.Value = Vector3.zero;
         }
 
         private void OnDestroy()
@@ -123,10 +130,18 @@ namespace PunchPeng
             Velocity.Value = Vector3.zero;
         }
 
-        public void SetIsAI()
+        public void SetIsAI(bool copyAI)
         {
-            m_BehaviorTree = new BehaviorTree();
-            m_BehaviorTree.Init(this);
+            if (copyAI)
+            {
+                m_CopyAI = new CopyPlayerInputAI();
+                m_CopyAI.Init(this);
+            }
+            else
+            {
+                m_BehaviorTree = new BehaviorTree();
+                m_BehaviorTree.Init(this);
+            }
         }
 
         public void PlayAnim(ClipTransition anim)

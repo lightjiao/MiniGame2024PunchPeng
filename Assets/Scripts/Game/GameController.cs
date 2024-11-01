@@ -26,31 +26,8 @@ namespace PunchPeng
 
         private void Update()
         {
-            Check1PInput();
-            Check2PInput();
+            PlayerInputManager.Inst.OnUpdate();
             VfxManager.Inst.OnUpdate(Time.deltaTime);
-        }
-
-        public void Check1PInput()
-        {
-            if (m_Player1 == null) return;
-
-            var rawInput = new Vector3(Input.GetAxis("Player1_Horizontal"), 0, Input.GetAxis("Player1_Vertical"));
-            var squreInput = Vector3Util.SquareToCircle(rawInput);
-            m_Player1.InputMoveDir.Value = squreInput;
-            m_Player1.InputRun.Value = Input.GetButton("Player1_Run");
-            m_Player1.InputAttack.Value = Input.GetButtonDown("Player1_Attack");
-        }
-
-        public void Check2PInput()
-        {
-            if (m_Player2 == null) return;
-
-            var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
-            var squreInput = Vector3Util.SquareToCircle(rawInput);
-            m_Player2.InputMoveDir.Value = squreInput;
-            m_Player2.InputRun.Value = !Input.GetAxis("Player2_Run").Approximately(0);
-            m_Player2.InputAttack.Value = Input.GetButtonDown("Player2_Attack");
         }
 
         private async UniTask OnGameStartAsync()
@@ -88,10 +65,10 @@ namespace PunchPeng
             }
             PlayerList.Clear();
 
-            var testOneAI = true;
+            //var testOneAI = true;
             //if (testOneAI)
             //{
-            //    for (int i = 0; i < 2; i++)
+            //    for (int i = 0; i < 1; i++)
             //    {
             //        var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
             //        PlayerList.Add(player);
@@ -125,7 +102,7 @@ namespace PunchPeng
                     player.PlayerId = aiId;
                     aiId--;
                     player.name += $" AI:[{aiId}]";
-                    player.SetIsAI();
+                    player.SetIsAI(false);
                 }
                 else
                 {
