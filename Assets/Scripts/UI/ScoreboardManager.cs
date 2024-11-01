@@ -31,23 +31,16 @@ namespace PunchPeng
         private void OnPlayerDeadToChangeScore(int attacker, int deadPlayer)
         {
             // cal score
-            Debug.Log("player's index");
             var deadPlayerIndex = deadPlayer - 1;
             var attackerIndex = attacker - 1;
-            Debug.Log(deadPlayer);
-            Debug.Log(attacker);
             if (deadPlayer >= 0 && deadPlayer <= scores.Length)
             {
                 if (attacker <0 && scores[deadPlayerIndex] > 0)
                 {
-                    Debug.Log("attacked");
-                    Debug.Log(deadPlayer);
                     scores[deadPlayerIndex]--;
                 }
                 else if (attacker >= 0 && attackerIndex < scores.Length)
                 {
-                    Debug.Log("attack");
-                    Debug.Log(attacker);
                     scores[attackerIndex]++;
                 }
                 UpdateScoreModules();
