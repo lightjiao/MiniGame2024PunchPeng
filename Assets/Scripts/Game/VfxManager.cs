@@ -44,8 +44,9 @@ namespace PunchPeng
         {
             foreach (var kv in m_VfxHolderDic)
             {
-                DestroyVfx(kv.Key);
+                GameObjectUtil.DestroyGo(kv.Value.Go);
             }
+            m_VfxHolderDic.Clear();
         }
 
         public async UniTask<int> PlayVfx(string resName, Transform parent = null, float duration = 0)
