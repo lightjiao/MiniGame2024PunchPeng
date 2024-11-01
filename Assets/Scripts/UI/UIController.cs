@@ -11,8 +11,9 @@ namespace PunchPeng
         public GameObject submitPanel;
         public Camera uiCamera; // 添加 UI Camera 的引用
         
-        private float inputCooldown = 0.5f; // 输入间隔时间，单位为秒
-        private float timeSinceLastInput = 0;
+        private float inputCooldown = 1f; // 输入间隔时间，单位为秒
+        private readonly float m_CfgInputCD = 1f;
+        private float allowInputGameTime;
 
         private void Awake()
         {
@@ -27,6 +28,7 @@ namespace PunchPeng
 
         public void ShowGameStart()
         {
+            allowInputGameTime = Time.time + m_CfgInputCD;
             gameStartPanel.SetActive(true);
             loadingPanel.SetActive(false);
             submitPanel.SetActive(false);
@@ -34,6 +36,7 @@ namespace PunchPeng
 
         public void ShowLoading()
         {
+            allowInputGameTime = Time.time + m_CfgInputCD;
             gameStartPanel.SetActive(false);
             loadingPanel.SetActive(true);
             submitPanel.SetActive(false);
@@ -41,6 +44,7 @@ namespace PunchPeng
 
         public void ShowSubmit()
         {
+            allowInputGameTime = Time.time + m_CfgInputCD;
             gameStartPanel.SetActive(false);
             loadingPanel.SetActive(false);
             submitPanel.SetActive(true);
@@ -48,35 +52,39 @@ namespace PunchPeng
 
         void Update()
         {
-            timeSinceLastInput += Time.deltaTime;
+            if (Time.time < allowInputGameTime)
+            {
+                return;
+            }
             
             if (gameStartPanel.activeSelf)
             {
-                if (Input.GetKeyDown(KeyCode.Return) && timeSinceLastInput >= inputCooldown)
+                
+                if (Input.GetKeyDown(KeyCode.Return) )
                 {
-                    timeSinceLastInput = 0;
                     ShowLoading();
                 }
-                else if (Input.GetKeyDown(KeyCode.Escape) && timeSinceLastInput >= inputCooldown)
+                else if (Input.GetKeyDown(KeyCode.Escape) )
                 {
-                    timeSinceLastInput = 0;
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
 #else
-                Application.Quit();
+                    Application.Quit();
 #endif
                 }
+
+                return;
             }
-            if (loadingPanel.activeSelf && Input.anyKeyDown && timeSinceLastInput >= inputCooldown)
+            if (loadingPanel.activeSelf && Input.anyKeyDown)
             {
-                timeSinceLastInput = 0;
                 loadingPanel.SetActive(false);
                 GameEvent.Inst.OnGameStart?.Invoke();
+                return;
             }
-            else if (submitPanel.activeSelf && Input.anyKeyDown && timeSinceLastInput >= inputCooldown)
+            else if (submitPanel.activeSelf && Input.anyKeyDown)
             {
-                timeSinceLastInput = 0;
                 ShowGameStart();
+                return;
             }
 
             // 如果有基于射线检测的 UI 交互，可以在这里进行调整
