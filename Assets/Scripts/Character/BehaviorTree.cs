@@ -114,12 +114,12 @@ namespace PunchPeng
 
     public class BevMove : BevNode
     {
-        private float m_CfgSpeedUpDuration = 0.2f;
-        private float m_CfgSpeedDownDuration = 0.2f;
+        protected float m_CfgSpeedUpDuration = 0.2f;
+        protected float m_CfgSpeedDownDuration = 0.2f;
 
         protected Vector3 m_InputDir;
         protected Vector3 m_RealInput;
-        private float m_ReduceSpeedElapesdMoment;
+        protected float m_ReduceSpeedElapesdMoment;
 
         public override void Start()
         {
@@ -174,6 +174,12 @@ namespace PunchPeng
             }
         }
 
+        public override void Finish()
+        {
+            //Debug.Log($"Move Finish log: realInput:{m_RealInput}, m_ElapsedTime:{m_ElapsedTime}, m_ReduceSpeedElapesdMoment:{m_ReduceSpeedElapesdMoment}, m_CfgDuration:{m_CfgDuration}");
+            base.Finish();
+        }
+
         private bool PredictMoveInRange()
         {
             var predictPos = m_Player.Position + m_InputDir;
@@ -187,6 +193,7 @@ namespace PunchPeng
         {
             base.Start();
             m_CfgDuration = Random.Range(0.5f, 1f);
+            m_ReduceSpeedElapesdMoment = m_CfgDuration - m_CfgSpeedDownDuration;
             m_Player.InputRun.Value = true;
         }
 
