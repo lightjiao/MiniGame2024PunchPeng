@@ -149,16 +149,15 @@ namespace PunchPeng
             m_Animancer.Play(anim, fadeDuration: 0.15f, mode: FadeMode.FromStart);
         }
 
-        private void UpdateMoveCommand(Vector3 moveDir)
+        private void UpdateMoveCommand(Vector3 inputMove)
         {
             if (!CanMove) return;
 
             var curSpeed = VelocityMagnitude;
             var targetSpeed = InputRun.Value ? m_CfgMaxRunSpeed : m_CfgMaxMoveSpeed;
-            var realSpeed = Mathf.Lerp(curSpeed, targetSpeed, m_CfgAcceleration * Time.deltaTime);
-            if (realSpeed < m_CfgMaxMoveSpeed) realSpeed = m_CfgMaxMoveSpeed;
+            var realSpeed = Mathf.MoveTowards(curSpeed, targetSpeed, m_CfgAcceleration * Time.deltaTime);
 
-            var realVelocity = realSpeed * moveDir;
+            var realVelocity = realSpeed * inputMove.normalized;
             Velocity.Value = realVelocity;
             m_CCT.SimpleMove(realVelocity);
             if (!realVelocity.Approximately(Vector3.zero))

@@ -29,7 +29,7 @@ namespace PunchPeng
             m_BGMSource.clip = clip;
             m_BGMSource.loop = true;
             m_BGMSource.Play();
-            m_BGMSource.volume = 0.15f;
+            m_BGMSource.volume = 0.1f;
         }
 
         public async UniTask PauseBGMPlaySfx(string res)
