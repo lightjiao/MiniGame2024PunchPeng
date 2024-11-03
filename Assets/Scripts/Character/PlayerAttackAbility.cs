@@ -82,8 +82,12 @@ namespace PunchPeng
             var damageFrame = (int)(5 / Time.timeScale);
 
             await UniTask.DelayFrame(punchFrame);
+            if (m_Player == null || m_Player.IsDead) return;
+
             m_Player.m_PunchAttackTrigger.SetActiveEx(true);
             await UniTask.DelayFrame(damageFrame);
+
+            if (m_Player == null || m_Player.IsDead) return;
             m_Player.m_PunchAttackTrigger.SetActiveEx(false);
         }
     }
