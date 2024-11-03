@@ -22,6 +22,7 @@ namespace PunchPeng
             Inst = this;
             GameEvent.Inst.OnGameStart += OnGameStartAsync;
             GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
+            _ = ScoreboardManager.Inst;
         }
 
         private void Update()
