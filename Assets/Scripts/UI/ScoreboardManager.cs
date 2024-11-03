@@ -1,71 +1,54 @@
-using UnityEngine;
-using TMPro;
+using System.Collections.Generic;
 
 namespace PunchPeng
 {
-
-    public class ScoreboardManager : MonoBehaviour
+    public class ScoreboardManager : Singleton<ScoreboardManager>
     {
-        public TextMeshProUGUI player1ScoreText;
-        public TextMeshProUGUI player2ScoreText;
-        //public TextMeshProUGUI[] playerScores;
+        public Dictionary<int, int> m_PlayerScores = new();
 
-        public int[] scores = new int[2];
+        public bool HasScore => m_PlayerScores.Count > 0;
 
-        private void Awake()
+        protected override void OnInit()
         {
-            SetPlayerName(0, "Player1");
-            SetPlayerName(1, "Player2");
-
-            // 设置初始分数
-            for (int i = 0; i < 2; i++)
-            {
-                scores[i] = 0;
-                //UpdateScore(i, scores[i]);
-            }
-
             UpdateScoreModules();
             GameEvent.Inst.OnPlayerDead += OnPlayerDeadToChangeScore;
         }
 
         private void OnPlayerDeadToChangeScore(int attacker, int deadPlayer)
         {
-            // cal score
-            var deadPlayerIndex = deadPlayer - 1;
-            var attackerIndex = attacker - 1;
-            if (deadPlayer >= 0 && deadPlayer <= scores.Length)
+            if (deadPlayer < 0) return;
+
+            if (deadPlayer == 1)
             {
-                if (attacker <0 && scores[deadPlayerIndex] > 0)
-                {
-                    scores[deadPlayerIndex]--;
-                }
-                else if (attacker >= 0 && attackerIndex < scores.Length)
-                {
-                    scores[attackerIndex]++;
-                }
-                UpdateScoreModules();
+                AddPlayerScore(2);
             }
+            if (deadPlayer == 2)
+            {
+                AddPlayerScore(1);
+            }
+
+            UpdateScoreModules();
+        }
+
+        private void AddPlayerScore(int playerId)
+        {
+            if (!m_PlayerScores.ContainsKey(playerId))
+            {
+                m_PlayerScores[playerId] = 0;
+            }
+
+            m_PlayerScores[playerId]++;
+        }
+
+        public void ResetAllScore()
+        {
+            m_PlayerScores.Clear();
         }
 
         private void UpdateScoreModules()
         {
-            int module1Score = scores[0];
-            int module2Score = scores[1];
-
-            // draw ui
-            player1ScoreText.text = module1Score.ToString();
-            player2ScoreText.text = module2Score.ToString();
-        }
-        
-        private void SetPlayerName(int playerIndex, string playerName)
-        {
-            //playerNames[playerIndex].text = playerName;
-        }
-
-
-        public void UpdateScore(int playerIndex, int score)
-        {
-            //playerScores[playerIndex].text = score.ToString();
+            UIController.Inst.player1ScoreText.text = m_PlayerScores.GetValueOrDefault(1).ToString(); ;
+            UIController.Inst.player2ScoreText.text = m_PlayerScores.GetValueOrDefault(2).ToString(); ;
         }
     }
 }

@@ -1,24 +1,28 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace PunchPeng
 {
-    public class UIController : MonoBehaviour
+    public class UIController : SingletonMono<UIController>
     {
         public GameObject gameStartPanel;
         public Button startBtn;
+        public Button ResetScoreBtn;
+
         public GameObject loadingPanel;
         public GameObject submitPanel;
-        public Camera uiCamera; // 添加 UI Camera 的引用
-        
-        private float inputCooldown = 1f; // 输入间隔时间，单位为秒
-        private readonly float m_CfgInputCD = 1f;
+        public TextMeshProUGUI player1ScoreText;
+        public TextMeshProUGUI player2ScoreText;
+
+        private readonly float m_CfgInputCD = 0.618f;
         private float allowInputGameTime;
 
-        private void Awake()
+        protected override void OnAwake()
         {
             GameEvent.Inst.OnGameEnd += ShowSubmit;
             startBtn.onClick.AddListener(ClickStartGame);
+            ResetScoreBtn.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
@@ -26,9 +30,21 @@ namespace PunchPeng
             ShowGameStart();
         }
 
+        public void ClickStartGame()
+        {
+            ShowLoading();
+        }
+
+        private void ClickResetScore()
+        {
+            ScoreboardManager.Inst.ResetAllScore();
+            ResetScoreBtn.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
+        }
+
         public void ShowGameStart()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
+            ResetScoreBtn.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
             gameStartPanel.SetActive(true);
             loadingPanel.SetActive(false);
             submitPanel.SetActive(false);
@@ -56,15 +72,14 @@ namespace PunchPeng
             {
                 return;
             }
-            
+
             if (gameStartPanel.activeSelf)
             {
-                
-                if (Input.GetKeyDown(KeyCode.Return) )
+                if (Input.GetKeyDown(KeyCode.Return))
                 {
                     ShowLoading();
                 }
-                else if (Input.GetKeyDown(KeyCode.Escape) )
+                else if (Input.GetKeyDown(KeyCode.Escape))
                 {
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
@@ -86,22 +101,6 @@ namespace PunchPeng
                 ShowGameStart();
                 return;
             }
-
-            // 如果有基于射线检测的 UI 交互，可以在这里进行调整
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = uiCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    // 处理按钮点击等交互
-                }
-            }
-        }
-
-        public void ClickStartGame()
-        {
-            ShowLoading();
         }
     }
 }
