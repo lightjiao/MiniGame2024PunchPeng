@@ -57,7 +57,7 @@ namespace PunchPeng
         {
             var rawInput = new Vector3(Input.GetAxis("Player2_Horizontal"), 0, Input.GetAxis("Player2_Vertical"));
             var squreInput = Vector3Util.SquareToCircle(rawInput);
-            Player2Input.MoveDir = rawInput;
+            Player2Input.MoveDir = squreInput;
             //Player2Input.IsRun = !Input.GetAxis("Player2_Run").Approximately(0);
             Player2Input.IsRun = Input.GetButton("Player2_Run");
             Player2Input.IsAttack = Input.GetButtonDown("Player2_Attack");

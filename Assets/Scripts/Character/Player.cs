@@ -25,7 +25,7 @@ namespace PunchPeng
         /// </summary>
         public int PlayerId;
 
-        [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f; // 这个速度好像再初始化的时候，对动画不生效
+        [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f;
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
         [SerializeField] private float m_CfgAcceleration = 10f;
         [SerializeField] private float m_CfgRotateDeg = 60f;
@@ -116,8 +116,8 @@ namespace PunchPeng
         private void LateUpdate()
         {
             InputAttack.Value = false;
-            InputRun.Value = false;
-            InputMoveDir.Value = Vector3.zero;
+            //InputRun.Value = false;
+            //InputMoveDir.Value = Vector3.zero;
         }
 
         private void OnDestroy()
@@ -153,16 +153,27 @@ namespace PunchPeng
         {
             if (!CanMove) return;
 
-            var curSpeed = VelocityMagnitude;
-            var targetSpeed = InputRun.Value ? m_CfgMaxRunSpeed : m_CfgMaxMoveSpeed;
-            var realSpeed = Mathf.MoveTowards(curSpeed, targetSpeed, m_CfgAcceleration * Time.deltaTime);
-
-            var realVelocity = realSpeed * inputMove.normalized;
-            Velocity.Value = realVelocity;
-            m_CCT.SimpleMove(realVelocity);
-            if (!realVelocity.Approximately(Vector3.zero))
+            var targetVelocity = inputMove * m_CfgMaxMoveSpeed;
+            var targetSpeed = inputMove.magnitude;
+            if (InputRun.Value)
             {
-                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(realVelocity), m_CfgRotateDeg);
+                //VelocityMagnitude <= (m_CfgMaxRunSpeed + 0.1f)
+                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetSpeed = targetSpeed > m_CfgMaxRunSpeed ? m_CfgMaxRunSpeed : targetSpeed;
+
+                targetVelocity = inputMove.normalized * targetSpeed;
+            }
+            if (!InputRun.Value && VelocityMagnitude > m_CfgMaxMoveSpeed)
+            {
+                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, targetSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetVelocity = inputMove.normalized * targetSpeed;
+            }
+
+            Velocity.Value = targetVelocity;
+            m_CCT.SimpleMove(targetVelocity);
+            if (!targetVelocity.Approximately(Vector3.zero))
+            {
+                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(targetVelocity), m_CfgRotateDeg);
             }
         }
 
@@ -203,7 +214,7 @@ namespace PunchPeng
         {
             VelocityMagnitude = velocity.magnitude;
             velocity.y = 0f;
-            m_AnimData.LocomotionMixer.State.Parameter = velocity.magnitude;
+            m_AnimData.LocomotionMixer.State.Parameter = VelocityMagnitude;
         }
 
         public async UniTask PlaySfx(string res)
