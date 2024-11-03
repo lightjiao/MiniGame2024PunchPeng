@@ -35,6 +35,11 @@ public static class Vector3Util
         return copy;
     }
 
+    public static Vector3 ToHorizontalVector3(this Vector2 self)
+    {
+        return new Vector3(self.x, 0, self.y);
+    }
+
     /// <summary>
     /// 椭圆网格映射
     /// </summary>

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class PlayerInputManager : Singleton<PlayerInputManager>
+    public class PlayerInputManager : SingletonMono<PlayerInputManager>
     {
         public struct PlayerInput
         {
@@ -14,10 +14,21 @@ namespace PunchPeng
         public PlayerInput Player1Input = new();
         public PlayerInput Player2Input = new();
 
+        public PlayerControls m_PlayerControls;
 
-        protected override void OnInit()
+        protected override void OnAwake()
         {
+            m_PlayerControls = new();
+        }
 
+        private void OnEnable()
+        {
+            m_PlayerControls.Enable();
+        }
+
+        private void OnDisable()
+        {
+            m_PlayerControls.Disable();
         }
 
         public void OnUpdate()
