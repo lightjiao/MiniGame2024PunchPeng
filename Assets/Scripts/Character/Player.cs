@@ -28,7 +28,7 @@ namespace PunchPeng
         [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f;
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
         [SerializeField] private float m_CfgAcceleration = 10f;
-        [SerializeField] private float m_CfgRotateDeg = 60f;
+        [SerializeField] private float m_CfgRotateDeg = 30f;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
@@ -154,16 +154,17 @@ namespace PunchPeng
             if (!CanMove) return;
 
             var targetVelocity = inputMove * m_CfgMaxMoveSpeed;
-            var targetSpeed = inputMove.magnitude;
-            if (InputRun.Value)
+            var targetSpeed = targetVelocity.magnitude;
+            var playerCanRun = InputRun.Value && targetSpeed.Approximately(m_CfgMaxMoveSpeed);
+
+            if (playerCanRun)
             {
-                //VelocityMagnitude <= (m_CfgMaxRunSpeed + 0.1f)
                 targetSpeed = Mathf.MoveTowards(VelocityMagnitude, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
                 targetSpeed = targetSpeed > m_CfgMaxRunSpeed ? m_CfgMaxRunSpeed : targetSpeed;
 
                 targetVelocity = inputMove.normalized * targetSpeed;
             }
-            if (!InputRun.Value && VelocityMagnitude > m_CfgMaxMoveSpeed)
+            if (!playerCanRun && VelocityMagnitude > m_CfgMaxMoveSpeed)
             {
                 targetSpeed = Mathf.MoveTowards(VelocityMagnitude, targetSpeed, m_CfgAcceleration * Time.deltaTime);
                 targetVelocity = inputMove.normalized * targetSpeed;

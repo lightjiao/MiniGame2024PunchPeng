@@ -152,7 +152,7 @@ namespace PunchPeng
                 {
                     ""name"": """",
                     ""id"": ""8a376521-d1aa-475e-b793-41a98a2fcb3c"",
-                    ""path"": ""<Joystick>/stick/left"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -207,7 +207,7 @@ namespace PunchPeng
                 {
                     ""name"": """",
                     ""id"": ""8725919a-6a99-4f9d-a7cc-689e62220855"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -218,7 +218,7 @@ namespace PunchPeng
                 {
                     ""name"": """",
                     ""id"": ""bf5e94e1-8433-4993-909d-b4f1b55e79c4"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
