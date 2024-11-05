@@ -162,7 +162,18 @@ namespace PunchPeng
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5b5be685-c351-4ab0-8de9-2cd02ebb7065"",
+                    ""id"": ""644be163-423b-4a57-8700-004b53d5b730"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c2567cd-d2d2-4794-ad5a-d49ded84830b"",
                     ""path"": ""<HID::8BitDo 8BitDo Ultimate wireless Controller for PC>/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -184,28 +195,6 @@ namespace PunchPeng
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3393eb54-b56d-4fea-b2c1-096e69bd5ca7"",
-                    ""path"": ""<HID::8BitDo 8BitDo Ultimate wireless Controller for PC>/button10"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Run"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0107e898-b470-4672-9b35-96b3bd628df2"",
-                    ""path"": ""<HID::8BitDo 8BitDo Ultimate wireless Controller for PC>/button9"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Player2Run"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8725919a-6a99-4f9d-a7cc-689e62220855"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
@@ -219,6 +208,28 @@ namespace PunchPeng
                     ""name"": """",
                     ""id"": ""bf5e94e1-8433-4993-909d-b4f1b55e79c4"",
                     ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbbaa51a-f621-449c-8ce2-be575d8f86c4"",
+                    ""path"": ""<HID::8BitDo 8BitDo Ultimate wireless Controller for PC>/button9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f84c77b5-0b9d-4c03-919e-a7a8ee92eed8"",
+                    ""path"": ""<HID::8BitDo 8BitDo Ultimate wireless Controller for PC>/button10"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
