@@ -1,4 +1,4 @@
-using static PunchPeng.PlayerInputManager;
+using static PunchPeng.PlayerInputManagerHelper;
 
 namespace PunchPeng
 {
@@ -13,9 +13,9 @@ namespace PunchPeng
 
         public void OnUpdate()
         {
-            m_Player.InputMoveDir.Value = PlayerInputManager.Inst.Player1Input.MoveDir;
-            m_Player.InputRun.Value = PlayerInputManager.Inst.Player1Input.IsRun;
-            m_Player.InputAttack.Value = PlayerInputManager.Inst.Player1Input.IsAttack;
+            //m_Player.InputMoveDir.Value = PlayerInputManager.Inst.Player1Input.MoveDir;
+            //m_Player.InputRun.Value = PlayerInputManager.Inst.Player1Input.IsRun;
+            //m_Player.InputAttack.Value = PlayerInputManager.Inst.Player1Input.IsAttack;
         }
     }
 }
