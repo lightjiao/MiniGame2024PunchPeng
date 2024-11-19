@@ -27,6 +27,7 @@ namespace PunchPeng
 
         private void Update()
         {
+            PlayerInputManagerHelper.Inst.OnUpdate();
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 

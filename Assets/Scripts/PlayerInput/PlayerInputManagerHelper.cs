@@ -1,11 +1,13 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace PunchPeng
 {
-    public struct PlayerInputData
+    [Serializable]
+    public class PlayerInputData
     {
         public Vector3 MoveDir;
         public bool IsRun;
@@ -30,6 +32,23 @@ namespace PunchPeng
             await UniTask.DelayFrame(1); // PlayerInputManager.instance create at onenable
             PlayerInputManager.instance.onPlayerJoined += OnPlayerJoin;
             PlayerInputManager.instance.onPlayerLeft += OnPlayerLeft;
+        }
+
+        public void OnUpdate()
+        {
+            if (GameController.Inst.m_Player1 != null)
+            {
+                GameController.Inst.m_Player1.InputMoveDir.Value = GetPlayerInputData(1).MoveDir;
+                GameController.Inst.m_Player1.InputRun.Value = GetPlayerInputData(1).IsRun;
+                GameController.Inst.m_Player1.InputAttack.Value = GetPlayerInputData(1).IsAttack;
+            }
+
+            if (GameController.Inst.m_Player2 != null)
+            {
+                GameController.Inst.m_Player2.InputMoveDir.Value = GetPlayerInputData(2).MoveDir;
+                GameController.Inst.m_Player2.InputRun.Value = GetPlayerInputData(2).IsRun;
+                GameController.Inst.m_Player2.InputAttack.Value = GetPlayerInputData(2).IsAttack;
+            }
         }
 
         public PlayerInputData GetPlayerInputData(int playerIdx)

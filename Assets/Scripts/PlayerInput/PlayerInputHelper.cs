@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
@@ -8,8 +9,9 @@ namespace PunchPeng
     public class PlayerInputHelper : MonoBehaviour
     {
         private PlayerInput input;
-        private int m_InputIndex;
-        private PlayerInputData m_PlayerInputData;
+
+        [ReadOnly] private int m_InputIndex;
+        [ReadOnly] private PlayerInputData m_PlayerInputData;
 
         private void Awake()
         {
