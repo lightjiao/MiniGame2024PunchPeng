@@ -92,7 +92,7 @@ namespace PunchPeng
             }
             if (loadingPanel.activeSelf && Input.anyKeyDown)
             {
-                if (PlayerInputManagerHelper.Inst.GamePadCnt == 0)
+                if (PlayerInputManagerHelper.Inst.GamePadCount == 0)
                 {
                     // TODO: 也许弹窗提示需要至少一个手柄加入游戏，或者有个界面强制玩家选择一个手柄
                     Debug.LogError("需要至少一个手柄加入游戏");

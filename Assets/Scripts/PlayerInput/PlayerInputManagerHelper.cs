@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +20,8 @@ namespace PunchPeng
     // AI 随机拷贝当前玩家的移动数据
     public class PlayerInputManagerHelper : SingletonMono<PlayerInputManagerHelper>
     {
-        public int GamePadCnt => m_PlayerInputs.Count;
-        public bool KeyboardCtrlIsDisable;
+        [ShowInInspector]
+        public int GamePadCount => m_PlayerInputs.Count;
 
         private Dictionary<int, PlayerInput> m_PlayerInputs = new();
         private Dictionary<int, PlayerInputData> m_PlayerInputDatas = new();
@@ -29,12 +30,8 @@ namespace PunchPeng
         protected override void OnAwake()
         {
             m_KeyboardInput = new();
-            m_KeyboardInput.GamePlay.Move.performed += KeyboardMove;
-            m_KeyboardInput.GamePlay.Move.canceled += KeyboardMove;
-            m_KeyboardInput.GamePlay.Run.performed += KeyboardRun;
-            m_KeyboardInput.GamePlay.Run.canceled += KeyboardRun;
-            m_KeyboardInput.GamePlay.Attack.performed += KeyboardAttack;
-            m_KeyboardInput.GamePlay.Attack.canceled += KeyboardAttack;
+            var keyboardInput = new KeyboardInput();
+            m_KeyboardInput.GamePlay.AddCallbacks(keyboardInput);
 
             OnAwakeAsync();
         }
@@ -95,23 +92,29 @@ namespace PunchPeng
             //Debug.Log("OnPlayerLeft:" + playerInput.playerIndex);
             m_PlayerInputs.Remove(playerInput.playerIndex);
         }
+    }
 
-        private void KeyboardMove(CallbackContext ctx)
+    public class KeyboardInput : @PlayerInputKeyboard.IGamePlayActions
+    {
+        public void OnAttack(CallbackContext context)
         {
-            GetPlayerInputData(0).MoveDir = m_KeyboardInput.GamePlay.Move.ReadValue<Vector2>().ToHorizontalVector3();
-            //Debug.Log("KeyboardMove:" + GetPlayerInputData(0).MoveDir);
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).IsAttack = value;
+            //Debug.Log("KeyboardAttack:" + value);
         }
 
-        private void KeyboardRun(CallbackContext ctx)
+        public void OnMove(CallbackContext context)
         {
-            GetPlayerInputData(0).IsRun = !m_KeyboardInput.GamePlay.Run.ReadValue<float>().ApproximatelyZero();
-            //Debug.Log("KeyboardRun:" + GetPlayerInputData(0).IsRun);
+            var value = context.ReadValue<Vector2>().ToHorizontalVector3();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).MoveDir = value;
+            //Debug.Log("KeyboardMove:" + value);
         }
 
-        private void KeyboardAttack(CallbackContext ctx)
+        public void OnRun(CallbackContext context)
         {
-            GetPlayerInputData(0).IsAttack = !m_KeyboardInput.GamePlay.Attack.ReadValue<float>().ApproximatelyZero();
-            //Debug.Log("KeyboardAttack:" + GetPlayerInputData(0).IsAttack);
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).IsRun = value;
+            //Debug.Log("KeyboardRun:" + value);
         }
     }
 }
