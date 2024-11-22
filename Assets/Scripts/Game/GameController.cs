@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PunchPeng
 {
@@ -34,6 +35,7 @@ namespace PunchPeng
         private async UniTask OnGameStartAsync()
         {
             VfxManager.Inst.ReleaseAll();
+            PlayerInputManager.instance.DisableJoining();
 
             var randomLevel = Config_Global.Inst.data.LevelNames.RandomOne();
             var playBGM = AudioManager.Inst.PlayLevelBGM(randomLevel);

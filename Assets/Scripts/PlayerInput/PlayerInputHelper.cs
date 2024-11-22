@@ -10,34 +10,29 @@ namespace PunchPeng
     {
         private PlayerInput input;
 
-        [ReadOnly] private int m_InputIndex;
-        [ReadOnly] private PlayerInputData m_PlayerInputData;
+        [ReadOnly] private int m_JoinIndex;
+        private int m_PlayerIdx => PlayerInputManagerHelper.Inst.GamePadCnt > 1 ? m_JoinIndex : m_JoinIndex + 1;
 
         private void Awake()
         {
             input = GetComponent<PlayerInput>();
             Assert.IsNotNull(input);
-            m_InputIndex = input.playerIndex;
-            m_PlayerInputData = PlayerInputManagerHelper.Inst.GetPlayerInputData(m_InputIndex);
+            m_JoinIndex = input.playerIndex;
         }
 
         public void Move(InputAction.CallbackContext ctx)
         {
-            m_PlayerInputData.MoveDir = ctx.ReadValue<Vector2>().ToHorizontalVector3();
-            Debug.Log("MoveInput:" + m_PlayerInputData.MoveDir);
-            // TODO: 特殊处理键盘输入的gravity逻辑
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).MoveDir = ctx.ReadValue<Vector2>().ToHorizontalVector3();
         }
 
         public void Attack(InputAction.CallbackContext ctx)
         {
-            m_PlayerInputData.IsAttack = !ctx.ReadValue<float>().ApproximatelyZero();
-            Debug.Log("Attack:" + m_PlayerInputData.IsAttack);
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).IsAttack = !ctx.ReadValue<float>().ApproximatelyZero();
         }
 
         public void Run(InputAction.CallbackContext ctx)
         {
-            m_PlayerInputData.IsRun = !ctx.ReadValue<float>().ApproximatelyZero();
-            Debug.Log("Run：" + m_PlayerInputData.IsRun);
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).IsRun = !ctx.ReadValue<float>().ApproximatelyZero();
         }
     }
 }
