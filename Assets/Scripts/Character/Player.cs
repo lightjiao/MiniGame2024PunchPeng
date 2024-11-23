@@ -42,14 +42,15 @@ namespace PunchPeng
         private BehaviorTree m_BehaviorTree;
         private CopyPlayerInputAI m_CopyAI;
 
-        public readonly ReactiveProperty<Vector3> InputMoveDir = new();
-        public readonly ReactiveProperty<bool> InputRun = new();
-        public readonly ReactiveProperty<bool> InputAttack = new();
+        public Vector3 InputMoveDir;
+        public bool InputRun;
+        public bool InputAttack;
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
         public float VelocityMagnitude { get; private set; }
         [ReadOnly] public ReferenceBool CanMove;
+        [ReadOnly] public ReferenceBool CanAttack;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
@@ -89,6 +90,13 @@ namespace PunchPeng
         {
             CanMove.RefCnt++;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
+            StartAsync().Forget();
+        }
+
+        private async UniTask StartAsync()
+        {
+            await UniTask.Delay(3000); // 前三秒不准攻击
+            CanAttack.RefCnt++;
         }
 
         private void Update()
@@ -109,22 +117,20 @@ namespace PunchPeng
                     ability.Update(Time.deltaTime);
                 }
 
-                UpdateMoveCommand(InputMoveDir.Value);
+                UpdateMoveCommand(InputMoveDir);
             }
         }
 
         private void LateUpdate()
         {
-            InputAttack.Value = false;
-            //InputRun.Value = false;
-            //InputMoveDir.Value = Vector3.zero;
+            InputAttack = false;
         }
 
         private void OnDestroy()
         {
         }
 
-        public void EndGameStop()
+        public void OnGameEnd()
         {
             CanMove.RefCnt--;
             Velocity.Value = Vector3.zero;
@@ -155,7 +161,7 @@ namespace PunchPeng
 
             var targetVelocity = inputMove * m_CfgMaxMoveSpeed;
             var targetSpeed = targetVelocity.magnitude;
-            var playerCanRun = InputRun.Value && targetSpeed.Approximately(m_CfgMaxMoveSpeed);
+            var playerCanRun = InputRun && targetSpeed.Approximately(m_CfgMaxMoveSpeed);
 
             if (playerCanRun)
             {

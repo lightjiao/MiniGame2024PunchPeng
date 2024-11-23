@@ -48,7 +48,7 @@ namespace PunchPeng
                 m_AtkTime = Time.time;
                 if (MathUtil.InPercent(0.1f))
                 {
-                    m_Player.InputAttack.Value = true;
+                    m_Player.InputAttack = true;
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace PunchPeng
                 m_ReduceSpeedElapesdMoment = m_ElapsedTime;
             }
 
-            m_Player.InputMoveDir.Value = m_RealInput;
+            m_Player.InputMoveDir = m_RealInput;
 
             if (m_ElapsedTime >= m_ReduceSpeedElapesdMoment && m_RealInput.ApproximatelyZero())
             {
@@ -194,13 +194,13 @@ namespace PunchPeng
             base.Start();
             m_CfgDuration = Random.Range(0.5f, 1f);
             m_ReduceSpeedElapesdMoment = m_CfgDuration - m_CfgSpeedDownDuration;
-            m_Player.InputRun.Value = true;
+            m_Player.InputRun = true;
         }
 
         public override void Finish()
         {
             base.Finish();
-            m_Player.InputRun.Value = false;
+            m_Player.InputRun = false;
         }
     }
 
@@ -209,7 +209,7 @@ namespace PunchPeng
         public override void Start()
         {
             base.Start();
-            m_Player.InputAttack.Value = true;
+            m_Player.InputAttack = true;
         }
     }
 }

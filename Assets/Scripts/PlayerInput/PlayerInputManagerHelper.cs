@@ -58,16 +58,20 @@ namespace PunchPeng
         {
             if (GameController.Inst.m_Player1 != null)
             {
-                GameController.Inst.m_Player1.InputMoveDir.Value = GetPlayerInputData(0).MoveDir;
-                GameController.Inst.m_Player1.InputRun.Value = GetPlayerInputData(0).IsRun;
-                GameController.Inst.m_Player1.InputAttack.Value = GetPlayerInputData(0).IsAttack;
+                GameController.Inst.m_Player1.InputMoveDir = GetPlayerInputData(0).MoveDir;
+                GameController.Inst.m_Player1.InputRun = GetPlayerInputData(0).IsRun;
+                GameController.Inst.m_Player1.InputAttack = GetPlayerInputData(0).IsAttack;
+
+                PlayerInputLogger.Inst.AppendInput(1, Time.frameCount, GetPlayerInputData(0));
             }
 
             if (GameController.Inst.m_Player2 != null)
             {
-                GameController.Inst.m_Player2.InputMoveDir.Value = GetPlayerInputData(1).MoveDir;
-                GameController.Inst.m_Player2.InputRun.Value = GetPlayerInputData(1).IsRun;
-                GameController.Inst.m_Player2.InputAttack.Value = GetPlayerInputData(1).IsAttack;
+                GameController.Inst.m_Player2.InputMoveDir = GetPlayerInputData(1).MoveDir;
+                GameController.Inst.m_Player2.InputRun = GetPlayerInputData(1).IsRun;
+                GameController.Inst.m_Player2.InputAttack = GetPlayerInputData(1).IsAttack;
+
+                PlayerInputLogger.Inst.AppendInput(2, Time.frameCount, GetPlayerInputData(1));
             }
         }
 

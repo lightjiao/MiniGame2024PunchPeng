@@ -1,7 +1,11 @@
+using System.Threading;
 using UnityEngine;
 
 public class MonoEntity : MonoBehaviour
 {
+    private CancellationTokenSource _cTs;
+    protected CancellationTokenSource m_Cts => _cTs ??= new CancellationTokenSource();
+
     private Transform _trans;
     public Transform CachedTransform
     {

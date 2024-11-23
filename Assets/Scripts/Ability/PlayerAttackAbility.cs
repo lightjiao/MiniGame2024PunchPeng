@@ -8,7 +8,7 @@ namespace PunchPeng
     {
         protected override bool AbilityCanStart()
         {
-            var can = m_Player.InputAttack.Value && base.AbilityCanStart();
+            var can = m_Player.InputAttack && m_Player.CanAttack && base.AbilityCanStart();
 
             return can; ;
         }

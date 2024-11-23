@@ -13,6 +13,7 @@ namespace PunchPeng
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
+        [ReadOnly] public bool GameIsStart;
 
         // 纯玩家
         private Dictionary<int, Player> m_Players = new();
@@ -24,6 +25,8 @@ namespace PunchPeng
             GameEvent.Inst.OnGameStart += OnGameStartAsync;
             GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
             _ = ScoreboardManager.Inst;
+
+            GameIsStart = false;
         }
 
         private void Update()
@@ -43,10 +46,14 @@ namespace PunchPeng
             await SpawnPlayersAsync();
 
             await playBGM;
+
+            GameIsStart = true;
         }
 
         private async UniTask EndGameAsync()
         {
+            GameIsStart = false;
+
             GameEvent.Inst.OnGameEnd?.Invoke();
 
             m_Player1 = null;
@@ -56,7 +63,6 @@ namespace PunchPeng
                 GameObjectUtil.DestroyGo(item.gameObject);
             }
             PlayerList.Clear();
-
             await LevelMgr.Inst.UnLoadCurLevel();
         }
 
@@ -121,7 +127,7 @@ namespace PunchPeng
 
             foreach (var item in PlayerList)
             {
-                item.EndGameStop();
+                item.OnGameEnd();
             }
 
             Player winPlayer = null;
