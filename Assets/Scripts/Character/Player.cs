@@ -27,8 +27,8 @@ namespace PunchPeng
 
         [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f;
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
-        [SerializeField] private float m_CfgAcceleration = 10f;
-        [SerializeField] private float m_CfgRotateDeg = 30f;
+        [SerializeField] private float m_CfgAcceleration = 20f;
+        [SerializeField] private float m_CfgRotateDeg = 10f;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
@@ -49,7 +49,7 @@ namespace PunchPeng
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
-        public float VelocityMagnitude { get; private set; }
+        public float CurSpeed { get; private set; }
         [ReadOnly] public ReferenceBool CanMove;
         [ReadOnly] public ReferenceBool CanAttack;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
@@ -160,21 +160,24 @@ namespace PunchPeng
         {
             if (!CanMove) return;
 
-            var targetVelocity = inputMove * m_CfgMaxMoveSpeed;
-            var targetSpeed = targetVelocity.magnitude;
-            var playerCanRun = InputRun && targetSpeed.Approximately(m_CfgMaxMoveSpeed);
+            var inputVelocity = inputMove * m_CfgMaxMoveSpeed;
+            var inputSpeed = inputVelocity.magnitude;
+            var moveDir = !inputMove.ApproximatelyZero() ? inputMove.normalized : Velocity.Value.normalized;
 
+            var targetVelocity = inputVelocity;
+            var targetSpeed = inputSpeed;
+
+            var playerCanRun = InputRun && inputSpeed.Approximately(m_CfgMaxMoveSpeed);
             if (playerCanRun)
             {
-                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
-                targetSpeed = targetSpeed > m_CfgMaxRunSpeed ? m_CfgMaxRunSpeed : targetSpeed;
-
-                targetVelocity = inputMove.normalized * targetSpeed;
+                targetSpeed = Mathf.MoveTowards(CurSpeed, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetSpeed = Mathf.Min(targetSpeed, m_CfgMaxRunSpeed);
+                targetVelocity = moveDir * targetSpeed;
             }
-            if (!playerCanRun && VelocityMagnitude > m_CfgMaxMoveSpeed)
+            else
             {
-                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, targetSpeed, m_CfgAcceleration * Time.deltaTime);
-                targetVelocity = inputMove.normalized * targetSpeed;
+                targetSpeed = Mathf.MoveTowards(CurSpeed, inputSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetVelocity = moveDir * targetSpeed;
             }
 
             Velocity.Value = targetVelocity;
@@ -220,9 +223,9 @@ namespace PunchPeng
 
         private void OnVelocityChange(Vector3 velocity)
         {
-            VelocityMagnitude = velocity.magnitude;
+            CurSpeed = velocity.magnitude;
             velocity.y = 0f;
-            m_AnimData.LocomotionMixer.State.Parameter = VelocityMagnitude;
+            m_AnimData.LocomotionMixer.State.Parameter = CurSpeed;
         }
 
         public async UniTask PlaySfx(string res)
