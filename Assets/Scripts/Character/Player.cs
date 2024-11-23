@@ -45,6 +45,7 @@ namespace PunchPeng
         public Vector3 InputMoveDir;
         public bool InputRun;
         public bool InputAttack;
+        public bool InputUseSkill;
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();

@@ -12,8 +12,9 @@ namespace PunchPeng
     public class PlayerInputData
     {
         public Vector3 MoveDir;
-        public bool IsRun;
-        public bool IsAttack;
+        public bool Run;
+        public bool Attack;
+        public bool UseSkill;
     }
 
     // TODO: 记录玩家游玩时的数据，并随机赋给AI
@@ -59,8 +60,9 @@ namespace PunchPeng
             if (GameController.Inst.m_Player1 != null)
             {
                 GameController.Inst.m_Player1.InputMoveDir = GetPlayerInputData(0).MoveDir;
-                GameController.Inst.m_Player1.InputRun = GetPlayerInputData(0).IsRun;
-                GameController.Inst.m_Player1.InputAttack = GetPlayerInputData(0).IsAttack;
+                GameController.Inst.m_Player1.InputRun = GetPlayerInputData(0).Run;
+                GameController.Inst.m_Player1.InputAttack = GetPlayerInputData(0).Attack;
+                GameController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(0).UseSkill;
 
                 PlayerInputLogger.Inst.AppendInput(1, Time.frameCount, GetPlayerInputData(0));
             }
@@ -68,8 +70,9 @@ namespace PunchPeng
             if (GameController.Inst.m_Player2 != null)
             {
                 GameController.Inst.m_Player2.InputMoveDir = GetPlayerInputData(1).MoveDir;
-                GameController.Inst.m_Player2.InputRun = GetPlayerInputData(1).IsRun;
-                GameController.Inst.m_Player2.InputAttack = GetPlayerInputData(1).IsAttack;
+                GameController.Inst.m_Player2.InputRun = GetPlayerInputData(1).Run;
+                GameController.Inst.m_Player2.InputAttack = GetPlayerInputData(1).Attack;
+                GameController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(1).UseSkill;
 
                 PlayerInputLogger.Inst.AppendInput(2, Time.frameCount, GetPlayerInputData(1));
             }
@@ -103,7 +106,7 @@ namespace PunchPeng
         public void OnAttack(CallbackContext context)
         {
             var value = !context.ReadValue<float>().ApproximatelyZero();
-            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).IsAttack = value;
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).Attack = value;
             //Debug.Log("KeyboardAttack:" + value);
         }
 
@@ -117,8 +120,14 @@ namespace PunchPeng
         public void OnRun(CallbackContext context)
         {
             var value = !context.ReadValue<float>().ApproximatelyZero();
-            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).IsRun = value;
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).Run = value;
             //Debug.Log("KeyboardRun:" + value);
+        }
+
+        public void OnUseSkill(CallbackContext context)
+        {
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(0).UseSkill = value;
         }
     }
 }

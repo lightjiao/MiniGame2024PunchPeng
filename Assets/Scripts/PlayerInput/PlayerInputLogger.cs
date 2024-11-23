@@ -26,19 +26,19 @@ namespace PunchPeng
 
         public void AppendInput(int playerId, int frameCnt, PlayerInputData inputData)
         {
-            if (inputData.MoveDir.ApproximatelyZero())
-            {
-                return;
-            }
+            //if (inputData.MoveDir.ApproximatelyZero())
+            //{
+            //    return;
+            //}
 
-            var logData = new PlayerInputLogData();
-            logData.PlayerId = playerId;
-            logData.FrameCnt = frameCnt;
-            logData.MoveDir = inputData.MoveDir;
-            logData.IsRun = inputData.IsRun;
-            logData.IsAttack = inputData.IsAttack;
+            //var logData = new PlayerInputLogData();
+            //logData.PlayerId = playerId;
+            //logData.FrameCnt = frameCnt;
+            //logData.MoveDir = inputData.MoveDir;
+            //logData.IsRun = inputData.Run;
+            //logData.IsAttack = inputData.Attack;
 
-            m_PlayerInputDatas.Add(logData);
+            //m_PlayerInputDatas.Add(logData);
         }
 
         private void OnGameEnd()

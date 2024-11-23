@@ -12,6 +12,7 @@ namespace PunchPeng
 
         [ReadOnly] private int m_JoinIndex;
         private int m_PlayerIdx => PlayerInputManagerHelper.Inst.GamePadCount > 1 ? m_JoinIndex : m_JoinIndex + 1;
+        private PlayerInputData ThisPlayerInputData => PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx);
 
         private void Awake()
         {
@@ -23,22 +24,25 @@ namespace PunchPeng
         public void Move(InputAction.CallbackContext ctx)
         {
             var value = ctx.ReadValue<Vector2>().ToHorizontalVector3();
-            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).MoveDir = value;
-            //Debug.Log($"m_PlayerIdx:{m_PlayerIdx} PlayerInputHelper.Move:" + value);
+            ThisPlayerInputData.MoveDir = value;
         }
 
         public void Attack(InputAction.CallbackContext ctx)
         {
             var value = !ctx.ReadValue<float>().ApproximatelyZero();
-            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).IsAttack = value;
-            //Debug.Log($"m_PlayerIdx:{m_PlayerIdx} PlayerInputHelper.Attack:" + value);
+            ThisPlayerInputData.Attack = value;
         }
 
         public void Run(InputAction.CallbackContext ctx)
         {
             var value = !ctx.ReadValue<float>().ApproximatelyZero();
-            PlayerInputManagerHelper.Inst.GetPlayerInputData(m_PlayerIdx).IsRun = value;
-            //Debug.Log($"m_PlayerIdx:{m_PlayerIdx} PlayerInputHelper.Run:" + value);
+            ThisPlayerInputData.Run = value;
+        }
+
+        public void UseSkill(InputAction.CallbackContext ctx)
+        {
+            var value = !ctx.ReadValue<float>().ApproximatelyZero();
+            ThisPlayerInputData.UseSkill = value;
         }
     }
 }

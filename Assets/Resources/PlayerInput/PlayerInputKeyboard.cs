@@ -55,6 +55,15 @@ namespace PunchPeng
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0f1fa9f-0d8d-4340-9e8a-dfd8c9c8eb8c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -189,6 +198,17 @@ namespace PunchPeng
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5fb0035d-c8bc-4eb8-aaee-10f73cd2047b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseSkill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -200,6 +220,7 @@ namespace PunchPeng
             m_GamePlay_Move = m_GamePlay.FindAction("Move", throwIfNotFound: true);
             m_GamePlay_Attack = m_GamePlay.FindAction("Attack", throwIfNotFound: true);
             m_GamePlay_Run = m_GamePlay.FindAction("Run", throwIfNotFound: true);
+            m_GamePlay_UseSkill = m_GamePlay.FindAction("UseSkill", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -264,6 +285,7 @@ namespace PunchPeng
         private readonly InputAction m_GamePlay_Move;
         private readonly InputAction m_GamePlay_Attack;
         private readonly InputAction m_GamePlay_Run;
+        private readonly InputAction m_GamePlay_UseSkill;
         public struct GamePlayActions
         {
             private @PlayerInputKeyboard m_Wrapper;
@@ -271,6 +293,7 @@ namespace PunchPeng
             public InputAction @Move => m_Wrapper.m_GamePlay_Move;
             public InputAction @Attack => m_Wrapper.m_GamePlay_Attack;
             public InputAction @Run => m_Wrapper.m_GamePlay_Run;
+            public InputAction @UseSkill => m_Wrapper.m_GamePlay_UseSkill;
             public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -289,6 +312,9 @@ namespace PunchPeng
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @UseSkill.started += instance.OnUseSkill;
+                @UseSkill.performed += instance.OnUseSkill;
+                @UseSkill.canceled += instance.OnUseSkill;
             }
 
             private void UnregisterCallbacks(IGamePlayActions instance)
@@ -302,6 +328,9 @@ namespace PunchPeng
                 @Run.started -= instance.OnRun;
                 @Run.performed -= instance.OnRun;
                 @Run.canceled -= instance.OnRun;
+                @UseSkill.started -= instance.OnUseSkill;
+                @UseSkill.performed -= instance.OnUseSkill;
+                @UseSkill.canceled -= instance.OnUseSkill;
             }
 
             public void RemoveCallbacks(IGamePlayActions instance)
@@ -324,6 +353,7 @@ namespace PunchPeng
             void OnMove(InputAction.CallbackContext context);
             void OnAttack(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
+            void OnUseSkill(InputAction.CallbackContext context);
         }
     }
 }
