@@ -184,7 +184,17 @@ namespace PunchPeng
             m_CCT.SimpleMove(targetVelocity);
             if (!targetVelocity.Approximately(Vector3.zero))
             {
-                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(targetVelocity), m_CfgRotateDeg);
+                var targetRot = Quaternion.LookRotation(targetVelocity);
+                var angle = Quaternion.Angle(CachedTransform.rotation, targetRot);
+
+                if (angle < 120)
+                {
+                    CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(targetVelocity), m_CfgRotateDeg);
+                }
+                else
+                {
+                    CachedTransform.rotation = targetRot;
+                }
             }
         }
 
