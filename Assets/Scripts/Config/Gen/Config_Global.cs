@@ -19,29 +19,42 @@ namespace ConfigAuto
 							TotalPlayerCount = 20,
 							PlayerPrefab = @"Character/Kelly",
 							PlayerPunchFrame = 8,
-							PlayerPunchSfx = @"Music/Punch",
-							PlayerBeHitSfxs = new()
+							LevelCfg = new()
 							{
-								@"Music/受击1",@"Music/受击2",
-							},
-							LevelNames = new()
-							{
-								@"PunchPeng",@"PunchPeng_Caodi",
-							},
-							LevelConfig = new Dictionary<String, LevelConfig>
-							{
-								{@"PunchPeng", new LevelConfig {
-									Camera = @"Level/PunchpengCamera",
-									BGMRes = @"Music/MM/Town.Bar",
-								}},
-								{@"PunchPeng_Caodi", new LevelConfig {
-									Camera = @"Level/PunchpengCamera",
+
+								new()
+								{
+									Scene = @"PunchPeng_Caodi",
 									BGMRes = @"Music/MM/Town.Village",
-								}},
+								},
+								new()
+								{
+									Scene = @"PunchPeng",
+									BGMRes = @"Music/MM/Town.Bar",
+								},
+								new()
+								{
+									Scene = @"PunchPeng_Gym",
+									BGMRes = @"Music/MM/Town.GoodbyeMinchi",
+									DisableBevTreeAttak = true,
+									CountdownAttackInterval = 20,
+								},
 							},
-							BeHitVfx = @"Vfx/BeHitVfx",
-							WinnerVfx = @"Vfx/WinnderVfx",
-							WinSfx = @"Music/MM/Battle.Win",
+							Sfx = new()
+							{
+								PlayerPunchSfx = @"Music/Punch",
+								PlayerBeHitSfxs = new()
+								{
+									@"Music/受击1",@"Music/受击2",
+								},
+								WinSfx = @"Music/MM/Battle.Win",
+								CoundDown321Sfx = @"Music/321",
+							},
+							Vfx = new()
+							{
+								BeHitVfx = @"Vfx/BeHitVfx",
+								WinnerVfx = @"Vfx/WinnderVfx",
+							},
 						},
 					};
 				return _inst;
@@ -54,18 +67,28 @@ namespace ConfigAuto
 			public Int32 TotalPlayerCount {get;set;}
 			public String PlayerPrefab {get;set;}
 			public Int32 PlayerPunchFrame {get;set;}
+			public List<LevelCfg> LevelCfg {get;set;}
+			public Sfx Sfx {get;set;}
+			public Vfx Vfx {get;set;}
+		}
+		public partial class LevelCfg
+		{
+			public String Scene {get;set;}
+			public String BGMRes {get;set;}
+			public Boolean DisableBevTreeAttak {get;set;}
+			public Int32 CountdownAttackInterval {get;set;}
+		}
+		public partial class Sfx
+		{
 			public String PlayerPunchSfx {get;set;}
 			public List<String> PlayerBeHitSfxs {get;set;}
-			public List<String> LevelNames {get;set;}
-			public Dictionary<String, LevelConfig> LevelConfig {get;set;}
+			public String WinSfx {get;set;}
+			public String CoundDown321Sfx {get;set;}
+		}
+		public partial class Vfx
+		{
 			public String BeHitVfx {get;set;}
 			public String WinnerVfx {get;set;}
-			public String WinSfx {get;set;}
-		}
-		public partial class LevelConfig
-		{
-			public String Camera {get;set;}
-			public String BGMRes {get;set;}
 		}
 
     }

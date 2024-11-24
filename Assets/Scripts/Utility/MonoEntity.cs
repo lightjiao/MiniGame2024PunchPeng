@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class MonoEntity : MonoBehaviour
 {
-    private CancellationTokenSource _cTs;
-    protected CancellationTokenSource m_Cts => _cTs ??= new CancellationTokenSource();
+    private CancellationTokenSource _destroyCts;
+    protected CancellationTokenSource m_DestroyCts => _destroyCts ??= new CancellationTokenSource();
 
     private Transform _trans;
     public Transform CachedTransform
@@ -32,5 +32,10 @@ public class MonoEntity : MonoBehaviour
     {
         get => CachedTransform.forward;
         set => CachedTransform.forward = value;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        _destroyCts?.Cancel();
     }
 }
