@@ -1967,6 +1967,7 @@ MonoBehaviour:
   PlayerList: []
   m_Player1: {fileID: 0}
   m_Player2: {fileID: 0}
+  GameIsStart: 0
 --- !u!4 &1931235566
 Transform:
   m_ObjectHideFlags: 0

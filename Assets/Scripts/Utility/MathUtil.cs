@@ -33,7 +33,8 @@ public static class MathUtil
 
     public static bool InPercent(float pct)
     {
-        return UnityEngine.Random.Range(0, 1f) < pct;
+        if (pct == 0) return false;
+        return UnityEngine.Random.Range(0, 1f) <= pct;
     }
 }
 

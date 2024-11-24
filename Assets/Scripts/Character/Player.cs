@@ -39,8 +39,7 @@ namespace PunchPeng
         [SerializeField] private AudioSource m_AudioSource;
 
         private List<PlayerAbility> m_Abilities = new();
-        private BehaviorTree m_BehaviorTree;
-        private CopyPlayerInputAI m_CopyAI;
+        private BevTree m_BehaviorTree;
 
         public Vector3 InputMoveDir;
         public bool InputRun;
@@ -104,14 +103,7 @@ namespace PunchPeng
         {
             if (!IsDead)
             {
-                if (m_CopyAI != null)
-                {
-                    m_CopyAI.OnUpdate();
-                }
-                else
-                {
-                    m_BehaviorTree?.OnUpdate(Time.deltaTime);
-                }
+                m_BehaviorTree?.OnUpdate(Time.deltaTime);
 
                 foreach (var ability in m_Abilities)
                 {
@@ -141,12 +133,10 @@ namespace PunchPeng
         {
             if (copyAI)
             {
-                m_CopyAI = new CopyPlayerInputAI();
-                m_CopyAI.Init(this);
             }
             else
             {
-                m_BehaviorTree = new BehaviorTree();
+                m_BehaviorTree = new();
                 m_BehaviorTree.Init(this);
             }
         }
