@@ -38,7 +38,7 @@ namespace PunchPeng
         private async UniTask OnGameStartAsync()
         {
             VfxManager.Inst.ReleaseAll();
-            PlayerInputManager.instance.DisableJoining();
+            //PlayerInputManager.instance.DisableJoining();
 
             var randomLevel = Config_Global.Inst.data.LevelNames.RandomOne();
             var playBGM = AudioManager.Inst.PlayLevelBGM(randomLevel);
@@ -86,7 +86,7 @@ namespace PunchPeng
             //else
             {
                 for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
-                //for (int i = 0; i < 2; i++)
+                //for (int i = 0; i < 3; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);
