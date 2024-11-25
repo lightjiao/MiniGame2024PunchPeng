@@ -1,35 +1,35 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
-public class LazyVar<T>
+public class LazyVar<T> where T : new()
 {
-    private bool _hasInit;
     private T _value;
 
     public T Value
     {
         get
         {
-            TryInit();
+            if (_value == null)
+            {
+                if (m_CustomConstructerFunc != null)
+                {
+                    _value = m_CustomConstructerFunc.Invoke();
+                }
+                else
+                {
+                    _value = Activator.CreateInstance<T>();
+                }
+            }
+
             return _value;
         }
 
         set => _value = value;
     }
 
-    private Func<T> _func;
+    private Func<T> m_CustomConstructerFunc;
 
-    public LazyVar(Func<T> func)
+    public LazyVar(Func<T> func = null)
     {
-        _func = func;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void TryInit()
-    {
-        if (_hasInit) return;
-
-        _value = _func.Invoke();
-        _hasInit = true;
+        m_CustomConstructerFunc = func;
     }
 }

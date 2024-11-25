@@ -11,6 +11,11 @@ public static class MathUtil
         return Math.Abs(self - other) < e;
     }
 
+    public static bool ApproximatelyZero(this float self, float e = Epsilon)
+    {
+        return self.Approximately(0);
+    }
+
     public static int ToMilliSec(this float self)
     {
         return (int)(self * 1000);
@@ -28,7 +33,8 @@ public static class MathUtil
 
     public static bool InPercent(float pct)
     {
-        return UnityEngine.Random.Range(0, 1f) < pct;
+        if (pct == 0) return false;
+        return UnityEngine.Random.Range(0, 1f) <= pct;
     }
 }
 

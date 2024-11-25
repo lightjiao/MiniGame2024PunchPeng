@@ -27,8 +27,8 @@ namespace PunchPeng
 
         [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f;
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
-        [SerializeField] private float m_CfgAcceleration = 10f;
-        [SerializeField] private float m_CfgRotateDeg = 60f;
+        [SerializeField] private float m_CfgAcceleration = 20f;
+        [SerializeField] private float m_CfgRotateDeg = 10f;
 
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
@@ -39,17 +39,18 @@ namespace PunchPeng
         [SerializeField] private AudioSource m_AudioSource;
 
         private List<PlayerAbility> m_Abilities = new();
-        private BehaviorTree m_BehaviorTree;
-        private CopyPlayerInputAI m_CopyAI;
+        private BevTree m_BehaviorTree;
 
-        public readonly ReactiveProperty<Vector3> InputMoveDir = new();
-        public readonly ReactiveProperty<bool> InputRun = new();
-        public readonly ReactiveProperty<bool> InputAttack = new();
+        public Vector3 InputMoveDir;
+        public bool InputRun;
+        public bool InputAttack;
+        public bool InputUseSkill;
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> Velocity = new();
-        public float VelocityMagnitude { get; private set; }
+        public float CurSpeed { get; private set; }
         [ReadOnly] public ReferenceBool CanMove;
+        [ReadOnly] public ReferenceBool CanAttack;
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
 
@@ -89,42 +90,40 @@ namespace PunchPeng
         {
             CanMove.RefCnt++;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
+            StartAsync().Forget();
+        }
+
+        private async UniTask StartAsync()
+        {
+            await UniTask.Delay(3000); // 前三秒不准攻击
+            CanAttack.RefCnt++;
         }
 
         private void Update()
         {
             if (!IsDead)
             {
-                if (m_CopyAI != null)
-                {
-                    m_CopyAI.OnUpdate();
-                }
-                else
-                {
-                    m_BehaviorTree?.OnUpdate(Time.deltaTime);
-                }
+                m_BehaviorTree?.OnUpdate(Time.deltaTime);
 
                 foreach (var ability in m_Abilities)
                 {
                     ability.Update(Time.deltaTime);
                 }
 
-                UpdateMoveCommand(InputMoveDir.Value);
+                UpdateMoveCommand(InputMoveDir);
             }
         }
 
         private void LateUpdate()
         {
-            InputAttack.Value = false;
-            //InputRun.Value = false;
-            //InputMoveDir.Value = Vector3.zero;
+            InputAttack = false;
         }
 
         private void OnDestroy()
         {
         }
 
-        public void EndGameStop()
+        public void OnGameEnd()
         {
             CanMove.RefCnt--;
             Velocity.Value = Vector3.zero;
@@ -134,12 +133,10 @@ namespace PunchPeng
         {
             if (copyAI)
             {
-                m_CopyAI = new CopyPlayerInputAI();
-                m_CopyAI.Init(this);
             }
             else
             {
-                m_BehaviorTree = new BehaviorTree();
+                m_BehaviorTree = new();
                 m_BehaviorTree.Init(this);
             }
         }
@@ -153,27 +150,41 @@ namespace PunchPeng
         {
             if (!CanMove) return;
 
-            var targetVelocity = inputMove * m_CfgMaxMoveSpeed;
-            var targetSpeed = inputMove.magnitude;
-            if (InputRun.Value)
-            {
-                //VelocityMagnitude <= (m_CfgMaxRunSpeed + 0.1f)
-                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
-                targetSpeed = targetSpeed > m_CfgMaxRunSpeed ? m_CfgMaxRunSpeed : targetSpeed;
+            var inputVelocity = inputMove * m_CfgMaxMoveSpeed;
+            var inputSpeed = inputVelocity.magnitude;
+            var moveDir = !inputMove.ApproximatelyZero() ? inputMove.normalized : Velocity.Value.normalized;
 
-                targetVelocity = inputMove.normalized * targetSpeed;
-            }
-            if (!InputRun.Value && VelocityMagnitude > m_CfgMaxMoveSpeed)
+            var targetVelocity = inputVelocity;
+            var targetSpeed = inputSpeed;
+
+            var playerCanRun = InputRun && inputSpeed.Approximately(m_CfgMaxMoveSpeed);
+            if (playerCanRun)
             {
-                targetSpeed = Mathf.MoveTowards(VelocityMagnitude, targetSpeed, m_CfgAcceleration * Time.deltaTime);
-                targetVelocity = inputMove.normalized * targetSpeed;
+                targetSpeed = Mathf.MoveTowards(CurSpeed, m_CfgMaxRunSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetSpeed = Mathf.Min(targetSpeed, m_CfgMaxRunSpeed);
+                targetVelocity = moveDir * targetSpeed;
+            }
+            else
+            {
+                targetSpeed = Mathf.MoveTowards(CurSpeed, inputSpeed, m_CfgAcceleration * Time.deltaTime);
+                targetVelocity = moveDir * targetSpeed;
             }
 
             Velocity.Value = targetVelocity;
             m_CCT.SimpleMove(targetVelocity);
             if (!targetVelocity.Approximately(Vector3.zero))
             {
-                CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(targetVelocity), m_CfgRotateDeg);
+                var targetRot = Quaternion.LookRotation(targetVelocity);
+                var angle = Quaternion.Angle(CachedTransform.rotation, targetRot);
+
+                if (angle < 120)
+                {
+                    CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(targetVelocity), m_CfgRotateDeg);
+                }
+                else
+                {
+                    CachedTransform.rotation = targetRot;
+                }
             }
         }
 
@@ -212,9 +223,9 @@ namespace PunchPeng
 
         private void OnVelocityChange(Vector3 velocity)
         {
-            VelocityMagnitude = velocity.magnitude;
+            CurSpeed = velocity.magnitude;
             velocity.y = 0f;
-            m_AnimData.LocomotionMixer.State.Parameter = VelocityMagnitude;
+            m_AnimData.LocomotionMixer.State.Parameter = CurSpeed;
         }
 
         public async UniTask PlaySfx(string res)

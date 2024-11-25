@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PunchPeng
 {
@@ -12,6 +13,7 @@ namespace PunchPeng
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
+        [ReadOnly] public bool GameIsStart;
 
         // 纯玩家
         private Dictionary<int, Player> m_Players = new();
@@ -23,17 +25,20 @@ namespace PunchPeng
             GameEvent.Inst.OnGameStart += OnGameStartAsync;
             GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
             _ = ScoreboardManager.Inst;
+
+            GameIsStart = false;
         }
 
         private void Update()
         {
-            PlayerInputManager.Inst.OnUpdate();
+            PlayerInputManagerHelper.Inst.OnUpdate();
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 
         private async UniTask OnGameStartAsync()
         {
             VfxManager.Inst.ReleaseAll();
+            //PlayerInputManager.instance.DisableJoining();
 
             var randomLevel = Config_Global.Inst.data.LevelNames.RandomOne();
             var playBGM = AudioManager.Inst.PlayLevelBGM(randomLevel);
@@ -41,10 +46,14 @@ namespace PunchPeng
             await SpawnPlayersAsync();
 
             await playBGM;
+
+            GameIsStart = true;
         }
 
         private async UniTask EndGameAsync()
         {
+            GameIsStart = false;
+
             GameEvent.Inst.OnGameEnd?.Invoke();
 
             m_Player1 = null;
@@ -54,7 +63,6 @@ namespace PunchPeng
                 GameObjectUtil.DestroyGo(item.gameObject);
             }
             PlayerList.Clear();
-
             await LevelMgr.Inst.UnLoadCurLevel();
         }
 
@@ -78,6 +86,7 @@ namespace PunchPeng
             //else
             {
                 for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
+                //for (int i = 0; i < 3; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);
@@ -118,7 +127,7 @@ namespace PunchPeng
 
             foreach (var item in PlayerList)
             {
-                item.EndGameStop();
+                item.OnGameEnd();
             }
 
             Player winPlayer = null;

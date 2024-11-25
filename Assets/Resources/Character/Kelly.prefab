@@ -113,15 +113,22 @@ MonoBehaviour:
   PlayerId: 0
   m_CfgMaxMoveSpeed: 2.4
   m_CfgMaxRunSpeed: 3.5
-  m_CfgAcceleration: 10
-  m_CfgRotateDeg: 60
+  m_CfgAcceleration: 20
+  m_CfgRotateDeg: 10
   m_CCT: {fileID: 5517429912030599293}
   m_Animancer: {fileID: 939207347799376905}
   m_AnimData: {fileID: 4078643856851147666}
   m_PunchAttackTrigger: {fileID: 6164739117820392807}
   m_HeadAttackTrigger: {fileID: 6758802320795477583}
   m_AudioSource: {fileID: 0}
-  CanMove: 0
+  InputMoveDir: {x: 0, y: 0, z: 0}
+  InputRun: 0
+  InputAttack: 0
+  InputUseSkill: 0
+  CanMove:
+    RefCnt: 0
+  CanAttack:
+    RefCnt: 0
 --- !u!143 &5517429912030599293
 CharacterController:
   m_ObjectHideFlags: 0
@@ -376,6 +383,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400080, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}
+      propertyPath: m_UpdateMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 76df9114d9bdf1540a6b0ca26d8877a6, type: 3}

@@ -14,4 +14,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/PunchPeng/PunchPeng_Caodi.unity
     guid: 1b667653c9949e24ea2e718beb38cbca
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 197978a11e886d14abc12594f73dccdf, type: 2}

@@ -26,4 +26,9 @@ public static class CollectionUtil
 
         return self[UnityEngine.Random.Range(0, self.Count)];
     }
+
+    public static string ToStringEx<T>(this ICollection<T> self)
+    {
+        return $"[{string.Join(", ", self)}]";
+    }
 }
