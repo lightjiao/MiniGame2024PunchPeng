@@ -107,7 +107,7 @@ Material:
     - __NULL_RenderMode: 0
     - __NULL_UserMode: 0
     m_Colors:
-    - _Color: {r: 0.6698113, g: 0.5678886, b: 0.45812565, a: 1}
+    - _Color: {r: 0.65882355, g: 0.4784314, b: 0.27058825, a: 1}
     - _EmissionColor: {r: 0.6132076, g: 0.25164652, b: 0.52757466, a: 1}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 0}
     - _LowColorOffset: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
