@@ -6,9 +6,17 @@ namespace PunchPeng
         protected float m_CfgInterval;
         protected float m_IntervalElapsed;
 
-        protected override void OnUpdate(float elapseSeconds)
+        protected override void OnBuffAwake()
         {
-            base.OnUpdate(elapseSeconds);
+            base.OnBuffAwake();
+            m_CfgInterval = m_Cfg.Param1;
+        }
+
+        protected override void OnBuffUpdate(float elapseSeconds)
+        {
+            base.OnBuffUpdate(elapseSeconds);
+
+            m_IntervalElapsed += elapseSeconds;
 
             if (m_IntervalElapsed >= m_CfgInterval)
             {

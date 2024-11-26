@@ -12,9 +12,9 @@ namespace PunchPeng
         protected float m_ReduceSpeedElapesdMoment;
 
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
+            base.OnBevStart();
             m_CfgDuration = Random.Range(1f, 2f);
             m_ReduceSpeedElapesdMoment = m_CfgDuration - m_CfgSpeedDownDuration;
 
@@ -34,9 +34,9 @@ namespace PunchPeng
             }
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
-            base.OnUpdate(deltaTime);
+            base.OnBevUpdate(deltaTime);
 
             if (m_ElapsedTime < m_CfgSpeedUpDuration)
             {
@@ -67,10 +67,10 @@ namespace PunchPeng
             return TaskStatus.Running;
         }
 
-        public override void OnEnd()
+        public override void OnBevEnd()
         {
             //Debug.Log($"Move Finish log: realInput:{m_RealInput}, m_ElapsedTime:{m_ElapsedTime}, m_ReduceSpeedElapesdMoment:{m_ReduceSpeedElapesdMoment}, m_CfgDuration:{m_CfgDuration}");
-            base.OnEnd();
+            base.OnBevEnd();
         }
 
         private bool PredictMoveInRange()

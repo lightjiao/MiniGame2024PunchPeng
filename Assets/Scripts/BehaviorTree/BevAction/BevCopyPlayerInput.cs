@@ -8,7 +8,7 @@ namespace PunchPeng
 
         private bool m_AlreadyHasCopyAI = false;
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
             m_CopyedPlayerId = Random.Range(0, 2);
             m_CfgDuration = Random.Range(1f, 3f);
@@ -16,12 +16,12 @@ namespace PunchPeng
             m_AlreadyHasCopyAI = GameController.Inst.HasCopyAI;
             GameController.Inst.HasCopyAI.RefCnt++;
 
-            base.OnStart();
+            base.OnBevStart();
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
-            base.OnUpdate(deltaTime);
+            base.OnBevUpdate(deltaTime);
 
             if (m_AlreadyHasCopyAI)
             {
@@ -34,13 +34,13 @@ namespace PunchPeng
             return TaskStatusByDuration;
         }
 
-        public override void OnEnd()
+        public override void OnBevEnd()
         {
             GameController.Inst.HasCopyAI.RefCnt--;
             m_Player.InputMoveDir = Vector3.zero;
             m_Player.InputRun = false;
 
-            base.OnEnd();
+            base.OnBevEnd();
         }
     }
 }

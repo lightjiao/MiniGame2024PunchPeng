@@ -9,27 +9,27 @@ namespace PunchPeng
             m_Task = task;
         }
 
-        public override void Init(Player player)
+        public override void OnBevAwake(Player player)
         {
-            base.Init(player);
-            m_Task.Init(player);
+            base.OnBevAwake(player);
+            m_Task.OnBevAwake(player);
         }
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
-            m_Task.OnStart();
+            base.OnBevStart();
+            m_Task.OnBevStart();
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
-            return m_Task.OnUpdate(deltaTime);
+            return m_Task.OnBevUpdate(deltaTime);
         }
 
-        public override void OnEnd()
+        public override void OnBevEnd()
         {
-            m_Task.OnEnd();
-            base.OnEnd();
+            m_Task.OnBevEnd();
+            base.OnBevEnd();
         }
     }
 }

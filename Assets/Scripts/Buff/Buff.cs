@@ -2,51 +2,41 @@ using System.Threading;
 
 namespace PunchPeng
 {
+    public interface IBuffOwner
+    {
+
+    }
+
     public class Buff
     {
-    private CancellationTokenSource _destroyCts;
+        private CancellationTokenSource _destroyCts;
         protected CancellationTokenSource m_DestroyCts => _destroyCts ??= new CancellationTokenSource();
 
-        protected Player m_Player;
-        protected float m_CfgDuration;
+        public int m_Uid;
+        public int DataId => m_Cfg.DataId;
+        public bool Started => m_TimeElapsed > 0;
+        public bool TimeEnd => m_Cfg.Duration > 0 && m_TimeElapsed >= m_Cfg.Duration;
+
+        protected IBuffOwner m_Owner;
+        protected BuffCfg m_Cfg;
 
         protected float m_TimeElapsed;
 
-        public void Init(Player player)
+        public void BuffAwake(int uid, IBuffOwner player, BuffCfg cfg)
         {
-            m_Player = player;
-            OnInit();
-        }
-
-        protected virtual void OnInit()
-        {
-            BuffStart();
-        }
-
-        public void Update(float elapseSeconds)
-        {
-            m_TimeElapsed += elapseSeconds;
-
-            /**
-             * 一定执行一次 OnUpdate() 确保整秒的逻辑能正常执行
-             * 比如每 1 秒执行一次伤害，配置了 5 秒，上一次update是 4.977 秒，已经执行了 4 次伤害，下一次Update的时候，就会变成 5.01 秒，如果立刻 End ，会导致 第 5 秒的伤害没有
-             */
-            OnUpdate(elapseSeconds);
-
-            if (m_TimeElapsed > m_CfgDuration)
-            {
-                BuffEnd();
-            }
-        }
-
-        protected virtual void OnUpdate(float elapseSeconds)
-        {
-
-        }
-
-        private void BuffStart()
-        {
+            m_Uid = uid;
+            m_Owner = player;
+            m_Cfg = cfg;
             m_TimeElapsed = 0;
+            OnBuffAwake();
+        }
+
+        protected virtual void OnBuffAwake()
+        {
+        }
+
+        public void BuffStart()
+        {
             OnBuffStart();
         }
 
@@ -55,13 +45,29 @@ namespace PunchPeng
 
         }
 
-        private void BuffEnd()
+        public void BuffUpdate(float elapseSeconds)
+        {
+            m_TimeElapsed += elapseSeconds;
+            OnBuffUpdate(elapseSeconds);
+        }
+
+        protected virtual void OnBuffUpdate(float elapseSeconds)
+        {
+
+        }
+
+        public void BuffEnd()
         {
             _destroyCts?.Cancel();
             OnBuffEnd();
         }
 
         protected virtual void OnBuffEnd()
+        {
+
+        }
+
+        public virtual void BeforeBuffRemove()
         {
 
         }

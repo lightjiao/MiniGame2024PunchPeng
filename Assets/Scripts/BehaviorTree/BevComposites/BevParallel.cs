@@ -9,18 +9,18 @@ namespace PunchPeng
             m_WaitOne = true;
         }
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
+            base.OnBevStart();
 
             foreach (var item in m_Tasks)
             {
-                item.OnStart();
+                item.OnBevStart();
             }
         }
 
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
             var allEnd = true;
             var oneEnd = false;
@@ -28,7 +28,7 @@ namespace PunchPeng
 
             foreach (var item in m_Tasks)
             {
-                var status = item.OnUpdate(deltaTime);
+                var status = item.OnBevUpdate(deltaTime);
                 if (m_WaitOne)
                 {
                     oneEnd = true;
@@ -56,14 +56,14 @@ namespace PunchPeng
             return TaskStatus.Running;
         }
 
-        public override void OnEnd()
+        public override void OnBevEnd()
         {
             foreach (var item in m_Tasks)
             {
-                item.OnEnd();
+                item.OnBevEnd();
             }
 
-            base.OnEnd();
+            base.OnBevEnd();
         }
     }
 }

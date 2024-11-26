@@ -10,7 +10,7 @@ namespace PunchPeng
             return this;
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
             return MathUtil.InPercent(m_Posibility) ? TaskStatus.Success : TaskStatus.Failure;
         }

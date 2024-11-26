@@ -5,10 +5,16 @@ namespace PunchPeng
 {
     public class BuffAICountDownAttack : BuffIntervalAction
     {
-        protected override void OnInit()
+        protected override void OnBuffStart()
         {
-            base.OnInit();
-            m_CfgInterval = GameController.Inst.m_CurLevelCfg.CountdownAttackInterval;
+            base.OnBuffStart();
+            GameController.Inst.DisableAIBevAttack.RefCnt++;
+        }
+
+        protected override void OnBuffEnd()
+        {
+            GameController.Inst.DisableAIBevAttack.RefCnt--;
+            base.OnBuffEnd();
         }
 
         protected override void InvervalTick()
@@ -21,6 +27,7 @@ namespace PunchPeng
             if (cts.IsCancellationRequested) return;
 
             // TODO: show UI and sfx
+            UIController.Inst.PlayCoundDown321Anim().Forget();
             await AudioManager.Inst.Play2DSfx(ConfigAuto.Config_Global.Inst.data.Sfx.CoundDown321Sfx);
 
             if (cts.IsCancellationRequested) return;

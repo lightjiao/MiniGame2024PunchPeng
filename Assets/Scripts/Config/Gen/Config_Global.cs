@@ -36,8 +36,10 @@ namespace ConfigAuto
 								{
 									Scene = @"PunchPeng_Gym",
 									BGMRes = @"Music/MM/Town.GoodbyeMinchi",
-									DisableBevTreeAttak = true,
-									CountdownAttackInterval = 20,
+									BuffIds = new()
+									{
+										1,
+									},
 								},
 							},
 							Sfx = new()
@@ -75,8 +77,7 @@ namespace ConfigAuto
 		{
 			public String Scene {get;set;}
 			public String BGMRes {get;set;}
-			public Boolean DisableBevTreeAttak {get;set;}
-			public Int32 CountdownAttackInterval {get;set;}
+			public List<Int32> BuffIds {get;set;}
 		}
 		public partial class Sfx
 		{

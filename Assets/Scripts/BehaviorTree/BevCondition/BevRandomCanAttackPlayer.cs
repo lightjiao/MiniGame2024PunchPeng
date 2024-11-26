@@ -8,9 +8,9 @@ namespace PunchPeng
         private float m_AtkTime = 0;
         private float m_AttackPct = 0.1f;
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
-            if (GameController.Inst.m_CurLevelCfg.DisableBevTreeAttak)
+            if (GameController.Inst.DisableAIBevAttack)
             {
                 return TaskStatus.Failure;
             }

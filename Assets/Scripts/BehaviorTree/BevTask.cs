@@ -13,22 +13,22 @@ namespace PunchPeng
         protected Player m_Player;
         public bool IsRunning;
 
-        public virtual void Init(Player player)
+        public virtual void OnBevAwake(Player player)
         {
             m_Player = player;
         }
 
-        public virtual void OnStart()
+        public virtual void OnBevStart()
         {
             IsRunning = true;
         }
 
-        public virtual TaskStatus OnUpdate(float deltaTime)
+        public virtual TaskStatus OnBevUpdate(float deltaTime)
         {
             return TaskStatus.Success;
         }
 
-        public virtual void OnEnd()
+        public virtual void OnBevEnd()
         {
             IsRunning = false;
         }

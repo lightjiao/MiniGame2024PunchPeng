@@ -13,13 +13,13 @@ namespace PunchPeng
             return this;
         }
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
+            base.OnBevStart();
             m_ElapsedTime = 0;
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
             m_ElapsedTime += deltaTime;
 

@@ -8,7 +8,7 @@ namespace PunchPeng
         public void Init(Player player)
         {
             m_Player = player;
-            m_EntryTask.Init(m_Player);
+            m_EntryTask.OnBevAwake(m_Player);
         }
 
         public void OnUpdate(float deltaTime)
@@ -20,14 +20,14 @@ namespace PunchPeng
         {
             if (!task.IsRunning)
             {
-                task.OnStart();
+                task.OnBevStart();
             }
 
-            var taskStatus = task.OnUpdate(deltaTime);
+            var taskStatus = task.OnBevUpdate(deltaTime);
 
             if (taskStatus == TaskStatus.Success || taskStatus == TaskStatus.Failure)
             {
-                task.OnEnd();
+                task.OnBevEnd();
             }
 
             return taskStatus;

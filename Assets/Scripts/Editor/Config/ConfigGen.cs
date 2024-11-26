@@ -235,6 +235,10 @@ namespace ConfigAuto
             if (treeType != ETreeType.EFromDic)
                 str += ",";
         }
+        else if (fname.Contains("RuntimeType"))
+        {
+
+        }
         else
         {
             if (vtype.Name.StartsWith("ValueTuple"))

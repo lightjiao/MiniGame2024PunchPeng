@@ -6,17 +6,17 @@ namespace PunchPeng
 {
     public class BevRun : BevMove
     {
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
+            base.OnBevStart();
             m_CfgDuration = Random.Range(0.5f, 1f);
             m_ReduceSpeedElapesdMoment = m_CfgDuration - m_CfgSpeedDownDuration;
             m_Player.InputRun = true;
         }
 
-        public override void OnEnd()
+        public override void OnBevEnd()
         {
-            base.OnEnd();
+            base.OnBevEnd();
             m_Player.InputRun = false;
         }
     }

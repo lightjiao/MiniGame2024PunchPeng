@@ -3,14 +3,18 @@ using System.Collections.Generic;
 
 public static class CollectionUtil
 {
-    public static void KeysCopyTo<TKey, TValue>(this Dictionary<TKey, TValue> self, List<TKey> keys)
+    public static void KeysCopyTo<TKey, TValue>(this Dictionary<TKey, TValue> self, List<TKey> keys, bool clear = true)
     {
         if (self == null || keys == null)
         {
             throw new NullReferenceException("KeysCopyTo");
         }
 
-        keys.Clear();
+        if (clear)
+        {
+            keys.Clear();
+        }
+
         foreach (var kv in self)
         {
             keys.Add(kv.Key);

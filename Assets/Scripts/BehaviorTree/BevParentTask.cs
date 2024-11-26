@@ -10,12 +10,12 @@ public class BevParentTask : BevTask
         m_Tasks.Add(task);
     }
 
-    public override void Init(Player player)
+    public override void OnBevAwake(Player player)
     {
-        base.Init(player);
+        base.OnBevAwake(player);
         foreach (var item in m_Tasks)
         {
-            item.Init(player);
+            item.OnBevAwake(player);
         }
     }
 }

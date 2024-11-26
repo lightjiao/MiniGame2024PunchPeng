@@ -1,4 +1,7 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,11 +9,19 @@ namespace PunchPeng
 {
     public class UIController : SingletonMono<UIController>
     {
-        public GameObject gameStartPanel;
-        public Button startBtn;
-        public Button ResetScoreBtn;
+        public GameObject gameEntry;
+        public Button btnStartGame;
+        public Button btnResetScore;
 
         public GameObject loadingPanel;
+        private Image loadingImg;
+
+        public GameObject gameUI;
+        public GameObject counddoan321;
+        public GameObject tree;
+        public GameObject two;
+        public GameObject one;
+
         public GameObject submitPanel;
         public TextMeshProUGUI player1ScoreText;
         public TextMeshProUGUI player2ScoreText;
@@ -21,8 +32,8 @@ namespace PunchPeng
         protected override void OnAwake()
         {
             GameEvent.Inst.OnGameEnd += ShowSubmit;
-            startBtn.onClick.AddListener(ClickStartGame);
-            ResetScoreBtn.onClick.AddListener(ClickResetScore);
+            btnStartGame.onClick.AddListener(ShowLoading);
+            btnResetScore.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
@@ -30,50 +41,59 @@ namespace PunchPeng
             ShowGameStart();
         }
 
-        public void ClickStartGame()
+        public void ShowGameStart()
         {
-            ShowLoading();
+            allowInputGameTime = Time.time + m_CfgInputCD;
+            btnResetScore.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
+            gameEntry.SetActiveEx(true);
+            loadingPanel.SetActiveEx(false);
+            gameUI.SetActiveEx(false);
+            submitPanel.SetActiveEx(false);
         }
 
         private void ClickResetScore()
         {
             ScoreboardManager.Inst.ResetAllScore();
-            ResetScoreBtn.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
-        }
-
-        public void ShowGameStart()
-        {
-            allowInputGameTime = Time.time + m_CfgInputCD;
-            ResetScoreBtn.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
-            gameStartPanel.SetActive(true);
-            loadingPanel.SetActive(false);
-            submitPanel.SetActive(false);
+            btnResetScore.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
         }
 
         public void ShowLoading()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
-            gameStartPanel.SetActive(false);
-            loadingPanel.SetActive(true);
-            submitPanel.SetActive(false);
+            gameEntry.SetActiveEx(false);
+            loadingPanel.SetActiveEx(true); // TODO: 加载 img
+            gameUI.SetActiveEx(false);
+            submitPanel.SetActiveEx(false);
+        }
+
+        public void ShowGameUI()
+        {
+            allowInputGameTime = Time.time + m_CfgInputCD;
+            gameEntry.SetActiveEx(false);
+            loadingPanel.SetActiveEx(false);
+            gameUI.SetActiveEx(true);
+            submitPanel.SetActiveEx(false);
+
+            counddoan321.SetActiveEx(false);
         }
 
         public void ShowSubmit()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
-            gameStartPanel.SetActive(false);
-            loadingPanel.SetActive(false);
-            submitPanel.SetActive(true);
+            gameEntry.SetActiveEx(false);
+            loadingPanel.SetActiveEx(false);
+            gameUI.SetActiveEx(false);
+            submitPanel.SetActiveEx(true);
         }
 
-        void Update()
+        private void Update()
         {
             if (Time.time < allowInputGameTime)
             {
                 return;
             }
 
-            if (gameStartPanel.activeSelf)
+            if (gameEntry.activeSelf)
             {
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
@@ -81,32 +101,56 @@ namespace PunchPeng
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#else
-                    Application.Quit();
-#endif
+                    QuitGame();
                 }
-
                 return;
             }
+
             if (loadingPanel.activeSelf && Input.anyKeyDown)
             {
-                //if (PlayerInputManagerHelper.Inst.GamePadCount == 0)
-                //{
-                //    // TODO: 也许弹窗提示需要至少一个手柄加入游戏，或者有个界面强制玩家选择一个手柄
-                //    Debug.LogError("需要至少一个手柄加入游戏");
-                //    return;
-                //}
-                loadingPanel.SetActive(false);
+                ShowGameUI();
                 GameEvent.Inst.OnGameStart?.Invoke();
                 return;
             }
             else if (submitPanel.activeSelf && Input.anyKeyDown)
             {
-                ShowGameStart();
+                ShowLoading();
                 return;
             }
+        }
+
+        private void QuitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
+        public async UniTask PlayCoundDown321Anim()
+        {
+            counddoan321.SetActiveEx(true);
+            one.SetActiveEx(false);
+            two.SetActiveEx(false);
+            tree.SetActiveEx(false);
+            one.transform.localScale = Vector3.one;
+            two.transform.localScale = Vector3.one;
+            tree.transform.localScale = Vector3.one;
+
+            tree.SetActiveEx(true);
+            await tree.transform.DOScale(3, 0.5f).AsyncWaitForCompletion();
+            tree.SetActiveEx(false);
+
+            two.SetActiveEx(true);
+            await two.transform.DOScale(3, 0.5f).AsyncWaitForCompletion();
+            two.SetActiveEx(false);
+
+            one.SetActiveEx(true);
+            await one.transform.DOScale(3, 0.5f).AsyncWaitForCompletion();
+            one.SetActiveEx(false);
+
+            counddoan321.SetActiveEx(false);
         }
     }
 }

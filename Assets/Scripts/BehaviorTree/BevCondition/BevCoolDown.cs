@@ -13,13 +13,13 @@ namespace PunchPeng
             return this;
         }
 
-        public override void Init(Player player)
+        public override void OnBevAwake(Player player)
         {
-            base.Init(player);
+            base.OnBevAwake(player);
             m_LastTime = 0;
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
             if (Time.time - m_LastTime > m_Cd)
             {

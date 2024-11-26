@@ -5,13 +5,13 @@ namespace PunchPeng
         private int m_CurIndx;
         private BevTask m_CurTask => m_Tasks.Count > m_CurIndx ? m_Tasks[m_CurIndx] : null;
 
-        public override void OnStart()
+        public override void OnBevStart()
         {
-            base.OnStart();
+            base.OnBevStart();
             m_CurIndx = 0;
         }
 
-        public override TaskStatus OnUpdate(float deltaTime)
+        public override TaskStatus OnBevUpdate(float deltaTime)
         {
             if (m_CurTask == null)
             {

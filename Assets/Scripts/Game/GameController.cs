@@ -19,6 +19,9 @@ namespace PunchPeng
 
         [ReadOnly] public ReferenceBool HasCopyAI = new();
 
+        public BuffContainer m_BuffContainer = new();
+        public ReferenceBool DisableAIBevAttack = new();
+
         protected override void OnAwake()
         {
             Inst = this;
@@ -32,6 +35,7 @@ namespace PunchPeng
 
         private void Update()
         {
+            m_BuffContainer.Update(Time.deltaTime);
             PlayerInputManagerHelper.Inst.OnUpdate();
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
@@ -40,12 +44,17 @@ namespace PunchPeng
         {
             VfxManager.Inst.ReleaseAll();
 
-            m_CurLevelCfg = Config_Global.Inst.data.LevelCfg[0];
+            m_CurLevelCfg = Config_Global.Inst.data.LevelCfg[2];
             var playBGM = AudioManager.Inst.PlayBGM(m_CurLevelCfg.BGMRes);
             await LevelMgr.Inst.LoadLevelAsync(m_CurLevelCfg.Scene);
             await SpawnPlayersAsync();
 
             await playBGM;
+
+            foreach (var item in m_CurLevelCfg.BuffIds)
+            {
+                m_BuffContainer.AddBuff(item);
+            }
 
             GameIsStart = true;
         }

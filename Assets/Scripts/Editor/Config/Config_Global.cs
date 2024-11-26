@@ -23,8 +23,7 @@ namespace ConfigAuto
                 new {
                     Scene = "PunchPeng_Gym",
                     BGMRes = "Music/MM/Town.GoodbyeMinchi",
-                    DisableBevTreeAttak = true,
-                    CountdownAttackInterval = 20,
+                    BuffIds = new []{ 1,}
                 },
                 //new {
                 //    Scene = "PunchPeng_Gym",
