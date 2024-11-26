@@ -3,12 +3,10 @@ namespace PunchPeng
     public class BevTree
     {
         private Player m_Player;
-        private BevEntryTask m_EntryTask;
+        private BevEntryTask m_EntryTask = new();
 
         public void Init(Player player)
         {
-            CreateAsNormal();
-
             m_Player = player;
             m_EntryTask.Init(m_Player);
         }
@@ -35,9 +33,13 @@ namespace PunchPeng
             return taskStatus;
         }
 
-        // ============ quite hack
-        public void CreateAsNormal()
+        public static BevTree CreateBevTree()
         {
+            var posibilityToCopy = new BevSequence();
+            posibilityToCopy.AddTask(new BevPosibility().SetPosibility(0.1f));
+            posibilityToCopy.AddTask(new BevCoolDown().SetCD(10));
+            posibilityToCopy.AddTask(new BevCopyPlayerInput());
+
             var randomMove = new BevSelector();
             randomMove.AddTask(new BevIdle());
             randomMove.AddTask(new BevIdle());
@@ -45,6 +47,7 @@ namespace PunchPeng
             randomMove.AddTask(new BevMove());
             randomMove.AddTask(new BevMove());
             randomMove.AddTask(new BevRun());
+            randomMove.AddTask(posibilityToCopy);
 
             var randomAttack = new BevSequence();
             randomAttack.AddTask(new BevRandomCanAttackPlayer());
@@ -54,13 +57,10 @@ namespace PunchPeng
             parallel.AddTask(randomMove);
             parallel.AddTask(randomAttack);
 
-            m_EntryTask = new BevEntryTask();
-            m_EntryTask.AddTask(parallel);
-        }
+            var tree = new BevTree();
+            tree.m_EntryTask.AddTask(parallel);
 
-        public void CreateWithoutAttack()
-        {
-
+            return tree;
         }
     }
 }

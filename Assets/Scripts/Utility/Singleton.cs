@@ -25,6 +25,16 @@ public abstract class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Inst;
 
+    private Transform _trans;
+    public Transform CachedTransform
+    {
+        get
+        {
+            if (_trans == null) _trans = transform;
+            return _trans;
+        }
+    }
+
     private void Awake()
     {
         Inst = GetComponent<T>();

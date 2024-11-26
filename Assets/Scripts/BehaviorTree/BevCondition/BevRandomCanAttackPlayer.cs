@@ -10,6 +10,11 @@ namespace PunchPeng
 
         public override TaskStatus OnUpdate(float deltaTime)
         {
+            if (GameController.Inst.m_CurLevelCfg.DisableBevTreeAttak)
+            {
+                return TaskStatus.Failure;
+            }
+
             if (Time.time - m_AtkTime > m_CfgAtkCd && HasPlayerInFrontOfMe())
             {
                 m_AtkTime = Time.time;

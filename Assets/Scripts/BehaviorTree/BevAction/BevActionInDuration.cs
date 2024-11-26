@@ -7,6 +7,12 @@ namespace PunchPeng
         protected bool TimeEnd => m_ElapsedTime >= m_CfgDuration;
         protected TaskStatus TaskStatusByDuration => TimeEnd ? TaskStatus.Success : TaskStatus.Running;
 
+        public BevDurationAction SetDuration(float duration)
+        {
+            m_CfgDuration = duration;
+            return this;
+        }
+
         public override void OnStart()
         {
             base.OnStart();

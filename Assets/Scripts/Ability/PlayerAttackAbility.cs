@@ -17,7 +17,7 @@ namespace PunchPeng
         {
             base.AbilityOnStart();
             m_Player.CanMove.RefCnt--;
-            m_Player.PlaySfx(Config_Global.Inst.data.PlayerPunchSfx).Forget();
+            AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.PlayerPunchSfx).Forget();
         }
 
         protected override void AbilityOnStop()

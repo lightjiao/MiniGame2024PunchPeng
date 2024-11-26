@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace PunchPeng
 {
@@ -16,12 +15,14 @@ namespace PunchPeng
         [ReadOnly] public bool GameIsStart;
 
         // 纯玩家
-        private Dictionary<int, Player> m_Players = new();
+        public Config_Global.LevelCfg m_CurLevelCfg;
+
+        [ReadOnly] public ReferenceBool HasCopyAI = new();
 
         protected override void OnAwake()
         {
-            Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             Inst = this;
+            Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             GameEvent.Inst.OnGameStart += OnGameStartAsync;
             GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
             _ = ScoreboardManager.Inst;
@@ -38,11 +39,10 @@ namespace PunchPeng
         private async UniTask OnGameStartAsync()
         {
             VfxManager.Inst.ReleaseAll();
-            //PlayerInputManager.instance.DisableJoining();
 
-            var randomLevel = Config_Global.Inst.data.LevelNames.RandomOne();
-            var playBGM = AudioManager.Inst.PlayLevelBGM(randomLevel);
-            await LevelMgr.Inst.LoadLevelAsync(randomLevel);
+            m_CurLevelCfg = Config_Global.Inst.data.LevelCfg[0];
+            var playBGM = AudioManager.Inst.PlayBGM(m_CurLevelCfg.BGMRes);
+            await LevelMgr.Inst.LoadLevelAsync(m_CurLevelCfg.Scene);
             await SpawnPlayersAsync();
 
             await playBGM;
@@ -70,7 +70,7 @@ namespace PunchPeng
         {
             foreach (var player in PlayerList)
             {
-                Destroy(player);
+                Destroy(player.gameObject);
             }
             PlayerList.Clear();
 
@@ -92,11 +92,19 @@ namespace PunchPeng
                     PlayerList.Add(player);
                 }
 
+                var protectedLoopCnt = 100;
                 m_Player1 = PlayerList.RandomOne();
                 do
                 {
+                    protectedLoopCnt--;
                     m_Player2 = PlayerList.RandomOne();
-                } while (m_Player1 == m_Player2);
+                } while (m_Player1 == m_Player2 && protectedLoopCnt > 0);
+
+                if (protectedLoopCnt <= 0)
+                {
+                    Log.Error("初始化玩家失败，死循环了");
+                }
+
                 m_Player1.PlayerId = 1;
                 m_Player2.PlayerId = 2;
             }
@@ -112,7 +120,7 @@ namespace PunchPeng
                     player.PlayerId = aiId;
                     aiId--;
                     player.name += $" AI:[{aiId}]";
-                    player.SetIsAI(false);
+                    player.SetIsAI();
                 }
                 else
                 {
@@ -140,8 +148,8 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
-            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.WinnerVfx, winPlayer.Position, 10).Forget();
-            AudioManager.Inst.PauseBGMPlaySfx(Config_Global.Inst.data.WinSfx).Forget();
+            VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
+            AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();
 
             WaitToFinishGame(winPlayer).Forget();
         }

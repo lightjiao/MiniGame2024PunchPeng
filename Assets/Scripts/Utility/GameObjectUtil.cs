@@ -91,6 +91,12 @@ public static class GameObjectUtil
         obj = null;
     }
 
+    public static void DestroyGo(this MonoBehaviour self, GameObject go)
+    {
+        if (go == null) return;
+        GameObject.Destroy(go);
+    }
+
     public static void DestroyGo(GameObject obj)
     {
         if (obj == null) return;

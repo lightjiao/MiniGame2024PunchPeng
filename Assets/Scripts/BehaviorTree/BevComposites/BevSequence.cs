@@ -23,8 +23,10 @@ namespace PunchPeng
             {
                 return TaskStatus.Failure;
             }
-
-            m_CurIndx++;
+            if (status == TaskStatus.Success)
+            {
+                m_CurIndx++;
+            }
             return TaskStatus.Running;
         }
     }

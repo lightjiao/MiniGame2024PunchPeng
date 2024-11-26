@@ -1,11 +1,21 @@
-using static PunchPeng.PlayerInputManagerHelper;
+using UnityEngine;
 
 namespace PunchPeng
 {
-    public class CopyPlayerInputAI : BevDurationAction
+    public class BevCopyPlayerInput : BevDurationAction
     {
+        private int m_CopyedPlayerId;
+
+        private bool m_AlreadyHasCopyAI = false;
+
         public override void OnStart()
         {
+            m_CopyedPlayerId = Random.Range(0, 2);
+            m_CfgDuration = Random.Range(1f, 3f);
+
+            m_AlreadyHasCopyAI = GameController.Inst.HasCopyAI;
+            GameController.Inst.HasCopyAI.RefCnt++;
+
             base.OnStart();
         }
 
@@ -13,19 +23,24 @@ namespace PunchPeng
         {
             base.OnUpdate(deltaTime);
 
-            //m_Player.InputMoveDir = PlayerInputActionGen.
-            //m_Player.InputMoveDir.Value = PlayerInputManager.Inst.Player1Input.MoveDir;
-            //m_Player.InputRun.Value = PlayerInputManager.Inst.Player1Input.IsRun;
-            //m_Player.InputAttack.Value = PlayerInputManager.Inst.Player1Input.IsAttack;
+            if (m_AlreadyHasCopyAI)
+            {
+                return TaskStatus.Success;
+            }
+
+            m_Player.InputMoveDir = PlayerInputManagerHelper.Inst.GetPlayerInputData(m_CopyedPlayerId).MoveDir;
+            m_Player.InputRun = PlayerInputManagerHelper.Inst.GetPlayerInputData(m_CopyedPlayerId).Run;
 
             return TaskStatusByDuration;
         }
 
-        public void OnUpdate()
+        public override void OnEnd()
         {
-            //m_Player.InputMoveDir.Value = PlayerInputManager.Inst.Player1Input.MoveDir;
-            //m_Player.InputRun.Value = PlayerInputManager.Inst.Player1Input.IsRun;
-            //m_Player.InputAttack.Value = PlayerInputManager.Inst.Player1Input.IsAttack;
+            GameController.Inst.HasCopyAI.RefCnt--;
+            m_Player.InputMoveDir = Vector3.zero;
+            m_Player.InputRun = false;
+
+            base.OnEnd();
         }
     }
 }
