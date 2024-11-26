@@ -17,6 +17,8 @@ namespace PunchPeng
         // 纯玩家
         public Config_Global.LevelCfg m_CurLevelCfg;
 
+        [ReadOnly] public ReferenceBool HasCopyAI = new();
+
         protected override void OnAwake()
         {
             Inst = this;

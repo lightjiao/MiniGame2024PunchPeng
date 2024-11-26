@@ -35,6 +35,11 @@ namespace PunchPeng
 
         public static BevTree CreateBevTree()
         {
+            var posibilityToCopy = new BevSequence();
+            posibilityToCopy.AddTask(new BevPosibility().SetPosibility(0.1f));
+            posibilityToCopy.AddTask(new BevCoolDown().SetCD(10));
+            posibilityToCopy.AddTask(new BevCopyPlayerInput());
+
             var randomMove = new BevSelector();
             randomMove.AddTask(new BevIdle());
             randomMove.AddTask(new BevIdle());
@@ -42,6 +47,7 @@ namespace PunchPeng
             randomMove.AddTask(new BevMove());
             randomMove.AddTask(new BevMove());
             randomMove.AddTask(new BevRun());
+            randomMove.AddTask(posibilityToCopy);
 
             var randomAttack = new BevSequence();
             randomAttack.AddTask(new BevRandomCanAttackPlayer());
