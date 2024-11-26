@@ -90,11 +90,19 @@ namespace PunchPeng
                     PlayerList.Add(player);
                 }
 
+                var protectedLoopCnt = 100;
                 m_Player1 = PlayerList.RandomOne();
                 do
                 {
+                    protectedLoopCnt--;
                     m_Player2 = PlayerList.RandomOne();
-                } while (m_Player1 == m_Player2);
+                } while (m_Player1 == m_Player2 && protectedLoopCnt > 0);
+
+                if (protectedLoopCnt <= 0)
+                {
+                    Log.Error("初始化玩家失败，死循环了");
+                }
+
                 m_Player1.PlayerId = 1;
                 m_Player2.PlayerId = 2;
             }
