@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 450
-  m_AmbientSkyColor: {r: 0.48460937, g: 0.38501248, b: 0.7924528, a: 1}
+  m_AmbientSkyColor: {r: 0.3816972, g: 0.21333212, b: 0.8867924, a: 1}
   m_AmbientEquatorColor: {r: 0.26125845, g: 0.28403422, b: 0.5377358, a: 1}
   m_AmbientGroundColor: {r: 0.3326362, g: 0.3573758, b: 0.6132076, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 1
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.45349768, g: 0.53607833, b: 0.745283, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -7761,7 +7761,6 @@ Transform:
   - {fileID: 1424615874}
   - {fileID: 685046078}
   - {fileID: 1290042123}
-  - {fileID: 2128626739}
   - {fileID: 2041215425}
   - {fileID: 1380163192}
   - {fileID: 1040287475}
@@ -7769,6 +7768,7 @@ Transform:
   - {fileID: 1782067025}
   - {fileID: 1084592501}
   - {fileID: 1510756525}
+  - {fileID: 2128626739}
   - {fileID: 150831700}
   - {fileID: 1692090459}
   - {fileID: 294757670}
@@ -7789,7 +7789,6 @@ Transform:
   - {fileID: 800423920}
   - {fileID: 145033380}
   - {fileID: 1642901425}
-  - {fileID: 1645792812}
   - {fileID: 2071697802}
   - {fileID: 549004070}
   - {fileID: 799377987}
@@ -7802,6 +7801,7 @@ Transform:
   - {fileID: 638740864}
   - {fileID: 1075908990}
   - {fileID: 1877500044}
+  - {fileID: 1645792812}
   - {fileID: 112530878}
   - {fileID: 590921124}
   - {fileID: 1064440466}
