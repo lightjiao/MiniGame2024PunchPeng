@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine;
 
 namespace PunchPeng
 {
@@ -8,12 +9,12 @@ namespace PunchPeng
         protected override void OnBuffStart()
         {
             base.OnBuffStart();
-            GameController.Inst.DisableAIBevAttack.RefCnt++;
+            LevelController.Inst.DisableAIBevAttack.RefCnt++;
         }
 
         protected override void OnBuffEnd()
         {
-            GameController.Inst.DisableAIBevAttack.RefCnt--;
+            LevelController.Inst.DisableAIBevAttack.RefCnt--;
             base.OnBuffEnd();
         }
 
@@ -26,17 +27,28 @@ namespace PunchPeng
         {
             if (cts.IsCancellationRequested) return;
 
-            // TODO: show UI and sfx
             UIController.Inst.PlayCoundDown321Anim().Forget();
             await AudioManager.Inst.Play2DSfx(ConfigAuto.Config_Global.Inst.data.Sfx.CoundDown321Sfx);
 
             if (cts.IsCancellationRequested) return;
 
-            foreach (var player in GameController.Inst.PlayerList)
+            foreach (var player in LevelController.Inst.PlayerList)
             {
                 if (!player.IsAI) continue;
-                player.InputAttack = true;
+                RandomDelayAttack(player, cts).Forget();
             }
+        }
+
+        private async UniTask RandomDelayAttack(Player player, CancellationTokenSource cts)
+        {
+            await UniTask.DelayFrame(Random.Range(0, 15));
+
+            if (cts.IsCancellationRequested || player == null || player.IsDead)
+            {
+                return;
+            }
+
+            player.InputAttack = true;
         }
     }
 }

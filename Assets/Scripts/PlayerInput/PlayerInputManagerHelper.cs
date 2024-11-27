@@ -57,22 +57,22 @@ namespace PunchPeng
 
         public void OnUpdate()
         {
-            if (GameController.Inst.m_Player1 != null)
+            if (LevelController.Inst.m_Player1 != null)
             {
-                GameController.Inst.m_Player1.InputMoveDir = GetPlayerInputData(0).MoveDir;
-                GameController.Inst.m_Player1.InputRun = GetPlayerInputData(0).Run;
-                GameController.Inst.m_Player1.InputAttack = GetPlayerInputData(0).Attack;
-                GameController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(0).UseSkill;
+                LevelController.Inst.m_Player1.InputMoveDir = GetPlayerInputData(0).MoveDir;
+                LevelController.Inst.m_Player1.InputRun = GetPlayerInputData(0).Run;
+                LevelController.Inst.m_Player1.InputAttack = GetPlayerInputData(0).Attack;
+                LevelController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(0).UseSkill;
 
                 PlayerInputLogger.Inst.AppendInput(1, Time.frameCount, GetPlayerInputData(0));
             }
 
-            if (GameController.Inst.m_Player2 != null)
+            if (LevelController.Inst.m_Player2 != null)
             {
-                GameController.Inst.m_Player2.InputMoveDir = GetPlayerInputData(1).MoveDir;
-                GameController.Inst.m_Player2.InputRun = GetPlayerInputData(1).Run;
-                GameController.Inst.m_Player2.InputAttack = GetPlayerInputData(1).Attack;
-                GameController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(1).UseSkill;
+                LevelController.Inst.m_Player2.InputMoveDir = GetPlayerInputData(1).MoveDir;
+                LevelController.Inst.m_Player2.InputRun = GetPlayerInputData(1).Run;
+                LevelController.Inst.m_Player2.InputAttack = GetPlayerInputData(1).Attack;
+                LevelController.Inst.m_Player2.InputUseSkill = GetPlayerInputData(1).UseSkill;
 
                 PlayerInputLogger.Inst.AppendInput(2, Time.frameCount, GetPlayerInputData(1));
             }

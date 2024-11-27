@@ -21,6 +21,16 @@ public static class CollectionUtil
         }
     }
 
+    public static int RandomIndex<T>(this IList<T> self)
+    {
+        if (self == null || self.Count == 0)
+        {
+            return default;
+        }
+
+        return UnityEngine.Random.Range(0, self.Count);
+    }
+
     public static T RandomOne<T>(this IList<T> self)
     {
         if (self == null || self.Count == 0)

@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +9,24 @@ namespace PunchPeng
 {
     public class UIController : SingletonMono<UIController>
     {
+        [Title("GameEntry")]
         public GameObject gameEntry;
         public Button btnStartGame;
         public Button btnResetScore;
 
-        public GameObject loadingPanel;
-        private Image loadingImg;
+        [Title("GamePreload")]
+        public GameObject gamePreload;
+        public Image gamePreloadImg;
+        private UniTask? loadingTask;
 
+        [Title("GameUI")]
         public GameObject gameUI;
         public GameObject counddoan321;
         public GameObject tree;
         public GameObject two;
         public GameObject one;
 
+        [Title("GameSubmit")]
         public GameObject submitPanel;
         public TextMeshProUGUI player1ScoreText;
         public TextMeshProUGUI player2ScoreText;
@@ -31,22 +36,22 @@ namespace PunchPeng
 
         protected override void OnAwake()
         {
-            GameEvent.Inst.OnGameEnd += ShowSubmit;
+            GameEvent.Inst.BeforeLevelEnd += ShowSubmit;
             btnStartGame.onClick.AddListener(ShowLoading);
             btnResetScore.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
         {
-            ShowGameStart();
+            ShowGameEntry();
         }
 
-        public void ShowGameStart()
+        public void ShowGameEntry()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
             btnResetScore.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
             gameEntry.SetActiveEx(true);
-            loadingPanel.SetActiveEx(false);
+            gamePreload.SetActiveEx(false);
             gameUI.SetActiveEx(false);
             submitPanel.SetActiveEx(false);
         }
@@ -60,8 +65,13 @@ namespace PunchPeng
         public void ShowLoading()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
+
+            GameFlowController.Inst.ChooseLevel();
+            loadingTask = LevelController.Inst.LevelPreload();
+            gamePreloadImg.sprite = ResourceMgr.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
+
             gameEntry.SetActiveEx(false);
-            loadingPanel.SetActiveEx(true); // TODO: 加载 img
+            gamePreload.SetActiveEx(true);
             gameUI.SetActiveEx(false);
             submitPanel.SetActiveEx(false);
         }
@@ -70,7 +80,7 @@ namespace PunchPeng
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
             gameEntry.SetActiveEx(false);
-            loadingPanel.SetActiveEx(false);
+            gamePreload.SetActiveEx(false);
             gameUI.SetActiveEx(true);
             submitPanel.SetActiveEx(false);
 
@@ -81,7 +91,7 @@ namespace PunchPeng
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
             gameEntry.SetActiveEx(false);
-            loadingPanel.SetActiveEx(false);
+            gamePreload.SetActiveEx(false);
             gameUI.SetActiveEx(false);
             submitPanel.SetActiveEx(true);
         }
@@ -106,10 +116,11 @@ namespace PunchPeng
                 return;
             }
 
-            if (loadingPanel.activeSelf && Input.anyKeyDown)
+            if (gamePreload.activeSelf && Input.anyKeyDown && loadingTask != null && loadingTask.Value.Status == UniTaskStatus.Succeeded)
             {
+                loadingTask = null;
                 ShowGameUI();
-                GameEvent.Inst.OnGameStart?.Invoke();
+                LevelController.Inst.LevelStart().Forget();
                 return;
             }
             else if (submitPanel.activeSelf && Input.anyKeyDown)

@@ -38,7 +38,7 @@ public class CfgTableBuff : Singleton<CfgTableBuff>
             DataId = 1,
             BuffType = typeof(BuffAICountDownAttack),
             Duration = -1,
-            Param1 = 5,// 倒计时间隔时间
+            Param1 = 10,// 倒计时间隔时间
         }
     };
 }

@@ -1,16 +1,19 @@
+using ConfigAuto;
+
 namespace PunchPeng
 {
     public class GameFlowController : Singleton<GameFlowController>
     {
-        private int m_CurLevel;
+        public int CurLevel { get; private set; }
 
         protected override void OnInit()
         {
         }
 
-        public void GameFlowStart()
+        public int ChooseLevel()
         {
-            m_CurLevel = 0;
+            CurLevel = Config_Global.Inst.data.LevelCfg.RandomIndex();
+            return CurLevel;
         }
     }
 }

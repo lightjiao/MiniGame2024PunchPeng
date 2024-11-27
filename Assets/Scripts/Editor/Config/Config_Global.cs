@@ -14,14 +14,17 @@ namespace ConfigAuto
             {
                 new {
                     Scene = "PunchPeng_Caodi",
+                    PreloadImg = "UI/Loading_Caodi",
                     BGMRes = "Music/MM/Town.Village",
                 },
                 new {
                     Scene = "PunchPeng",
+                    PreloadImg = "UI/Loading",
                     BGMRes = "Music/MM/Town.Bar",
                 },
                 new {
                     Scene = "PunchPeng_Gym",
+                    PreloadImg = "UI/Loading_Gym",
                     BGMRes = "Music/MM/Town.GoodbyeMinchi",
                     BuffIds = new []{ 1,}
                 },

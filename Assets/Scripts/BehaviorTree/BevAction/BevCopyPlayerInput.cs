@@ -13,8 +13,8 @@ namespace PunchPeng
             m_CopyedPlayerId = Random.Range(0, 2);
             m_CfgDuration = Random.Range(1f, 3f);
 
-            m_AlreadyHasCopyAI = GameController.Inst.HasCopyAI;
-            GameController.Inst.HasCopyAI.RefCnt++;
+            m_AlreadyHasCopyAI = LevelController.Inst.HasCopyAI;
+            LevelController.Inst.HasCopyAI.RefCnt++;
 
             base.OnBevStart();
         }
@@ -36,7 +36,7 @@ namespace PunchPeng
 
         public override void OnBevEnd()
         {
-            GameController.Inst.HasCopyAI.RefCnt--;
+            LevelController.Inst.HasCopyAI.RefCnt--;
             m_Player.InputMoveDir = Vector3.zero;
             m_Player.InputRun = false;
 

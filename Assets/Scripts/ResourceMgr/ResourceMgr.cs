@@ -13,6 +13,26 @@ namespace PunchPeng
         private Dictionary<string, UniTaskCompletionSource> m_LoadingTcs = new();
         private Dictionary<string, Object> m_LoadedRes = new();
 
+        public T Load<T>(string resPath) where T : Object
+        {
+            if (string.IsNullOrEmpty(resPath))
+            {
+                return null;
+            }
+            // TODO loading res lock
+            if (!m_LoadedRes.TryGetValue(resPath, out var resObj))
+            {
+                resObj = Resources.Load<T>(resPath);
+                if (resObj == null)
+                {
+                    throw new System.Exception($"ResAsset `{resPath}` is null");
+                }
+                m_LoadedRes[resPath] = resObj;
+            }
+
+            return (T)resObj;
+        }
+
         public async UniTask<T> LoadAsync<T>(string resPath) where T : Object
         {
             if (string.IsNullOrEmpty(resPath))

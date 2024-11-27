@@ -10,7 +10,7 @@ namespace PunchPeng
 
         public override TaskStatus OnBevUpdate(float deltaTime)
         {
-            if (GameController.Inst.DisableAIBevAttack)
+            if (LevelController.Inst.DisableAIBevAttack)
             {
                 return TaskStatus.Failure;
             }
@@ -30,7 +30,7 @@ namespace PunchPeng
         {
             var predictPos = (m_Player.Position + m_Player.Forward);
 
-            foreach (var player in GameController.Inst.PlayerList)
+            foreach (var player in LevelController.Inst.PlayerList)
             {
                 if (m_Player == player || player.IsDead) continue;
                 if ((player.Position - predictPos).SetY(0).magnitude < 0.5f)

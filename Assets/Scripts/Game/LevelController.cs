@@ -2,11 +2,12 @@ using ConfigAuto;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PunchPeng
 {
-    public class GameController : SingletonMono<GameController>
+    public class LevelController : SingletonMono<LevelController>
     {
         // 包含了AI与玩家的列表
         [HideInInspector] public List<Player> PlayerList = new();
@@ -14,8 +15,7 @@ namespace PunchPeng
         [ReadOnly] public Player m_Player2;
         [ReadOnly] public bool GameIsStart;
 
-        // 纯玩家
-        public Config_Global.LevelCfg m_CurLevelCfg;
+        public Config_Global.LevelCfg CurLevelCfg { get; private set; }
 
         [ReadOnly] public ReferenceBool HasCopyAI = new();
 
@@ -26,8 +26,7 @@ namespace PunchPeng
         {
             Inst = this;
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
-            GameEvent.Inst.OnGameStart += OnGameStartAsync;
-            GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishGame;
+            GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishLevel;
             _ = ScoreboardManager.Inst;
 
             GameIsStart = false;
@@ -40,30 +39,34 @@ namespace PunchPeng
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 
-        private async UniTask OnGameStartAsync()
+        public async UniTask LevelPreload()
         {
             VfxManager.Inst.ReleaseAll();
 
-            m_CurLevelCfg = Config_Global.Inst.data.LevelCfg[2];
-            var playBGM = AudioManager.Inst.PlayBGM(m_CurLevelCfg.BGMRes);
-            await LevelMgr.Inst.LoadLevelAsync(m_CurLevelCfg.Scene);
-            await SpawnPlayersAsync();
+            CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameFlowController.Inst.CurLevel];
+            await LevelMgr.Inst.LoadLevelAsync(CurLevelCfg.Scene);
 
+            GameEvent.Inst.AfterLevelPreload?.Invoke();
+        }
+
+        public async UniTask LevelStart()
+        {
+            var playBGM = AudioManager.Inst.PlayBGM(CurLevelCfg.BGMRes);
             await playBGM;
 
-            foreach (var item in m_CurLevelCfg.BuffIds)
+            await SpawnPlayersAsync();
+            foreach (var item in CurLevelCfg.BuffIds ?? Enumerable.Empty<int>())
             {
                 m_BuffContainer.AddBuff(item);
             }
-
             GameIsStart = true;
         }
 
-        private async UniTask EndGameAsync()
+        private async UniTask LevelEnd()
         {
-            GameIsStart = false;
+            GameEvent.Inst.BeforeLevelEnd?.Invoke();
 
-            GameEvent.Inst.OnGameEnd?.Invoke();
+            GameIsStart = false;
 
             m_Player1 = null;
             m_Player2 = null;
@@ -138,7 +141,7 @@ namespace PunchPeng
             }
         }
 
-        private void OnPlayerDeadToFinishGame(int killer, int deadPlayer)
+        private void OnPlayerDeadToFinishLevel(int killer, int deadPlayer)
         {
             if (deadPlayer <= 0) return;
 
@@ -160,17 +163,17 @@ namespace PunchPeng
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();
 
-            WaitToFinishGame(winPlayer).Forget();
+            WaitToFinishLevel(winPlayer).Forget();
         }
 
-        private async UniTask WaitToFinishGame(Player winPlayer)
+        private async UniTask WaitToFinishLevel(Player winPlayer)
         {
             // wait attack anim to finish
             await UniTask.Delay(0.5f.ToMilliSec());
             winPlayer.PlayAnim(winPlayer.m_AnimData.Cheer);
 
             await UniTask.Delay(5f.ToMilliSec());
-            await EndGameAsync();
+            await LevelEnd();
         }
     }
 }
