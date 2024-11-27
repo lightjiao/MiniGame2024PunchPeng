@@ -13,7 +13,8 @@ namespace PunchPeng
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
-        [ReadOnly] public bool GameIsStart;
+        [ReadOnly] public bool LevelIsStart;
+        [ReadOnly] public bool LevelIsBooyah;
 
         public Config_Global.LevelCfg CurLevelCfg { get; private set; }
 
@@ -29,7 +30,7 @@ namespace PunchPeng
             GameEvent.Inst.PlayerDeadPost += PlayerDeadToBooyah;
             _ = ScoreboardManager.Inst;
 
-            GameIsStart = false;
+            LevelIsStart = false;
         }
 
         private void Update()
@@ -59,14 +60,14 @@ namespace PunchPeng
             {
                 m_BuffContainer.AddBuff(item);
             }
-            GameIsStart = true;
+            LevelIsStart = true;
         }
 
         private async UniTask LevelEnd()
         {
             GameEvent.Inst.LevelEndPre?.Invoke();
 
-            GameIsStart = false;
+            LevelIsStart = false;
 
             m_Player1 = null;
             m_Player2 = null;
@@ -97,7 +98,7 @@ namespace PunchPeng
             //}
             //else
             {
-                for (int i = 0; i < Config_Global.Inst.data.TotalPlayerCount; i++)
+                for (int i = 0; i < CurLevelCfg.PawnCount; i++)
                 //for (int i = 0; i < 3; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
@@ -143,6 +144,9 @@ namespace PunchPeng
 
         private void PlayerDeadToBooyah(int killer, int deadPlayer)
         {
+            if (LevelIsBooyah) return;
+
+            LevelIsBooyah = true;
             if (deadPlayer <= 0) return;
 
             Player winPlayer = null;
@@ -155,6 +159,7 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
+            m_BuffContainer.RemoveAllBuff();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
             AudioManager.Inst.StopBgm();
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();

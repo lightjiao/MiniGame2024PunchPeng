@@ -6,7 +6,6 @@ namespace PunchPeng
     {
         private float m_CfgAtkCd = 5;
         private float m_AtkTime = 0;
-        private float m_AttackPct = 0.1f;
 
         public override TaskStatus OnBevUpdate(float deltaTime)
         {
@@ -18,7 +17,7 @@ namespace PunchPeng
             if (Time.time - m_AtkTime > m_CfgAtkCd && HasPlayerInFrontOfMe())
             {
                 m_AtkTime = Time.time;
-                if (MathUtil.InPercent(m_AttackPct))
+                if (MathUtil.InPercent(LevelController.Inst.CurLevelCfg.AIAttackPct))
                 {
                     return TaskStatus.Success;
                 }

@@ -16,7 +16,6 @@ namespace ConfigAuto
 						data = new()
 						{
 							TargetFrameRate = 60,
-							TotalPlayerCount = 20,
 							PlayerPrefab = @"Character/Kelly",
 							PlayerPunchFrame = 8,
 							LevelCfg = new()
@@ -27,12 +26,16 @@ namespace ConfigAuto
 									Scene = @"PunchPeng_Caodi",
 									PreloadImg = @"UI/Loading_Caodi",
 									BGMRes = @"Music/MM/Town.Village",
+									PawnCount = 20,
+									AIAttackPct = 0.5f,
 								},
 								new()
 								{
 									Scene = @"PunchPeng",
 									PreloadImg = @"UI/Loading",
 									BGMRes = @"Music/MM/Town.Bar",
+									PawnCount = 20,
+									AIAttackPct = 0.1f,
 								},
 								new()
 								{
@@ -43,6 +46,7 @@ namespace ConfigAuto
 									{
 										1,
 									},
+									PawnCount = 20,
 								},
 							},
 							Sfx = new()
@@ -69,7 +73,6 @@ namespace ConfigAuto
 		public partial class Rootdata
 		{
 			public Int32 TargetFrameRate {get;set;}
-			public Int32 TotalPlayerCount {get;set;}
 			public String PlayerPrefab {get;set;}
 			public Int32 PlayerPunchFrame {get;set;}
 			public List<LevelCfg> LevelCfg {get;set;}
@@ -81,6 +84,8 @@ namespace ConfigAuto
 			public String Scene {get;set;}
 			public String PreloadImg {get;set;}
 			public String BGMRes {get;set;}
+			public Int32 PawnCount {get;set;}
+			public float AIAttackPct {get;set;}
 			public List<Int32> BuffIds {get;set;}
 		}
 		public partial class Sfx
