@@ -81,6 +81,7 @@ namespace PunchPeng
 
             m_PunchAttackTrigger.SetActiveEx(false);
             m_HeadAttackTrigger.SetActiveEx(false);
+            GameEvent.Inst.LevelBooyahPost += LevelBooyahPost;
         }
 
         private void Start()
@@ -116,7 +117,7 @@ namespace PunchPeng
             InputAttack = false;
         }
 
-        public void OnGameEnd()
+        private void LevelBooyahPost()
         {
             CanMove.RefCnt--;
             CanAttack.RefCnt--;
@@ -211,8 +212,7 @@ namespace PunchPeng
 
             LocomotionState.Value = PlayerLocomotionState.Dead;
 
-            // calculate player's score
-            GameEvent.Inst.OnPlayerDead?.Invoke(damager.PlayerId, PlayerId);
+            GameEvent.Inst.PlayerDeadPost?.Invoke(damager.PlayerId, PlayerId);
         }
 
         private void OnLocomotionStateChange(PlayerLocomotionState state)

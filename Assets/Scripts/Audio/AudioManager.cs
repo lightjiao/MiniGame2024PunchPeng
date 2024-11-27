@@ -21,6 +21,11 @@ namespace PunchPeng
             m_BGMSource.Play(clip, true, 0.1f);
         }
 
+        public void StopBgm()
+        {
+            m_BGMSource.Pause();
+        }
+
         public async UniTask Play2DSfx(string sfxRes, bool pauseBGM = false, float volum = 1)
         {
             var clip = await ResourceMgr.Inst.LoadAsync<AudioClip>(sfxRes);

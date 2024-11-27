@@ -36,7 +36,7 @@ namespace PunchPeng
 
         protected override void OnAwake()
         {
-            GameEvent.Inst.BeforeLevelEnd += ShowSubmit;
+            GameEvent.Inst.LevelEndPre += ShowSubmit;
             btnStartGame.onClick.AddListener(ShowLoading);
             btnResetScore.onClick.AddListener(ClickResetScore);
         }

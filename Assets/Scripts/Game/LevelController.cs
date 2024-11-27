@@ -26,7 +26,7 @@ namespace PunchPeng
         {
             Inst = this;
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
-            GameEvent.Inst.OnPlayerDead += OnPlayerDeadToFinishLevel;
+            GameEvent.Inst.PlayerDeadPost += PlayerDeadToBooyah;
             _ = ScoreboardManager.Inst;
 
             GameIsStart = false;
@@ -46,7 +46,7 @@ namespace PunchPeng
             CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameFlowController.Inst.CurLevel];
             await LevelMgr.Inst.LoadLevelAsync(CurLevelCfg.Scene);
 
-            GameEvent.Inst.AfterLevelPreload?.Invoke();
+            GameEvent.Inst.LevelPreloadPost?.Invoke();
         }
 
         public async UniTask LevelStart()
@@ -64,7 +64,7 @@ namespace PunchPeng
 
         private async UniTask LevelEnd()
         {
-            GameEvent.Inst.BeforeLevelEnd?.Invoke();
+            GameEvent.Inst.LevelEndPre?.Invoke();
 
             GameIsStart = false;
 
@@ -141,14 +141,9 @@ namespace PunchPeng
             }
         }
 
-        private void OnPlayerDeadToFinishLevel(int killer, int deadPlayer)
+        private void PlayerDeadToBooyah(int killer, int deadPlayer)
         {
             if (deadPlayer <= 0) return;
-
-            foreach (var item in PlayerList)
-            {
-                item.OnGameEnd();
-            }
 
             Player winPlayer = null;
             if (deadPlayer == m_Player1.PlayerId)
@@ -161,7 +156,10 @@ namespace PunchPeng
             }
 
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
+            AudioManager.Inst.StopBgm();
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();
+
+            GameEvent.Inst.LevelBooyahPost?.Invoke();
 
             WaitToFinishLevel(winPlayer).Forget();
         }

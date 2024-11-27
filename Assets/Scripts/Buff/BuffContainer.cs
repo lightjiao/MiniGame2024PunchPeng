@@ -36,6 +36,20 @@ namespace PunchPeng
             }
         }
 
+        public void RemoveAllBuff()
+        {
+            m_Buffs.KeysCopyTo(m_CacheUids);
+
+            foreach (var buffUid in m_CacheUids)
+            {
+                if (m_Buffs.TryGetValue(buffUid, out var buff))
+                {
+                    buff.BeforeBuffRemove();
+                    m_Buffs.Remove(buffUid);
+                }
+            }
+        }
+
         public void Update(float elapseSeconds)
         {
             m_Buffs.KeysCopyTo(m_CacheUids);

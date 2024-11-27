@@ -9,9 +9,11 @@ namespace PunchPeng
         {
         }
 
-        public Action AfterLevelPreload;
-        public Action AfterLevelStart;
-        public Action BeforeLevelEnd;
-        public Action<int, int> OnPlayerDead; // <killerId, deadPlayerId>
+        public Action LevelPreloadPost;
+        public Action LevelStartPost;
+        public Action LevelBooyahPost;
+        public Action LevelEndPre;
+        public Action<int, int> PlayerDeadPre;  // <killerId, deadPlayerId>
+        public Action<int, int> PlayerDeadPost; // <killerId, deadPlayerId>
     }
 }
