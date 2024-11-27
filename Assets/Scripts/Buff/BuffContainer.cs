@@ -15,6 +15,11 @@ namespace PunchPeng
         private Dictionary<int, Buff> m_Buffs = new();
         private List<int> m_CacheUids = new();
 
+        public void Init(IBuffOwner owner)
+        {
+            m_Owner = owner;
+        }
+
         public int AddBuff(int buffDataId)
         {
             var uid = UidGen++;

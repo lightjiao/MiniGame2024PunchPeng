@@ -30,6 +30,10 @@ namespace PunchPeng
 
         protected override void OnAwake()
         {
+            InputSystem.ResetHaptics();
+            InputSystem.Update();
+            //InputSystem.onAnyButtonPress.Call(OnAnyBtnPress);
+
             m_KeyboardInput = new();
             var keyboardInput = new KeyboardInput();
             m_KeyboardInput.GamePlay.AddCallbacks(keyboardInput);
@@ -55,7 +59,7 @@ namespace PunchPeng
             m_KeyboardInput.Disable();
         }
 
-        public void OnUpdate()
+        private void Update()
         {
             if (LevelController.Inst.m_Player1 != null)
             {
@@ -78,6 +82,10 @@ namespace PunchPeng
             }
         }
 
+        private void LateUpdate()
+        {
+        }
+
         public PlayerInputData GetPlayerInputData(int playerIdx)
         {
             if (!m_PlayerInputDatas.TryGetValue(playerIdx, out var data))
@@ -90,7 +98,7 @@ namespace PunchPeng
 
         private void OnPlayerJoin(PlayerInput playerInput)
         {
-            //Debug.Log("OnPlayerJoin:" + playerInput.playerIndex);
+            Log.Info("OnPlayerJoin:" + playerInput.playerIndex);
             m_PlayerInputs[playerInput.playerIndex] = playerInput;
         }
 
@@ -98,6 +106,12 @@ namespace PunchPeng
         {
             //Debug.Log("OnPlayerLeft:" + playerInput.playerIndex);
             m_PlayerInputs.Remove(playerInput.playerIndex);
+        }
+
+        private void OnAnyBtnPress(object value)
+        {
+            //AnyBtnPressed = true;
+            Log.Info("OnAnyBtnPress:" + value);
         }
     }
 

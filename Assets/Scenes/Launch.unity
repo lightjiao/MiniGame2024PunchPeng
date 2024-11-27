@@ -469,7 +469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &450070870
 RectTransform:
   m_ObjectHideFlags: 0
@@ -936,6 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31579250c7cb64643942c443cfe56410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnyBtnPressed: 0
 --- !u!4 &615083603
 Transform:
   m_ObjectHideFlags: 0
@@ -1896,6 +1897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameEntry: {fileID: 450070869}
   btnStartGame: {fileID: 874784009}
+  btnQuitGame: {fileID: 670525409}
   btnResetScore: {fileID: 271521700}
   gamePreload: {fileID: 1736172364}
   gamePreloadImg: {fileID: 1945360027}
@@ -2735,7 +2737,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 32
 --- !u!114 &2140614049
 MonoBehaviour:
   m_ObjectHideFlags: 0

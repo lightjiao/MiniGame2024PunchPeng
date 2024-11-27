@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class LevelController : SingletonMono<LevelController>
+    public class LevelController : SingletonMono<LevelController>, IBuffOwner
     {
         // 包含了AI与玩家的列表
         [HideInInspector] public List<Player> PlayerList = new();
@@ -28,12 +28,12 @@ namespace PunchPeng
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             GameEvent.Inst.PlayerDeadPostAction += PlayerDeadToBooyah;
             _ = ScoreboardManager.Inst;
+            m_BuffContainer.Init(this);
         }
 
         private void Update()
         {
             m_BuffContainer.Update(Time.deltaTime);
-            PlayerInputManagerHelper.Inst.OnUpdate();
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 

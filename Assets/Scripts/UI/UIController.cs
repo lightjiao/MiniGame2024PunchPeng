@@ -12,6 +12,7 @@ namespace PunchPeng
         [Title("GameEntry")]
         public GameObject gameEntry;
         public Button btnStartGame;
+        public Button btnQuitGame;
         public Button btnResetScore;
 
         [Title("GamePreload")]
@@ -38,12 +39,12 @@ namespace PunchPeng
         {
             GameEvent.Inst.LevelEndPreAction += ShowSubmit;
             btnStartGame.onClick.AddListener(ShowLoading);
+            btnQuitGame.onClick.AddListener(QuitGame);
             btnResetScore.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
         {
-            //GameFlowController.Inst.ChooseLevelTest();
             ShowGameEntry();
         }
 

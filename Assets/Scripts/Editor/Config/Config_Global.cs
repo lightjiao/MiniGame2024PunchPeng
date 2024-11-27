@@ -15,7 +15,7 @@ namespace ConfigAuto
                     Scene = "PunchPeng_Caodi",
                     PreloadImg = "UI/Loading_Caodi",
                     BGMRes = "Music/MM/Town.Village",
-                    PawnCount = 20,
+                    PawnCount = 40,
                     AIAttackPct = 0.5,
                 },
                 new {
@@ -23,7 +23,7 @@ namespace ConfigAuto
                     PreloadImg = "UI/Loading",
                     BGMRes = "Music/MM/Town.Bar",
                     PawnCount = 20,
-                    AIAttackPct = 0.1,
+                    AIAttackPct = 0.2,
                 },
                 new {
                     Scene = "PunchPeng_Gym",

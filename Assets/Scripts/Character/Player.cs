@@ -84,6 +84,16 @@ namespace PunchPeng
             GameEvent.Inst.LevelBooyahPostAction += LevelBooyahPost;
         }
 
+        private void OnEnable()
+        {
+            m_Animancer.Play(m_AnimData.LocomotionMixer);
+        }
+
+        private void OnDisable()
+        {
+
+        }
+
         private void Start()
         {
             CanMove.RefCnt++;
