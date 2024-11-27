@@ -11,7 +11,7 @@ namespace PunchPeng
         protected override void OnInit()
         {
             UpdateScoreModules();
-            GameEvent.Inst.PlayerDeadPost += OnPlayerDeadToChangeScore;
+            GameEvent.Inst.PlayerDeadPostAction += OnPlayerDeadToChangeScore;
         }
 
         private void OnPlayerDeadToChangeScore(int attacker, int deadPlayer)

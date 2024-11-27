@@ -2317,7 +2317,7 @@ MonoBehaviour:
   PlayerList: []
   m_Player1: {fileID: 0}
   m_Player2: {fileID: 0}
-  GameIsStart: 0
+  LevelIsBooyah: 0
   HasCopyAI:
     RefCnt: 0
   DisableAIBevAttack:

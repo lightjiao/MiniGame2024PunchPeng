@@ -81,7 +81,7 @@ namespace PunchPeng
 
             m_PunchAttackTrigger.SetActiveEx(false);
             m_HeadAttackTrigger.SetActiveEx(false);
-            GameEvent.Inst.LevelBooyahPost += LevelBooyahPost;
+            GameEvent.Inst.LevelBooyahPostAction += LevelBooyahPost;
         }
 
         private void Start()
@@ -202,7 +202,7 @@ namespace PunchPeng
 
         public void RecieveDamage(Player damager, int damageValue)
         {
-            if (IsDead) return;
+            if (IsDead || damager.IsDead || LevelController.Inst.LevelIsBooyah) return;
 
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.PlayerBeHitSfxs.RandomOne()).Forget();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.BeHitVfx, CachedTransform, 2f).Forget();
@@ -212,7 +212,7 @@ namespace PunchPeng
 
             LocomotionState.Value = PlayerLocomotionState.Dead;
 
-            GameEvent.Inst.PlayerDeadPost?.Invoke(damager.PlayerId, PlayerId);
+            GameEvent.Inst.PlayerDeadPostAction?.Invoke(damager.PlayerId, PlayerId);
         }
 
         private void OnLocomotionStateChange(PlayerLocomotionState state)

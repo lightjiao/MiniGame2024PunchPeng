@@ -13,7 +13,6 @@ namespace PunchPeng
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
-        [ReadOnly] public bool LevelIsStart;
         [ReadOnly] public bool LevelIsBooyah;
 
         public Config_Global.LevelCfg CurLevelCfg { get; private set; }
@@ -27,10 +26,8 @@ namespace PunchPeng
         {
             Inst = this;
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
-            GameEvent.Inst.PlayerDeadPost += PlayerDeadToBooyah;
+            GameEvent.Inst.PlayerDeadPostAction += PlayerDeadToBooyah;
             _ = ScoreboardManager.Inst;
-
-            LevelIsStart = false;
         }
 
         private void Update()
@@ -40,14 +37,14 @@ namespace PunchPeng
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 
-        public async UniTask LevelPreload()
+        public async UniTask LevelLoad()
         {
             VfxManager.Inst.ReleaseAll();
 
             CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameFlowController.Inst.CurLevel];
             await LevelMgr.Inst.LoadLevelAsync(CurLevelCfg.Scene);
 
-            GameEvent.Inst.LevelPreloadPost?.Invoke();
+            GameEvent.Inst.LevelLoadPostAction?.Invoke();
         }
 
         public async UniTask LevelStart()
@@ -60,14 +57,13 @@ namespace PunchPeng
             {
                 m_BuffContainer.AddBuff(item);
             }
-            LevelIsStart = true;
+            LevelIsBooyah = false;
         }
 
         private async UniTask LevelEnd()
         {
-            GameEvent.Inst.LevelEndPre?.Invoke();
-
-            LevelIsStart = false;
+            GameEvent.Inst.LevelEndPreAction?.Invoke();
+            AudioManager.Inst.StopBgm();
 
             m_Player1 = null;
             m_Player2 = null;
@@ -144,10 +140,10 @@ namespace PunchPeng
 
         private void PlayerDeadToBooyah(int killer, int deadPlayer)
         {
-            if (LevelIsBooyah) return;
-
-            LevelIsBooyah = true;
             if (deadPlayer <= 0) return;
+
+            if (LevelIsBooyah) return;
+            LevelIsBooyah = true;
 
             Player winPlayer = null;
             if (deadPlayer == m_Player1.PlayerId)
@@ -161,10 +157,9 @@ namespace PunchPeng
 
             m_BuffContainer.RemoveAllBuff();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
-            AudioManager.Inst.StopBgm();
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();
 
-            GameEvent.Inst.LevelBooyahPost?.Invoke();
+            GameEvent.Inst.LevelBooyahPostAction?.Invoke();
 
             WaitToFinishLevel(winPlayer).Forget();
         }

@@ -36,13 +36,14 @@ namespace PunchPeng
 
         protected override void OnAwake()
         {
-            GameEvent.Inst.LevelEndPre += ShowSubmit;
+            GameEvent.Inst.LevelEndPreAction += ShowSubmit;
             btnStartGame.onClick.AddListener(ShowLoading);
             btnResetScore.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
         {
+            //GameFlowController.Inst.ChooseLevelTest();
             ShowGameEntry();
         }
 
@@ -66,8 +67,8 @@ namespace PunchPeng
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
 
-            GameFlowController.Inst.ChooseLevel();
-            loadingTask = LevelController.Inst.LevelPreload();
+            GameFlowController.Inst.ChooseRandomLevelId();
+            loadingTask = LevelController.Inst.LevelLoad();
             gamePreloadImg.sprite = ResourceMgr.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
 
             gameEntry.SetActiveEx(false);

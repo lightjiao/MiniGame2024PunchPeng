@@ -21,6 +21,24 @@ public static class CollectionUtil
         }
     }
 
+    public static void KeysCopyTo<T>(this List<T> self, List<int> keys, bool clear = true)
+    {
+        if (self == null || keys == null)
+        {
+            throw new NullReferenceException("KeysCopyTo");
+        }
+
+        if (clear)
+        {
+            keys.Clear();
+        }
+
+        for (int i = 0; i < self.Count; i++)
+        {
+            keys.Add(i);
+        }
+    }
+
     public static int RandomIndex<T>(this IList<T> self)
     {
         if (self == null || self.Count == 0)

@@ -21,7 +21,7 @@ namespace PunchPeng
 
         protected override void OnInit()
         {
-            GameEvent.Inst.LevelEndPre += OnGameEnd;
+            GameEvent.Inst.LevelEndPreAction += OnGameEnd;
         }
 
         public void AppendInput(int playerId, int frameCnt, PlayerInputData inputData)

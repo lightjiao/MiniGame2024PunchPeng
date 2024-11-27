@@ -19,6 +19,11 @@ public class AudioSourceHelper : MonoBehaviour
         audioSource.volume = volume;
     }
 
+    public void Stop()
+    {
+        audioSource.Stop();
+    }
+
     public void Pause()
     {
         audioSource.Pause();
