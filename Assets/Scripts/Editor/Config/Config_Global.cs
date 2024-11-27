@@ -16,17 +16,22 @@ namespace ConfigAuto
                     Scene = "PunchPeng_Caodi",
                     PreloadImg = "UI/Loading_Caodi",
                     BGMRes = "Music/MM/Town.Village",
+                    AICount = 20,
+                    AIAttackPct = 0.5,
                 },
                 new {
                     Scene = "PunchPeng",
                     PreloadImg = "UI/Loading",
                     BGMRes = "Music/MM/Town.Bar",
+                    AICount = 20,
+                    AIAttackPct = 0.1,
                 },
                 new {
                     Scene = "PunchPeng_Gym",
                     PreloadImg = "UI/Loading_Gym",
                     BGMRes = "Music/MM/Town.GoodbyeMinchi",
-                    BuffIds = new []{ 1,}
+                    BuffIds = new []{ 1,},
+                    AICount = 20,
                 },
                 //new {
                 //    Scene = "PunchPeng_Gym",
