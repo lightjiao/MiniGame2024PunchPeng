@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -17,8 +18,6 @@ namespace PunchPeng
         public bool UseSkill;
     }
 
-    // TODO: 记录玩家游玩时的数据，并随机赋给AI
-    // AI 随机拷贝当前玩家的移动数据
     public class PlayerInputManagerHelper : SingletonMono<PlayerInputManagerHelper>
     {
         [ShowInInspector]
@@ -30,23 +29,8 @@ namespace PunchPeng
 
         protected override void OnAwake()
         {
-            InputSystem.ResetHaptics();
-            InputSystem.Update();
-            //InputSystem.onAnyButtonPress.Call(OnAnyBtnPress);
-
             m_KeyboardInput = new();
-            var keyboardInput = new KeyboardInput();
-            m_KeyboardInput.GamePlay.AddCallbacks(keyboardInput);
-
-            OnAwakeAsync();
-        }
-
-        private async void OnAwakeAsync()
-        {
-            await UniTask.DelayFrame(1); // PlayerInputManager.instance create at onenable
-            PlayerInputManager.instance.EnableJoining();
-            PlayerInputManager.instance.onPlayerJoined += OnPlayerJoin;
-            PlayerInputManager.instance.onPlayerLeft += OnPlayerLeft;
+            m_KeyboardInput.GamePlay.AddCallbacks(new KeyboardInputEventReciever());
         }
 
         private void OnEnable()
@@ -96,26 +80,32 @@ namespace PunchPeng
             return data;
         }
 
-        private void OnPlayerJoin(PlayerInput playerInput)
+        /// <summary>
+        /// 记录InputSystem 的BUG:
+        /// 如果用代码来实现事件监听，则必须在第一帧去访问 PlayerInputManager 保证它在 OnEnable 的时候实例化
+        /// 但有的设备会在第一帧自动被识别到，导致代码监听事件因时序问题获取不到
+        /// 所以这里必须使用 UnityEvent 的方式或者 SendMessage 的方式来访问 OnPlayerJoin 的回调，避免时序问题丢失设备
+        /// 
+        /// InputSystem 有一个 InputSystem.inputsetting.asset 的文件，在 ProjectSetting 里可以设置，
+        /// 里面的 Supported Devices 要么留空，要么一定要包含你所需要的设备，不然可能出现鼠标不在这个列表里导致鼠标点击不生效
+        /// </summary>
+        /// <param name="playerInput"></param>
+        public void UnityEventOnPlayerJoin(PlayerInput playerInput)
         {
-            Log.Info("OnPlayerJoin:" + playerInput.playerIndex);
+            var deviceNames = playerInput.devices.Select(x => x.name).ToArray().ToStringEx();
+            Log.Info($"OnPlayerJoin(): idx:{playerInput.playerIndex}, deviceNames:{deviceNames}");
+
             m_PlayerInputs[playerInput.playerIndex] = playerInput;
         }
 
-        private void OnPlayerLeft(PlayerInput playerInput)
+        public void UnityEventOnPlayerLeft(PlayerInput playerInput)
         {
             //Debug.Log("OnPlayerLeft:" + playerInput.playerIndex);
             m_PlayerInputs.Remove(playerInput.playerIndex);
         }
-
-        private void OnAnyBtnPress(object value)
-        {
-            //AnyBtnPressed = true;
-            Log.Info("OnAnyBtnPress:" + value);
-        }
     }
 
-    public class KeyboardInput : @PlayerInputKeyboard.IGamePlayActions
+    public class KeyboardInputEventReciever : @PlayerInputKeyboard.IGamePlayActions
     {
         public void OnAttack(CallbackContext context)
         {
