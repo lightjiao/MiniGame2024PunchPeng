@@ -15,7 +15,7 @@ namespace PunchPeng
         private Dictionary<int, Buff> m_Buffs = new();
         private List<int> m_CacheUids = new();
 
-        public void Init(IBuffOwner owner)
+        public BuffContainer(IBuffOwner owner)
         {
             m_Owner = owner;
         }
@@ -36,7 +36,7 @@ namespace PunchPeng
         {
             if (m_Buffs.TryGetValue(buffUid, out var buff))
             {
-                buff.BeforeBuffRemove();
+                buff.BuffEnd();
                 m_Buffs.Remove(buffUid);
             }
         }
@@ -47,11 +47,7 @@ namespace PunchPeng
 
             foreach (var buffUid in m_CacheUids)
             {
-                if (m_Buffs.TryGetValue(buffUid, out var buff))
-                {
-                    buff.BeforeBuffRemove();
-                    m_Buffs.Remove(buffUid);
-                }
+                RemoveBuff(buffUid);
             }
         }
 
@@ -63,7 +59,7 @@ namespace PunchPeng
                 var buff = m_Buffs[uid];
 
                 // Unity 的 Awake 在第 0 帧 Start 和 第一次 Update 都在第 1 帧，和 Unity 保持一致
-                if (!buff.Started)
+                if (!buff.IsEffecting)
                 {
                     buff.BuffStart();
                 }
@@ -76,7 +72,7 @@ namespace PunchPeng
 
                 if (buff.TimeEnd)
                 {
-                    buff.BuffEnd();
+                    //buff.BuffEnd();
                     RemoveBuff(uid);
                 }
             }

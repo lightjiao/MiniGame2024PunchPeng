@@ -14,7 +14,7 @@ namespace PunchPeng
 
         public int m_Uid;
         public int DataId => m_Cfg.DataId;
-        public bool Started => m_TimeElapsed > 0;
+        public bool IsEffecting { get; private set; }
         public bool TimeEnd => m_Cfg.Duration > 0 && m_TimeElapsed >= m_Cfg.Duration;
 
         protected IBuffOwner m_Owner;
@@ -37,6 +37,7 @@ namespace PunchPeng
 
         public void BuffStart()
         {
+            IsEffecting = true;
             OnBuffStart();
         }
 
@@ -58,16 +59,14 @@ namespace PunchPeng
 
         public void BuffEnd()
         {
+            if (!IsEffecting) return;
+            IsEffecting = false;
+
             _destroyCts?.Cancel();
             OnBuffEnd();
         }
 
         protected virtual void OnBuffEnd()
-        {
-
-        }
-
-        public virtual void BeforeBuffRemove()
         {
 
         }

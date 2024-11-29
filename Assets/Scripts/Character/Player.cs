@@ -5,7 +5,6 @@ using R3;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace PunchPeng
 {
@@ -18,7 +17,13 @@ namespace PunchPeng
         Ability,
     }
 
-    public class Player : MonoEntity
+    public interface ICanAttack
+    {
+        public IntAsBool CanAttack { get; set; }
+    }
+
+
+    public class Player : MonoEntity, IBuffOwner, ICanAttack
     {
         /// <summary>
         /// 玩家ID, 正常玩家ID为 1 或者 2，0表示AI
@@ -49,11 +54,13 @@ namespace PunchPeng
         public readonly ReactiveProperty<Vector3> LocomotionVelocity = new(); // 动画速度，代表人物本身的速度, 这个需要保存下来用于计算动画的平滑过渡
         public readonly ReactiveProperty<Vector3> Velocity = new(); // 玩家实际在移动的速度，用于CCT Move 以及计算地面摩擦
 
-        [ReadOnly] public ReferenceBool CanMove;
-        [ReadOnly] public ReferenceBool CanAttack;
+        [ReadOnly] public IntAsBool CanMove;
+        [ShowInInspector] public IntAsBool CanAttack { get; set; }
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
         public float GroundFriction = 0.5f; // 地面摩擦系数[0~1]，越接近1越打滑
+
+        public BuffContainer BuffContainer { get; private set; }
 
         public override Vector3 Position
         {
@@ -69,6 +76,7 @@ namespace PunchPeng
 
         private void Awake()
         {
+            BuffContainer = new BuffContainer(this);
             m_Abilities.Add(new PlayerPunchAttackAbility());
 
             foreach (var ability in m_Abilities)
@@ -96,19 +104,15 @@ namespace PunchPeng
 
         private void Start()
         {
-            CanMove.RefCnt++;
+            CanMove++;
+            CanAttack++;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
-            StartAsync().Forget();
-        }
-
-        private async UniTask StartAsync()
-        {
-            await UniTask.Delay(3000); // 前三秒不准攻击
-            CanAttack.RefCnt++;
         }
 
         private void Update()
         {
+            BuffContainer.Update(Time.deltaTime);
+
             if (!IsDead)
             {
                 m_BehaviorTree?.OnUpdate(Time.deltaTime);
@@ -129,8 +133,8 @@ namespace PunchPeng
 
         private void LevelBooyahPost()
         {
-            CanMove.RefCnt--;
-            CanAttack.RefCnt--;
+            CanMove--;
+            CanAttack--;
             LocomotionVelocity.Value = Vector3.zero;
         }
 
@@ -212,7 +216,7 @@ namespace PunchPeng
 
         public void RecieveDamage(Player damager, int damageValue)
         {
-            if (IsDead || damager.IsDead || LevelController.Inst.LevelIsBooyah) return;
+            if (IsDead || damager.IsDead || LevelController.Inst.IsBooyah) return;
 
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.PlayerBeHitSfxs.RandomOne()).Forget();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.BeHitVfx, CachedTransform, 2f).Forget();

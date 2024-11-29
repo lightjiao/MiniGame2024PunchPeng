@@ -26,23 +26,30 @@ namespace ConfigAuto
 									Scene = @"PunchPeng_Caodi",
 									PreloadImg = @"UI/Loading_Caodi",
 									BGMRes = @"Music/MM/Town.Village",
+									PlayerBuffs = new()
+									{
+										2,
+									},
 									PawnCount = 40,
-									AIAttackPct = 0.5f,
 								},
 								new()
 								{
 									Scene = @"PunchPeng",
 									PreloadImg = @"UI/Loading",
 									BGMRes = @"Music/MM/Town.Bar",
+									PlayerBuffs = new()
+									{
+										2,
+									},
 									PawnCount = 20,
-									AIAttackPct = 0.2f,
+									AIAttackPct = 0.1f,
 								},
 								new()
 								{
 									Scene = @"PunchPeng_Gym",
 									PreloadImg = @"UI/Loading_Gym",
 									BGMRes = @"Music/MM/Town.GoodbyeMinchi",
-									BuffIds = new()
+									LevelBuffs = new()
 									{
 										1,
 									},
@@ -84,9 +91,10 @@ namespace ConfigAuto
 			public String Scene {get;set;}
 			public String PreloadImg {get;set;}
 			public String BGMRes {get;set;}
+			public List<Int32> PlayerBuffs {get;set;}
 			public Int32 PawnCount {get;set;}
 			public float AIAttackPct {get;set;}
-			public List<Int32> BuffIds {get;set;}
+			public List<Int32> LevelBuffs {get;set;}
 		}
 		public partial class Sfx
 		{

@@ -9,7 +9,7 @@ namespace PunchPeng
         protected override void OnBuffAwake()
         {
             base.OnBuffAwake();
-            m_CfgInterval = m_Cfg.Param1;
+            m_CfgInterval = m_Cfg.Interval;
         }
 
         protected override void OnBuffUpdate(float elapseSeconds)

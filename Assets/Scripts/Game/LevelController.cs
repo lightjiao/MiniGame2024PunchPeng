@@ -13,14 +13,12 @@ namespace PunchPeng
         [HideInInspector] public List<Player> PlayerList = new();
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
-        [ReadOnly] public bool LevelIsBooyah;
+        [ReadOnly] public int CopyPlayerInputAICount;
+        [ReadOnly] public IntAsBool DisableAIBevAttack;
+        [ReadOnly][ShowInInspector] public bool IsBooyah { get; private set; }
 
+        public BuffContainer BuffContainer { get; private set; }
         public Config_Global.LevelCfg CurLevelCfg { get; private set; }
-
-        [ReadOnly] public ReferenceBool HasCopyAI = new();
-
-        public BuffContainer m_BuffContainer = new();
-        public ReferenceBool DisableAIBevAttack = new();
 
         protected override void OnAwake()
         {
@@ -28,12 +26,12 @@ namespace PunchPeng
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             GameEvent.Inst.PlayerDeadPostAction += PlayerDeadToBooyah;
             _ = ScoreboardManager.Inst;
-            m_BuffContainer.Init(this);
+            BuffContainer = new BuffContainer(this);
         }
 
         private void Update()
         {
-            m_BuffContainer.Update(Time.deltaTime);
+            BuffContainer.Update(Time.deltaTime);
             VfxManager.Inst.OnUpdate(Time.deltaTime);
         }
 
@@ -49,15 +47,23 @@ namespace PunchPeng
 
         public async UniTask LevelStart()
         {
+            IsBooyah = false;
+
             var playBGM = AudioManager.Inst.PlayBGM(CurLevelCfg.BGMRes);
             await playBGM;
-
             await SpawnPlayersAsync();
-            foreach (var item in CurLevelCfg.BuffIds ?? Enumerable.Empty<int>())
+
+            foreach (var buffId in CurLevelCfg.LevelBuffs ?? Enumerable.Empty<int>())
             {
-                m_BuffContainer.AddBuff(item);
+                BuffContainer.AddBuff(buffId);
             }
-            LevelIsBooyah = false;
+            foreach (var buffId in CurLevelCfg.PlayerBuffs ?? Enumerable.Empty<int>())
+            {
+                foreach (var player in PlayerList)
+                {
+                    player.BuffContainer.AddBuff(buffId);
+                }
+            }
         }
 
         private async UniTask LevelEnd()
@@ -142,8 +148,8 @@ namespace PunchPeng
         {
             if (deadPlayer <= 0) return;
 
-            if (LevelIsBooyah) return;
-            LevelIsBooyah = true;
+            if (IsBooyah) return;
+            IsBooyah = true;
 
             Player winPlayer = null;
             if (deadPlayer == m_Player1.PlayerId)
@@ -155,7 +161,7 @@ namespace PunchPeng
                 winPlayer = m_Player1;
             }
 
-            m_BuffContainer.RemoveAllBuff();
+            BuffContainer.RemoveAllBuff();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.WinSfx, true, 0.1f).Forget();
 

@@ -16,13 +16,13 @@ namespace PunchPeng
         protected override void AbilityOnStart()
         {
             base.AbilityOnStart();
-            m_Player.CanMove.RefCnt--;
+            m_Player.CanMove--;
             AudioManager.Inst.Play2DSfx(Config_Global.Inst.data.Sfx.PlayerPunchSfx).Forget();
         }
 
         protected override void AbilityOnStop()
         {
-            m_Player.CanMove.RefCnt++;
+            m_Player.CanMove++;
             base.AbilityOnStop();
         }
 

@@ -11,7 +11,7 @@ namespace PunchPeng
         protected override void OnBuffStart()
         {
             base.OnBuffStart();
-            LevelController.Inst.DisableAIBevAttack.RefCnt++;
+            LevelController.Inst.DisableAIBevAttack++;
             m_AIBevDisabled = true;
         }
 
@@ -20,21 +20,10 @@ namespace PunchPeng
             if (m_AIBevDisabled)
             {
                 m_AIBevDisabled = false;
-                LevelController.Inst.DisableAIBevAttack.RefCnt--;
+                LevelController.Inst.DisableAIBevAttack--;
             }
             base.OnBuffEnd();
         }
-
-        public override void BeforeBuffRemove()
-        {
-            if (m_AIBevDisabled)
-            {
-                m_AIBevDisabled = false;
-                LevelController.Inst.DisableAIBevAttack.RefCnt--;
-            }
-            base.BeforeBuffRemove();
-        }
-
 
         protected override void InvervalTick()
         {
