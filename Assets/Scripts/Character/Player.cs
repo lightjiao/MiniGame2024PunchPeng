@@ -11,10 +11,8 @@ namespace PunchPeng
     public enum PlayerLocomotionState
     {
         Locomotion,
-        HeadAttack,
-        PunchAttac,
         Dead,
-        Ability,
+        Custom,
     }
 
     public interface ICanAttack
@@ -51,13 +49,14 @@ namespace PunchPeng
         public bool InputAttack;
         public bool InputUseSkill;
 
-        public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
-        public readonly ReactiveProperty<Vector3> LocomotionVelocity = new(); // 动画速度，代表人物本身的速度, 这个需要保存下来用于计算动画的平滑过渡
+        [ReadOnly][ShowInInspector] public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
+        [ReadOnly][ShowInInspector] public ReactiveProperty<Vector3> LocomotionVelocity = new(); // 动画速度，代表输入的速度
         [ReadOnly][ShowInInspector] public Vector3 Velocity { get; private set; } // 玩家实际在移动的速度，用于CCT Move 以及计算地面摩擦
 
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
         [ReadOnly] public IntAsBool CanMove;
+        [ReadOnly] public IntAsBool CanInputMove;
         [ReadOnly][ShowInInspector] public IntAsBool CanAttack { get; set; }
         [ReadOnly][ShowInInspector] public float InputSlowDownScale { get; set; }
         [ShowInInspector] public float SpeedUpReduction { get; set; }
@@ -106,6 +105,7 @@ namespace PunchPeng
 
         private void Start()
         {
+            CanInputMove++;
             CanMove++;
             CanAttack++;
             LocomotionState.Value = PlayerLocomotionState.Locomotion;
@@ -113,7 +113,7 @@ namespace PunchPeng
 
         private void Update()
         {
-            BuffContainer.Update(Time.deltaTime);
+            BuffContainer?.Update(Time.deltaTime);
 
             if (!IsDead)
             {
@@ -124,7 +124,9 @@ namespace PunchPeng
                     ability.Update(Time.deltaTime);
                 }
 
-                UpdateMoveCommand();
+                LocomotionVelocity.Value = CalPlayerInputMove();
+                UpdateRotaion();
+                UpdatePosition();
             }
         }
 
@@ -135,7 +137,7 @@ namespace PunchPeng
 
         private void LevelBooyahPost()
         {
-            CanMove--;
+            CanInputMove--;
             CanAttack--;
             LocomotionVelocity.Value = Vector3.zero;
         }
@@ -151,49 +153,16 @@ namespace PunchPeng
             m_Animancer.Play(anim, fadeDuration: 0.15f, mode: FadeMode.FromStart);
         }
 
-        private void UpdateMoveCommand()
+        private Vector3 CalPlayerInputMove()
         {
-            if (!CanMove || IsDead) return;
-            var input = InputMoveDir;
-            if (input.sqrMagnitude < 0.2) input = Vector3.zero;
-            input *= (1 - InputSlowDownScale);
-
-            var inputVelocity = CalMotionVelocity(input);
-            LocomotionVelocity.Value = inputVelocity; // 角色的移动动画表现以玩家输入为准
-
-            var moveVelocity = CalGroundFrictionVelocity(inputVelocity);
-            Velocity = moveVelocity;
-
-            m_CCT.SimpleMove(moveVelocity);
-            if (!inputVelocity.Approximately(Vector3.zero))
+            if (!CanInputMove || IsDead) // 立即停止运动
             {
-                var targetRot = Quaternion.LookRotation(inputVelocity);
-                var angle = Quaternion.Angle(CachedTransform.rotation, targetRot);
-
-                if (angle < 120)
-                {
-                    CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(inputVelocity), m_CfgRotateDeg);
-                }
-                else
-                {
-                    CachedTransform.rotation = targetRot;
-                }
+                return Vector3.zero;
             }
-        }
 
-        private Vector3 CalGroundFrictionVelocity(Vector3 motionVelocity)
-        {
-            // TODO_OR_NEVER: 角色的移动速度和转向速度要加入地面摩擦系数
-            // 但目前这样的实现效果其实也还不错
+            var inputMoveDir = InputMoveDir;
+            if (inputMoveDir.sqrMagnitude < 0.2) inputMoveDir = Vector3.zero;
 
-            motionVelocity *= (1 - SpeedUpReduction);
-            var oldVelocity = Velocity * SpeedDownScale;
-            var velocity = motionVelocity + oldVelocity;
-            return velocity.ClampMagnitude(0, m_CfgMaxSlideSpeed);
-        }
-
-        private Vector3 CalMotionVelocity(Vector3 inputMoveDir)
-        {
             var inputVelocity = inputMoveDir * m_CfgMaxMoveSpeed;
             var inputSpeed = inputVelocity.magnitude;
             var moveDir = !inputMoveDir.ApproximatelyZero() ? inputMoveDir.normalized : LocomotionVelocity.Value.normalized;
@@ -210,7 +179,43 @@ namespace PunchPeng
                 targetSpeed = Mathf.MoveTowards(LocomotionVelocity.Value.magnitude, inputSpeed, m_CfgAcceleration * Time.deltaTime);
             }
 
-            return moveDir * targetSpeed;
+            return (1 - InputSlowDownScale) * targetSpeed * moveDir;
+        }
+
+        private void UpdateRotaion()
+        {
+            var locomotionVelocity = LocomotionVelocity.Value;
+            if (!locomotionVelocity.Approximately(Vector3.zero))
+            {
+                var targetRot = Quaternion.LookRotation(locomotionVelocity);
+                var angle = Quaternion.Angle(CachedTransform.rotation, targetRot);
+
+                if (angle < 120)
+                {
+                    CachedTransform.rotation = Quaternion.RotateTowards(CachedTransform.rotation, Quaternion.LookRotation(locomotionVelocity), m_CfgRotateDeg);
+                }
+                else
+                {
+                    CachedTransform.rotation = targetRot;
+                }
+            }
+        }
+
+        private void UpdatePosition()
+        {
+            // TODO_OR_NEVER: 角色的移动速度和转向速度要加入地面摩擦系数
+            // 但目前这样的实现效果其实也还不错
+
+            var locomotionVelocity = LocomotionVelocity.Value;
+
+            locomotionVelocity *= (1 - SpeedUpReduction);
+            var oldVelocity = Velocity * SpeedDownScale;
+            var velocity = locomotionVelocity + oldVelocity;
+            velocity.ClampMagnitude(0, m_CfgMaxSlideSpeed);
+
+            Velocity = velocity;
+
+            m_CCT.SimpleMove(velocity);
         }
 
         public void RecieveDamage(Player damager, int damageValue)
@@ -238,7 +243,8 @@ namespace PunchPeng
                 case PlayerLocomotionState.Dead:
                     m_Animancer.Play(m_AnimData.Dead);
                     break;
-                case PlayerLocomotionState.Ability:
+                case PlayerLocomotionState.Custom:
+                    m_Animancer.Stop();
                     break;
             }
         }

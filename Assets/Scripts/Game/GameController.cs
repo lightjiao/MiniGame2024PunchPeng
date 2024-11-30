@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 namespace PunchPeng
 {
-    public class GameFlowController : Singleton<GameFlowController>
+    /// <summary>
+    /// 整个游戏的 controller，具体某一关由LevelController 管理
+    /// </summary>
+    public class GameController : Singleton<GameController>
     {
         public int CurLevel { get; private set; }
         private List<int> LevelListIdx = new();

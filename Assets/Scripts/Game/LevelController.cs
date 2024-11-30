@@ -39,7 +39,7 @@ namespace PunchPeng
         {
             VfxManager.Inst.ReleaseAll();
 
-            CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameFlowController.Inst.CurLevel];
+            CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameController.Inst.CurLevel];
             await LevelMgr.Inst.LoadLevelAsync(CurLevelCfg.Scene);
 
             GameEvent.Inst.LevelLoadPostAction?.Invoke();
@@ -106,8 +106,8 @@ namespace PunchPeng
             //}
             //else
             {
-                for (int i = 0; i < CurLevelCfg.PawnCount; i++)
-                //for (int i = 0; i < 3; i++)
+                //for (int i = 0; i < CurLevelCfg.PawnCount; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);

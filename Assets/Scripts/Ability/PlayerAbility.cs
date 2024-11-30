@@ -58,7 +58,7 @@ namespace PunchPeng
             IsEffecting = true;
             m_EffectingElapsed = 0;
 
-            m_Player.LocomotionState.Value = PlayerLocomotionState.Ability;
+            m_Player.LocomotionState.Value = PlayerLocomotionState.Custom;
             m_Player.PlayAnim(m_CfgAnim);
             AbilityOnStart();
         }

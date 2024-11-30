@@ -68,7 +68,7 @@ namespace PunchPeng
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
 
-            GameFlowController.Inst.ChooseRandomLevelId();
+            GameController.Inst.ChooseRandomLevelId();
             loadingTask = LevelController.Inst.LevelLoad();
             gamePreloadImg.sprite = ResourceMgr.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
 
