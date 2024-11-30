@@ -8,12 +8,10 @@ namespace PunchPeng
     // 以buff系统为例，可以尝试把每个buff需要的接口单独声明，但buff里将owner强转为对应的interface，并调用方法
     public class BuffContainer
     {
-        public IBuffOwner m_Owner;
-
         private int UidGen;
-
-        private Dictionary<int, Buff> m_Buffs = new();
-        private List<int> m_CacheUids = new();
+        private readonly IBuffOwner m_Owner;
+        private readonly Dictionary<int, Buff> m_Buffs = new();
+        private readonly List<int> m_CacheUids = new();
 
         public BuffContainer(IBuffOwner owner)
         {
@@ -22,11 +20,15 @@ namespace PunchPeng
 
         public int AddBuff(int buffDataId)
         {
-            var uid = UidGen++;
-            var buffCfg = CfgTableBuff.Inst.Get(buffDataId);
+            if (false == CfgTableBuff.Inst.Get(buffDataId, out var cfg))
+            {
+                Log.Error($"Find no buff cfg:{buffDataId}");
+                return -1;
+            }
 
-            var buff = Activator.CreateInstance(buffCfg.BuffType) as Buff;
-            buff.BuffAwake(uid, m_Owner, buffCfg);
+            var uid = UidGen++;
+            var buff = Activator.CreateInstance(cfg.BuffType) as Buff;
+            buff.BuffAwake(uid, m_Owner, cfg);
             m_Buffs[uid] = buff;
 
             return uid;
@@ -72,7 +74,7 @@ namespace PunchPeng
 
                 if (buff.TimeEnd)
                 {
-                    //buff.BuffEnd();
+                    // buff.BuffEnd();
                     RemoveBuff(uid);
                 }
             }

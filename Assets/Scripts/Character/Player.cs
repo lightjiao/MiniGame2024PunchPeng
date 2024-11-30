@@ -23,7 +23,7 @@ namespace PunchPeng
     }
 
 
-    public class Player : MonoEntity, IBuffOwner, ICanAttack
+    public class Player : MonoEntity, IBuffOwner, ICanAttack, IInputSlowDown, IIceWalkAccScale
     {
         /// <summary>
         /// 玩家ID, 正常玩家ID为 1 或者 2，0表示AI
@@ -32,6 +32,7 @@ namespace PunchPeng
 
         [SerializeField] private float m_CfgMaxMoveSpeed = 2.4f;
         [SerializeField] private float m_CfgMaxRunSpeed = 3.5f;
+        [SerializeField] private float m_CfgMaxSlideSpeed = 4f;
         [SerializeField] private float m_CfgAcceleration = 20f;
         [SerializeField] private float m_CfgRotateDeg = 10f;
 
@@ -52,14 +53,15 @@ namespace PunchPeng
 
         public readonly ReactiveProperty<PlayerLocomotionState> LocomotionState = new();
         public readonly ReactiveProperty<Vector3> LocomotionVelocity = new(); // 动画速度，代表人物本身的速度, 这个需要保存下来用于计算动画的平滑过渡
-        public readonly ReactiveProperty<Vector3> Velocity = new(); // 玩家实际在移动的速度，用于CCT Move 以及计算地面摩擦
+        [ReadOnly][ShowInInspector] public Vector3 Velocity { get; private set; } // 玩家实际在移动的速度，用于CCT Move 以及计算地面摩擦
 
-        [ReadOnly] public IntAsBool CanMove;
-        [ShowInInspector] public IntAsBool CanAttack { get; set; }
         public bool IsDead => LocomotionState.Value == PlayerLocomotionState.Dead;
         public bool IsAI => m_BehaviorTree != null;
-        public float GroundFriction = 0.5f; // 地面摩擦系数[0~1]，越接近1越打滑
-
+        [ReadOnly] public IntAsBool CanMove;
+        [ReadOnly][ShowInInspector] public IntAsBool CanAttack { get; set; }
+        [ReadOnly][ShowInInspector] public float InputSlowDownScale { get; set; }
+        [ShowInInspector] public float SpeedUpReduction { get; set; }
+        [ShowInInspector] public float SpeedDownScale { get; set; }
         public BuffContainer BuffContainer { get; private set; }
 
         public override Vector3 Position
@@ -152,21 +154,15 @@ namespace PunchPeng
         private void UpdateMoveCommand()
         {
             if (!CanMove || IsDead) return;
+            var input = InputMoveDir;
+            if (input.sqrMagnitude < 0.2) input = Vector3.zero;
+            input *= (1 - InputSlowDownScale);
 
-            // 角色动画是按照输入逻辑计算
-            // 角色的移动速度和转向速度要加入地面摩擦系数
+            var inputVelocity = CalMotionVelocity(input);
+            LocomotionVelocity.Value = inputVelocity; // 角色的移动动画表现以玩家输入为准
 
-            // 加速也是慢慢加速
-            // 减速也是慢慢减速
-            // 但不影响角色动画表现
-            //GroundFrictionVelocity
-
-            var inputVelocity = CalInputVelocity(InputMoveDir);
-            LocomotionVelocity.Value = inputVelocity;
-
-            // 计算地面摩擦系数
-            var moveVelocity = CalGroundFriction(inputVelocity);
-            Velocity.Value = moveVelocity;
+            var moveVelocity = CalGroundFrictionVelocity(inputVelocity);
+            Velocity = moveVelocity;
 
             m_CCT.SimpleMove(moveVelocity);
             if (!inputVelocity.Approximately(Vector3.zero))
@@ -185,15 +181,18 @@ namespace PunchPeng
             }
         }
 
-        private Vector3 CalGroundFriction(Vector3 targetVelocity)
+        private Vector3 CalGroundFrictionVelocity(Vector3 motionVelocity)
         {
-            //Mathf.MoveTowards(Velocity.Value, targetVelocity, GroundFriction * Time.deltaTime);
-            // 如果只是2D，那么只计算加速度减速度即可，
-            // 3D方向，要考虑，老的方向逐渐减速，新的方向逐渐加速
-            return targetVelocity;
+            // TODO_OR_NEVER: 角色的移动速度和转向速度要加入地面摩擦系数
+            // 但目前这样的实现效果其实也还不错
+
+            motionVelocity *= (1 - SpeedUpReduction);
+            var oldVelocity = Velocity * SpeedDownScale;
+            var velocity = motionVelocity + oldVelocity;
+            return velocity.ClampMagnitude(0, m_CfgMaxSlideSpeed);
         }
 
-        private Vector3 CalInputVelocity(Vector3 inputMoveDir)
+        private Vector3 CalMotionVelocity(Vector3 inputMoveDir)
         {
             var inputVelocity = inputMoveDir * m_CfgMaxMoveSpeed;
             var inputSpeed = inputVelocity.magnitude;

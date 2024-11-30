@@ -2,7 +2,7 @@ using PunchPeng;
 using System;
 using System.Collections.Generic;
 
-public class BuffCfg
+public struct BuffCfg
 {
     public int DataId;
     public Type BuffType;
@@ -19,25 +19,26 @@ public class CfgTableBuff : Singleton<CfgTableBuff>
 {
     protected override void OnInit()
     {
-        m_BuffDict = new Dictionary<int, BuffCfg>();
-        foreach (var item in list)
+        m_CfgDict = new Dictionary<int, BuffCfg>();
+
+        foreach (var cfg in m_CfgList)
         {
-            if (m_BuffDict.ContainsKey(item.DataId))
+            if (m_CfgDict.ContainsKey(cfg.DataId))
             {
-                throw new Exception($"Duplicated DataId:{item.DataId}");
+                throw new Exception($"Duplicated DataId:{cfg.DataId}");
             }
-            m_BuffDict[item.DataId] = item;
+            m_CfgDict[cfg.DataId] = cfg;
         }
     }
 
-    public BuffCfg Get(int id)
+    public bool Get(int id, out BuffCfg cfg)
     {
-        m_BuffDict.TryGetValue(id, out var buff);
-        return buff;
+        return m_CfgDict.TryGetValue(id, out cfg);
     }
 
-    private Dictionary<int, BuffCfg> m_BuffDict;
-    private readonly List<BuffCfg> list = new()
+    private Dictionary<int, BuffCfg> m_CfgDict;
+
+    private readonly List<BuffCfg> m_CfgList = new()
     {
         new() {
             DataId = 1,
@@ -54,6 +55,8 @@ public class CfgTableBuff : Singleton<CfgTableBuff>
             DataId = 3,
             BuffType = typeof(BuffIceWalk),
             Duration = -1,
+            Param1 = 0.95f, // 加速的减益
+            Param2 = 0.99f, // 减速缩放
         }
     };
 }

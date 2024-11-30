@@ -18,6 +18,10 @@ namespace ConfigAuto
 							TargetFrameRate = 60,
 							PlayerPrefab = @"Character/Kelly",
 							PlayerPunchFrame = 8,
+							EveryLevelPlayerBuffs = new()
+							{
+								2,
+							},
 							LevelCfg = new()
 							{
 
@@ -26,10 +30,6 @@ namespace ConfigAuto
 									Scene = @"PunchPeng_Caodi",
 									PreloadImg = @"UI/Loading_Caodi",
 									BGMRes = @"Music/MM/Town.Village",
-									PlayerBuffs = new()
-									{
-										2,
-									},
 									PawnCount = 40,
 								},
 								new()
@@ -37,10 +37,6 @@ namespace ConfigAuto
 									Scene = @"PunchPeng",
 									PreloadImg = @"UI/Loading",
 									BGMRes = @"Music/MM/Town.Bar",
-									PlayerBuffs = new()
-									{
-										2,
-									},
 									PawnCount = 20,
 									AIAttackPct = 0.1f,
 								},
@@ -49,11 +45,22 @@ namespace ConfigAuto
 									Scene = @"PunchPeng_Gym",
 									PreloadImg = @"UI/Loading_Gym",
 									BGMRes = @"Music/MM/Town.GoodbyeMinchi",
+									PawnCount = 20,
 									LevelBuffs = new()
 									{
 										1,
 									},
+								},
+								new()
+								{
+									Scene = @"PunchPeng_Xuedi",
+									PreloadImg = @"UI/Loading_Gym",
+									BGMRes = @"Music/MM/Town.Dance",
 									PawnCount = 20,
+									PlayerBuffs = new()
+									{
+										3,
+									},
 								},
 							},
 							Sfx = new()
@@ -82,6 +89,7 @@ namespace ConfigAuto
 			public Int32 TargetFrameRate {get;set;}
 			public String PlayerPrefab {get;set;}
 			public Int32 PlayerPunchFrame {get;set;}
+			public List<Int32> EveryLevelPlayerBuffs {get;set;}
 			public List<LevelCfg> LevelCfg {get;set;}
 			public Sfx Sfx {get;set;}
 			public Vfx Vfx {get;set;}
@@ -91,10 +99,10 @@ namespace ConfigAuto
 			public String Scene {get;set;}
 			public String PreloadImg {get;set;}
 			public String BGMRes {get;set;}
-			public List<Int32> PlayerBuffs {get;set;}
 			public Int32 PawnCount {get;set;}
 			public float AIAttackPct {get;set;}
 			public List<Int32> LevelBuffs {get;set;}
+			public List<Int32> PlayerBuffs {get;set;}
 		}
 		public partial class Sfx
 		{

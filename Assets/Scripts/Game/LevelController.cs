@@ -53,13 +53,19 @@ namespace PunchPeng
             await playBGM;
             await SpawnPlayersAsync();
 
-            foreach (var buffId in CurLevelCfg.LevelBuffs ?? Enumerable.Empty<int>())
+            foreach (var buffId in CurLevelCfg.LevelBuffs ?? CollectionUtil.EmptyListInt)
             {
                 BuffContainer.AddBuff(buffId);
             }
-            foreach (var buffId in CurLevelCfg.PlayerBuffs ?? Enumerable.Empty<int>())
+
+            foreach (var player in PlayerList)
             {
-                foreach (var player in PlayerList)
+                foreach (var buffId in Config_Global.Inst.data.EveryLevelPlayerBuffs ?? CollectionUtil.EmptyListInt)
+                {
+                    player.BuffContainer.AddBuff(buffId);
+                }
+
+                foreach (var buffId in CurLevelCfg.PlayerBuffs ?? CollectionUtil.EmptyListInt)
                 {
                     player.BuffContainer.AddBuff(buffId);
                 }

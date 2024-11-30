@@ -124,4 +124,16 @@ public static class Vector3Util
         }
         return self.x < value.x && self.z < value.z;
     }
+
+    public static Vector3 ClampMagnitude(this Vector3 self, float min, float max)
+    {
+        var magnitude = self.magnitude;
+        var clampedMagnitude = Mathf.Clamp(magnitude, min, max);
+
+        if (magnitude == clampedMagnitude)
+        {
+            return self;
+        }
+        return self.normalized * clampedMagnitude;
+    }
 }

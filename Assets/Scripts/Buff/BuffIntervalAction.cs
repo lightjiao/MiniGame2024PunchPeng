@@ -21,10 +21,10 @@ namespace PunchPeng
             if (m_IntervalElapsed >= m_CfgInterval)
             {
                 m_IntervalElapsed -= m_CfgInterval;
-                InvervalTick();
+                OnIntervalTick();
             }
         }
 
-        protected abstract void InvervalTick();
+        protected abstract void OnIntervalTick();
     }
 }

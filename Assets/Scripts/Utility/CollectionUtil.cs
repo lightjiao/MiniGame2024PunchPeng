@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public static class CollectionUtil
 {
+    public readonly static List<int> EmptyListInt = new();
+
     public static void KeysCopyTo<TKey, TValue>(this Dictionary<TKey, TValue> self, List<TKey> keys, bool clear = true)
     {
         if (self == null || keys == null)

@@ -37,6 +37,7 @@ namespace PunchPeng
 
         public void BuffStart()
         {
+            if (IsEffecting) return;
             IsEffecting = true;
             OnBuffStart();
         }

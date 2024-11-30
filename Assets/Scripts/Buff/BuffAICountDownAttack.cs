@@ -6,26 +6,19 @@ namespace PunchPeng
 {
     public class BuffAICountDownAttack : BuffIntervalAction
     {
-        private bool m_AIBevDisabled = false;
-
         protected override void OnBuffStart()
         {
             base.OnBuffStart();
             LevelController.Inst.DisableAIBevAttack++;
-            m_AIBevDisabled = true;
         }
 
         protected override void OnBuffEnd()
         {
-            if (m_AIBevDisabled)
-            {
-                m_AIBevDisabled = false;
-                LevelController.Inst.DisableAIBevAttack--;
-            }
+            LevelController.Inst.DisableAIBevAttack--;
             base.OnBuffEnd();
         }
 
-        protected override void InvervalTick()
+        protected override void OnIntervalTick()
         {
             AICountDownAttack(m_DestroyCts).Forget();
         }
