@@ -56,7 +56,7 @@ public class CfgTableBuff : Singleton<CfgTableBuff>
             BuffType = typeof(BuffIceWalk),
             Duration = -1,
             Param1 = 0.95f, // 加速的减益
-            Param2 = 0.99f, // 减速缩放
+            Param2 = 0.98f, // 减速缩放
         }
     };
 }

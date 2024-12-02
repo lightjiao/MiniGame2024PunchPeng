@@ -61,6 +61,7 @@ namespace ConfigAuto
 									{
 										3,
 									},
+									AIAttackPct = 0.2f,
 								},
 							},
 							Sfx = new()

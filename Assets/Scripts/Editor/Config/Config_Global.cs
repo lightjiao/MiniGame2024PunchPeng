@@ -39,6 +39,7 @@ namespace ConfigAuto
                     BGMRes = "Music/MM/Town.Dance",
                     PawnCount = 20,
                     PlayerBuffs = new[]{3}, // 冰面移动模拟
+                    AIAttackPct = 0.2,
                 }
             },
 
