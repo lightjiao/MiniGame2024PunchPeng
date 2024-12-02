@@ -106,8 +106,8 @@ namespace PunchPeng
             //}
             //else
             {
-                //for (int i = 0; i < CurLevelCfg.PawnCount; i++)
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < CurLevelCfg.PawnCount; i++)
+                //for (int i = 0; i < 2; i++)
                 {
                     var player = await ResourceMgr.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);
