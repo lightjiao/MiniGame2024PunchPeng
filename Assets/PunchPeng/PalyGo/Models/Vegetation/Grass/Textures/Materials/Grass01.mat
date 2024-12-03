@@ -8,15 +8,16 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Grass01
-  m_Shader: {fileID: 4800000, guid: 947355c823b272d489f36561db5960f5, type: 3}
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ALPHABLEND_ON
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -83,7 +84,7 @@ Material:
     - _ColorVariationPower: 1
     - _Cutoff: 0.29
     - _DetailNormalMapScale: 1
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _Float2: 0.04
     - _GlossMapScale: 1
     - _Glossiness: 0
@@ -91,7 +92,7 @@ Material:
     - _GrassViewDistance: 50
     - _GrassViewFaloff: 50
     - _Metallic: 0
-    - _Mode: 2
+    - _Mode: 1
     - _NoiseScale: 4.39
     - _NoiseTiling: -0.02
     - _NormalPower: 0.59
@@ -100,15 +101,15 @@ Material:
     - _Shininess: 0.01
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _UVSec: 0
     - _WindDebugView: 0
     - _WindDebugView1: 0
     - _WindMultiplier: 0.1
-    - _ZWrite: 0
+    - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.47291014, g: 0.6698113, b: 0.17377181, a: 1}
     - _Color0: {r: 0.44313726, g: 0.7803922, b: 0.12549016, a: 1}
     - _Color01: {r: 0.37049812, g: 0.6132076, b: 0.072312206, a: 1}
     - _Color02: {r: 0.7803922, g: 0.93725497, b: 0.28235295, a: 1}
