@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.3326362, g: 0.3573758, b: 0.6132076, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.45349768, g: 0.53607833, b: 0.745283, a: 1}
+  m_SubtractiveShadowColor: {r: 0.6944642, g: 0.77046156, b: 0.9622642, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -1809,7 +1809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.48
+      value: -15.679999
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2815,7 +2815,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 78f2d9a0cf225e34486fdf1ff216bd46, type: 2}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_RootOrder
-      value: 73
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2827,7 +2827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.56
+      value: -15.76
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4554,7 +4554,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9245283, g: 0.8918429, b: 0.5538448, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -4633,7 +4633,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 78f2d9a0cf225e34486fdf1ff216bd46, type: 2}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_RootOrder
-      value: 72
+      value: 71
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4645,7 +4645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.03
+      value: -14.23
       objectReference: {fileID: 0}
     - target: {fileID: 1172181875094368916, guid: 900e756d070e0224ca717c851e8a0df7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6732,6 +6732,10 @@ PrefabInstance:
     - target: {fileID: 1739095297033439608, guid: 155352d16d2399a4b843f8ae6c7634d6, type: 3}
       propertyPath: m_Name
       value: PunchPeng_SkyBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 1739095297033439608, guid: 155352d16d2399a4b843f8ae6c7634d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1739095297033540952, guid: 155352d16d2399a4b843f8ae6c7634d6, type: 3}
       propertyPath: m_RootOrder
