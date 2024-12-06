@@ -6176,8 +6176,8 @@ Transform:
   - {fileID: 988344410}
   - {fileID: 1153271923}
   - {fileID: 522873394}
-  - {fileID: 924360840}
   - {fileID: 1268207112}
+  - {fileID: 924360840}
   - {fileID: 841736284}
   - {fileID: 2055234100}
   - {fileID: 747070525}
@@ -6197,8 +6197,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 22.4, y: 2.8071504, z: 19.12}
-  m_Center: {x: -0.46964645, y: 0.9035752, z: -2.1}
+  m_Size: {x: 22, y: 3, z: 19}
+  m_Center: {x: -0.4, y: 0, z: -2.25}
 --- !u!114 &1932358622
 MonoBehaviour:
   m_ObjectHideFlags: 0
