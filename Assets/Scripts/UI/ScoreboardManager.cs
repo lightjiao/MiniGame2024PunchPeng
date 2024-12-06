@@ -45,6 +45,20 @@ namespace PunchPeng
             m_PlayerScores.Clear();
         }
 
+        public int GetWinPlayer()
+        {
+            var winpoint = ConfigAuto.Config_Global.Inst.data.WinPoint;
+            foreach (var kv in m_PlayerScores)
+            {
+                if (kv.Value >= winpoint)
+                {
+                    return kv.Key;
+                }
+            }
+
+            return 0;
+        }
+
         private void UpdateScoreModules()
         {
             UIController.Inst.player1ScoreText.text = m_PlayerScores.GetValueOrDefault(1).ToString(); ;

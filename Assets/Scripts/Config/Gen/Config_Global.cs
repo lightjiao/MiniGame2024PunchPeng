@@ -19,6 +19,7 @@ namespace ConfigAuto
 							PlayerPrefab = @"Character/PlayerPrefab",
 							PlayerPunchAtkTime = 0.13f,
 							PlayerPunchAtkDuration = 0.1f,
+							WinPoint = 3,
 							EveryLevelPlayerBuffs = new()
 							{
 								2,
@@ -93,6 +94,7 @@ namespace ConfigAuto
 			public String PlayerPrefab {get;set;}
 			public float PlayerPunchAtkTime {get;set;}
 			public float PlayerPunchAtkDuration {get;set;}
+			public Int32 WinPoint {get;set;}
 			public List<Int32> EveryLevelPlayerBuffs {get;set;}
 			public List<LevelCfg> LevelCfg {get;set;}
 			public Sfx Sfx {get;set;}

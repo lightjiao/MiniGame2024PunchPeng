@@ -11,6 +11,7 @@ namespace ConfigAuto
             PlayerPrefab = "Character/PlayerPrefab",
             PlayerPunchAtkTime = 0.13, // 攻击开始时间, 动画资源是按照30帧的第4帧算伤害
             PlayerPunchAtkDuration = 0.1, // 攻击判定持续时间
+            WinPoint = 3, // 胜利目标分数
 
             EveryLevelPlayerBuffs = new[] { 2 }, // disbale attack for a period
 

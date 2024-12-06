@@ -8,11 +8,19 @@ namespace PunchPeng
     /// </summary>
     public class GameController : Singleton<GameController>
     {
+        public int Winner;
         public int CurLevel { get; private set; }
         private List<int> LevelListIdx = new();
 
         protected override void OnInit()
         {
+        }
+
+        public void ResetGame()
+        {
+            Winner = 0;
+            CurLevel = 0;
+            ScoreboardManager.Inst.ResetAllScore();
         }
 
         public int ChooseRandomLevelId()

@@ -3,6 +3,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace PunchPeng
@@ -22,7 +23,7 @@ namespace PunchPeng
 
         [Title("GameUI")]
         public GameObject gameUI;
-        public GameObject counddoan321;
+        public GameObject countDown321;
         public GameObject tree;
         public GameObject two;
         public GameObject one;
@@ -31,6 +32,8 @@ namespace PunchPeng
         public GameObject submitPanel;
         public TextMeshProUGUI player1ScoreText;
         public TextMeshProUGUI player2ScoreText;
+        public TextMeshProUGUI player1Win;
+        public TextMeshProUGUI player2Win;
 
         private readonly float m_CfgInputCD = 0.618f;
         private float allowInputGameTime;
@@ -40,7 +43,6 @@ namespace PunchPeng
             GameEvent.Inst.LevelEndPreAction += ShowSubmit;
             btnStartGame.onClick.AddListener(ShowLoading);
             btnQuitGame.onClick.AddListener(QuitGame);
-            btnResetScore.onClick.AddListener(ClickResetScore);
         }
 
         private void Start()
@@ -51,24 +53,19 @@ namespace PunchPeng
         public void ShowGameEntry()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
-            btnResetScore.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
+
+            GameController.Inst.ResetGame();
+
             gameEntry.SetActiveEx(true);
             gamePreload.SetActiveEx(false);
             gameUI.SetActiveEx(false);
             submitPanel.SetActiveEx(false);
         }
 
-        private void ClickResetScore()
-        {
-            ScoreboardManager.Inst.ResetAllScore();
-            btnResetScore.gameObject.SetActiveEx(ScoreboardManager.Inst.HasScore);
-        }
-
         public void ShowLoading()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
 
-            GameController.Inst.ChooseRandomLevelId();
             loadingTask = LevelController.Inst.LevelLoad();
             gamePreloadImg.sprite = ResourceManager.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
 
@@ -86,7 +83,7 @@ namespace PunchPeng
             gameUI.SetActiveEx(true);
             submitPanel.SetActiveEx(false);
 
-            counddoan321.SetActiveEx(false);
+            countDown321.SetActiveEx(false);
         }
 
         public void ShowSubmit()
@@ -96,6 +93,22 @@ namespace PunchPeng
             gamePreload.SetActiveEx(false);
             gameUI.SetActiveEx(false);
             submitPanel.SetActiveEx(true);
+            player1Win.gameObject.SetActiveEx(false);
+            player2Win.gameObject.SetActiveEx(false);
+
+            var winPlayerId = ScoreboardManager.Inst.GetWinPlayer();
+            if (winPlayerId != 0)
+            {
+                GameController.Inst.Winner = winPlayerId;
+                ShowWinner(winPlayerId).Forget();
+            }
+        }
+
+        private async UniTask ShowWinner(int winPlayerId)
+        {
+            allowInputGameTime = Time.time + 999; // pretty hack
+            await PlayGameWinUIAnim(winPlayerId);
+            allowInputGameTime = Time.time + m_CfgInputCD;
         }
 
         private void Update()
@@ -105,16 +118,14 @@ namespace PunchPeng
                 return;
             }
 
-            if (gameEntry.activeSelf)
+            if (gameEntry.activeSelf && Input.anyKeyDown)
             {
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    ShowLoading();
-                }
-                else if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    QuitGame();
-                }
+                GameController.Inst.ChooseRandomLevelId();
+                ShowLoading();
+                //if (Input.GetKeyDown(KeyCode.Escape))
+                //{
+                //    QuitGame();
+                //}
                 return;
             }
 
@@ -125,9 +136,19 @@ namespace PunchPeng
                 LevelController.Inst.LevelStart().Forget();
                 return;
             }
-            else if (submitPanel.activeSelf && Input.anyKeyDown)
+
+            if (submitPanel.activeSelf && Input.anyKeyDown)
             {
-                ShowLoading();
+                if (GameController.Inst.Winner == 0)
+                {
+                    GameController.Inst.ChooseRandomLevelId();
+                    ShowLoading();
+                }
+                else
+                {
+                    ShowGameEntry();
+                }
+
                 return;
             }
         }
@@ -143,7 +164,7 @@ namespace PunchPeng
 
         public async UniTask PlayCoundDown321Anim()
         {
-            counddoan321.SetActiveEx(true);
+            countDown321.SetActiveEx(true);
             one.SetActiveEx(false);
             two.SetActiveEx(false);
             tree.SetActiveEx(false);
@@ -163,7 +184,37 @@ namespace PunchPeng
             await one.transform.DOScale(3, 0.5f).AsyncWaitForCompletion();
             one.SetActiveEx(false);
 
-            counddoan321.SetActiveEx(false);
+            countDown321.SetActiveEx(false);
+        }
+
+        [Button("PlayGameWinUIAnim")]
+        private async UniTask PlayGameWinUIAnim(int winPlayerId)
+        {
+            player1Win.gameObject.SetActive(false);
+            player2Win.gameObject.SetActive(false);
+
+            TextMeshProUGUI winTxt = null;
+            switch (winPlayerId)
+            {
+                case 1:
+                    winTxt = player1Win;
+                    break;
+                case 2:
+                    winTxt = player2Win;
+                    break;
+            }
+
+            if (winTxt == null) return;
+
+            winTxt.transform.localScale = Vector3.one * 3;
+            winTxt.gameObject.SetActiveEx(true);
+
+            var txtDefaultColor = winTxt.color;
+
+            await winTxt.DOScale(1, 0.618f).SetEase(Ease.InCubic).AsyncWaitForCompletion();
+            await winTxt.DOColor(Color.white, 0.1f).SetLoops(3).AsyncWaitForCompletion();
+
+            winTxt.color = txtDefaultColor;
         }
     }
 }

@@ -93,14 +93,15 @@ namespace PunchPeng
         public void UnityEventOnPlayerJoin(PlayerInput playerInput)
         {
             var deviceNames = playerInput.devices.Select(x => x.name).ToArray().ToStringEx();
-            Log.Info($"OnPlayerJoin(): idx:{playerInput.playerIndex}, deviceNames:{deviceNames}");
+            Log.Info($"UnityEventOnPlayerJoin(): idx:{playerInput.playerIndex}, deviceNames:{deviceNames}");
 
             m_PlayerInputs[playerInput.playerIndex] = playerInput;
         }
 
         public void UnityEventOnPlayerLeft(PlayerInput playerInput)
         {
-            //Debug.Log("OnPlayerLeft:" + playerInput.playerIndex);
+            var deviceNames = playerInput.devices.Select(x => x.name).ToArray().ToStringEx();
+            Log.Info($"UnityEventOnPlayerLeft(): idx:{playerInput.playerIndex}, deviceNames:{deviceNames}");
             m_PlayerInputs.Remove(playerInput.playerIndex);
         }
     }
