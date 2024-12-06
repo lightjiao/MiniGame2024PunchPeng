@@ -70,7 +70,7 @@ namespace PunchPeng
 
             GameController.Inst.ChooseRandomLevelId();
             loadingTask = LevelController.Inst.LevelLoad();
-            gamePreloadImg.sprite = ResourceMgr.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
+            gamePreloadImg.sprite = ResourceManager.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
 
             gameEntry.SetActiveEx(false);
             gamePreload.SetActiveEx(true);

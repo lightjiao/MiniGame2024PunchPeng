@@ -51,7 +51,7 @@ namespace PunchPeng
 
         public async UniTask<int> PlayVfx(string resName, Transform parent = null, float duration = 0)
         {
-            var go = await ResourceMgr.Inst.InstantiateAsync(resName, parent);
+            var go = await ResourceManager.Inst.InstantiateAsync(resName, parent);
             var holder = new VfxHolder();
             holder.Uuid = ++m_UUID;
             holder.ResName = resName;

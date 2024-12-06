@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class ResourceMgr : Singleton<ResourceMgr>
+    public class ResourceManager : Singleton<ResourceManager>
     {
         protected override void OnInit()
         {
@@ -19,7 +19,7 @@ namespace PunchPeng
             {
                 return null;
             }
-            // TODO loading res lock
+
             if (!m_LoadedRes.TryGetValue(resPath, out var resObj))
             {
                 resObj = Resources.Load<T>(resPath);
@@ -39,6 +39,7 @@ namespace PunchPeng
             {
                 return null;
             }
+
             // TODO loading res lock
             if (!m_LoadedRes.TryGetValue(resPath, out var resObj))
             {

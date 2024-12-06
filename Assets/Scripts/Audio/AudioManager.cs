@@ -25,7 +25,7 @@ namespace PunchPeng
                 m_BGMSource = Instantiate(m_2DAudioSource, CachedTransform);
             }
 
-            var clip = await ResourceMgr.Inst.LoadAsync<AudioClip>(bgmRes);
+            var clip = await ResourceManager.Inst.LoadAsync<AudioClip>(bgmRes);
             m_BGMSource.Play(clip, true, 0.1f);
         }
 
@@ -61,7 +61,7 @@ namespace PunchPeng
             if (!CanPlaySfx(sfxRes)) return;
             AddCount(sfxRes);
 
-            var clip = await ResourceMgr.Inst.LoadAsync<AudioClip>(sfxRes);
+            var clip = await ResourceManager.Inst.LoadAsync<AudioClip>(sfxRes);
 
             if (pauseBGM) PauseBGM();
 
@@ -81,7 +81,7 @@ namespace PunchPeng
             if (!CanPlaySfx(sfxRes)) return;
             AddCount(sfxRes);
 
-            var clip = await ResourceMgr.Inst.LoadAsync<AudioClip>(sfxRes);
+            var clip = await ResourceManager.Inst.LoadAsync<AudioClip>(sfxRes);
 
             if (pauseBGM) PauseBGM();
 
