@@ -33,6 +33,7 @@ namespace PunchPeng
 
             CurLevel = newLevel;
             LevelListIdx.Remove(newLevel);
+            //CurLevel = 3;
 
             return CurLevel;
         }

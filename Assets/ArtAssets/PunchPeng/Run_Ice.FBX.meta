@@ -1,79 +1,11 @@
 fileFormatVersion: 2
-guid: 02fdc56b6c378874e88d36988cf91c89
+guid: 3ab8a7ed53afc2147b2d2392e785c5a4
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Bip001 Pelvis
-    100002: //RootNode
-    100004: Head
-    100006: Hips
-    100008: LeftArm
-    100010: LeftFoot
-    100012: LeftForeArm
-    100014: LeftHand
-    100016: LeftHandIndex1
-    100018: LeftHandIndex2
-    100020: LeftHandThumb1
-    100022: LeftHandThumb2
-    100024: LeftLeg
-    100026: LeftShoulder
-    100028: LeftToeBase
-    100030: LeftUpLeg
-    100032: Neck
-    100034: Point001
-    100036: RightArm
-    100038: RightFoot
-    100040: RightForeArm
-    100042: RightHand
-    100044: RightHandIndex1
-    100046: RightHandIndex2
-    100048: RightHandThumb1
-    100050: RightHandThumb2
-    100052: RightLeg
-    100054: RightShoulder
-    100056: RightToeBase
-    100058: RightUpLeg
-    100060: Root
-    100062: Spine
-    100064: Spine1
-    400000: Bip001 Pelvis
-    400002: //RootNode
-    400004: Head
-    400006: Hips
-    400008: LeftArm
-    400010: LeftFoot
-    400012: LeftForeArm
-    400014: LeftHand
-    400016: LeftHandIndex1
-    400018: LeftHandIndex2
-    400020: LeftHandThumb1
-    400022: LeftHandThumb2
-    400024: LeftLeg
-    400026: LeftShoulder
-    400028: LeftToeBase
-    400030: LeftUpLeg
-    400032: Neck
-    400034: Point001
-    400036: RightArm
-    400038: RightFoot
-    400040: RightForeArm
-    400042: RightHand
-    400044: RightHandIndex1
-    400046: RightHandIndex2
-    400048: RightHandThumb1
-    400050: RightHandThumb2
-    400052: RightLeg
-    400054: RightShoulder
-    400056: RightToeBase
-    400058: RightUpLeg
-    400060: Root
-    400062: Spine
-    400064: Spine1
-    7400000: cherr
-    9500000: //RootNode
+  serializedVersion: 21300
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    importMaterials: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -82,6 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -100,17 +33,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: cherr
+      name: Take 001
       takeName: Take 001
+      internalID: 1827226128182048838
       firstFrame: 0
-      lastFrame: 66
+      lastFrame: 12
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -131,28 +65,38 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 2
+    meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -161,10 +105,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -174,13 +118,18 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

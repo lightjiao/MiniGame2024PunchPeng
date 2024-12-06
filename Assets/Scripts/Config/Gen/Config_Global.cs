@@ -16,8 +16,9 @@ namespace ConfigAuto
 						data = new()
 						{
 							TargetFrameRate = 60,
-							PlayerPrefab = @"Character/Kelly",
-							PlayerPunchFrame = 8,
+							PlayerPrefab = @"Character/PlayerPrefab",
+							PlayerPunchAtkTime = 0.13f,
+							PlayerPunchAtkDuration = 0.1f,
 							EveryLevelPlayerBuffs = new()
 							{
 								2,
@@ -54,7 +55,7 @@ namespace ConfigAuto
 								new()
 								{
 									Scene = @"PunchPeng_Xuedi",
-									PreloadImg = @"UI/Loading_Gym",
+									PreloadImg = @"UI/Loading_Xuedi",
 									BGMRes = @"Music/MM/Town.Dance",
 									PawnCount = 20,
 									PlayerBuffs = new()
@@ -62,6 +63,7 @@ namespace ConfigAuto
 										3,
 									},
 									AIAttackPct = 0.2f,
+									Locomotion = 1,
 								},
 							},
 							Sfx = new()
@@ -89,7 +91,8 @@ namespace ConfigAuto
 		{
 			public Int32 TargetFrameRate {get;set;}
 			public String PlayerPrefab {get;set;}
-			public Int32 PlayerPunchFrame {get;set;}
+			public float PlayerPunchAtkTime {get;set;}
+			public float PlayerPunchAtkDuration {get;set;}
 			public List<Int32> EveryLevelPlayerBuffs {get;set;}
 			public List<LevelCfg> LevelCfg {get;set;}
 			public Sfx Sfx {get;set;}
@@ -104,6 +107,7 @@ namespace ConfigAuto
 			public float AIAttackPct {get;set;}
 			public List<Int32> LevelBuffs {get;set;}
 			public List<Int32> PlayerBuffs {get;set;}
+			public int Locomotion {get;set;}
 		}
 		public partial class Sfx
 		{

@@ -15,6 +15,13 @@ namespace PunchPeng
         Custom,
     }
 
+    public enum PlayerLocomotionType
+    {
+        Default,
+        Ice,
+        Sport,
+    }
+
     public interface ICanAttack
     {
         public IntAsBool CanAttack { get; set; }
@@ -37,6 +44,7 @@ namespace PunchPeng
         [SerializeField] private CharacterController m_CCT;
         [SerializeField] private AnimancerComponent m_Animancer;
         [SerializeField] public PlayerAnimData m_AnimData;
+
 
         [SerializeField] public TriggerHelper m_PunchAttackTrigger;
         [SerializeField] public TriggerHelper m_HeadAttackTrigger;
@@ -78,7 +86,7 @@ namespace PunchPeng
         private void Awake()
         {
             BuffContainer = new BuffContainer(this);
-            m_Abilities.Add(new PlayerPunchAttackAbility());
+            m_Abilities.Add(new PlayerAbilityAttackByPunch());
 
             foreach (var ability in m_Abilities)
             {
@@ -95,7 +103,7 @@ namespace PunchPeng
 
         private void OnEnable()
         {
-            m_Animancer.Play(m_AnimData.LocomotionMixer);
+            OnLocomotionStateChange(PlayerLocomotionState.Locomotion);
         }
 
         private void OnDisable()
@@ -238,7 +246,7 @@ namespace PunchPeng
             switch (state)
             {
                 case PlayerLocomotionState.Locomotion:
-                    m_Animancer.Play(m_AnimData.LocomotionMixer);
+                    m_Animancer.Play(LocomotionAnim);
                     break;
                 case PlayerLocomotionState.Dead:
                     m_Animancer.Play(m_AnimData.Dead);
@@ -249,9 +257,28 @@ namespace PunchPeng
             }
         }
 
+        private LinearMixerTransitionAsset.UnShared LocomotionAnim
+        {
+            get
+            {
+                var locomotion = PlayerLocomotionType.Default;
+                if (LevelController.Inst != null)
+                {
+                    locomotion = (PlayerLocomotionType)LevelController.Inst.CurLevelCfg.Locomotion;
+                }
+
+                return locomotion switch
+                {
+                    PlayerLocomotionType.Default => m_AnimData.LocomotionDefault,
+                    PlayerLocomotionType.Ice => m_AnimData.LocomotionIce,
+                    _ => m_AnimData.LocomotionDefault,
+                };
+            }
+        }
+
         private void OnLocomotionVelocityChange(Vector3 value)
         {
-            m_AnimData.LocomotionMixer.State.Parameter = value.magnitude;
+            LocomotionAnim.State.Parameter = value.magnitude;
         }
     }
 }

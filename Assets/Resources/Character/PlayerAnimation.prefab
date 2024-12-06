@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddb997369ed458785c83cb1f71b4969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocomotionMixer:
+  LocomotionDefault:
     _Asset: {fileID: 11400000, guid: f34f870e806e9f04ba857e20f31d1352, type: 2}
+  LocomotionIce:
+    _Asset: {fileID: 11400000, guid: fe4791b69395cd2419fdd6066e9af049, type: 2}
   HeadAttack:
     _FadeDuration: 0.25
     _Events:
@@ -88,7 +90,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: 5ada86c16fa99eb4782fc76b212026d9, type: 3}
+    _Clip: {fileID: 7400000, guid: 02fdc56b6c378874e88d36988cf91c89, type: 3}
     _Speed: 1
     _NormalizedStartTime: NaN
   AttackIdle:

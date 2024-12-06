@@ -1,3 +1,5 @@
+using PunchPeng;
+
 namespace ConfigAuto
 {
     public partial class Config_Global
@@ -6,8 +8,9 @@ namespace ConfigAuto
         {
             TargetFrameRate = 60,
 
-            PlayerPrefab = "Character/Kelly",
-            PlayerPunchFrame = 8, // 动画资源是按照30帧的第4帧算伤害
+            PlayerPrefab = "Character/PlayerPrefab",
+            PlayerPunchAtkTime = 0.13, // 攻击开始时间, 动画资源是按照30帧的第4帧算伤害
+            PlayerPunchAtkDuration = 0.1, // 攻击判定持续时间
 
             EveryLevelPlayerBuffs = new[] { 2 }, // disbale attack for a period
 
@@ -35,11 +38,12 @@ namespace ConfigAuto
                 },
                 new {
                     Scene = "PunchPeng_Xuedi",
-                    PreloadImg = "UI/Loading_Gym",
+                    PreloadImg = "UI/Loading_Xuedi",
                     BGMRes = "Music/MM/Town.Dance",
                     PawnCount = 20,
                     PlayerBuffs = new[]{3}, // 冰面移动模拟
                     AIAttackPct = 0.2,
+                    Locomotion = PlayerLocomotionType.Ice,
                 }
             },
 

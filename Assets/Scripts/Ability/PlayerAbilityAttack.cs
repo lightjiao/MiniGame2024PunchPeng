@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PunchPeng
 {
-    public class PlayerAttackAbility : PlayerAbility
+    public class PlayerAbilityAttack : PlayerAbility
     {
         protected override bool AbilityCanStart()
         {
@@ -36,7 +36,7 @@ namespace PunchPeng
         }
     }
 
-    public class PlayerHeadAttackAbility : PlayerAttackAbility
+    public class PlayerAbilityAttackByHead : PlayerAbilityAttack
     {
         protected override void OnInit()
         {
@@ -60,7 +60,7 @@ namespace PunchPeng
         }
     }
 
-    public class PlayerPunchAttackAbility : PlayerAttackAbility
+    public class PlayerAbilityAttackByPunch : PlayerAbilityAttack
     {
         protected override void OnInit()
         {
@@ -73,22 +73,20 @@ namespace PunchPeng
         protected override void AbilityOnStart()
         {
             base.AbilityOnStart();
-            PunchFrame().Forget();
+            PunchDamage().Forget();
         }
 
-        private async UniTask PunchFrame()
+        private async UniTask PunchDamage()
         {
-            var punchFrame = (int)(Config_Global.Inst.data.PlayerPunchFrame / Time.timeScale);
-            var damageFrame = (int)(5 / Time.timeScale);
-
-            await UniTask.DelayFrame(punchFrame);
+            await UniTask.Delay(Config_Global.Inst.data.PlayerPunchAtkTime.ToMilliSec());
             if (m_Player == null || m_Player.IsDead) return;
-
             m_Player.m_PunchAttackTrigger.SetActiveEx(true);
-            await UniTask.DelayFrame(damageFrame);
 
+            await UniTask.Delay(Config_Global.Inst.data.PlayerPunchAtkDuration.ToMilliSec());
             if (m_Player == null || m_Player.IsDead) return;
             m_Player.m_PunchAttackTrigger.SetActiveEx(false);
+
+            // TODO: 实现一个clip类，设置一个时间开始，设置一个时间结束，分别执行什么逻辑
         }
     }
 }
