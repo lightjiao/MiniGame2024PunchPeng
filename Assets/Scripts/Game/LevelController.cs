@@ -40,7 +40,7 @@ namespace PunchPeng
             VfxManager.Inst.ReleaseAll();
 
             CurLevelCfg = Config_Global.Inst.data.LevelCfg[GameController.Inst.CurLevel];
-            await LevelMgr.Inst.LoadLevelAsync(CurLevelCfg.Scene);
+            await LevelManager.Inst.LoadLevelAsync(CurLevelCfg.Scene);
 
             GameEvent.Inst.LevelLoadPostAction?.Invoke();
         }
@@ -84,7 +84,7 @@ namespace PunchPeng
                 GameObjectUtil.DestroyGo(item.gameObject);
             }
             PlayerList.Clear();
-            await LevelMgr.Inst.UnLoadCurLevel();
+            await LevelManager.Inst.UnLoadCurLevel();
         }
 
         private async UniTask SpawnPlayersAsync()

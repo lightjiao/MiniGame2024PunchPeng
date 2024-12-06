@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace PunchPeng
 {
-    public class LevelMgr : Singleton<LevelMgr>
+    public class LevelManager : Singleton<LevelManager>
     {
         protected override void OnInit()
         {
@@ -20,6 +20,10 @@ namespace PunchPeng
 
             m_CurLevelName = levelName;
             await SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
+
+            // 这样设置一下避免场景偏黄的问题
+            var scene = SceneManager.GetSceneByName(levelName);
+            SceneManager.SetActiveScene(scene);
         }
 
         public async UniTask UnLoadCurLevel()
