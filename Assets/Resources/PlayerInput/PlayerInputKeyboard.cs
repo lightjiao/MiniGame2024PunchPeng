@@ -161,6 +161,17 @@ namespace PunchPeng
                 {
                     ""name"": """",
                     ""id"": ""1c2738ca-7cfd-47da-b0d2-fdc88ea712cb"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player1Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2bfd83cd-94f8-4099-a83c-2eae0a950b6a"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -249,7 +260,7 @@ namespace PunchPeng
                 {
                     ""name"": """",
                     ""id"": ""56a4ac30-167e-4479-9756-cceca68e36f9"",
-                    ""path"": ""<Keyboard>/numpad0"",
+                    ""path"": ""<Keyboard>/rightCtrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
