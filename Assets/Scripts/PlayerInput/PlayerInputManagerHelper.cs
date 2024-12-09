@@ -108,31 +108,52 @@ namespace PunchPeng
 
     public class KeyboardInputEventReciever : @PlayerInputKeyboard.IGamePlayActions
     {
-        public void OnAttack(CallbackContext context)
+        public void OnPlayer1Attack(CallbackContext context)
         {
             var value = !context.ReadValue<float>().ApproximatelyZero();
             PlayerInputManagerHelper.Inst.GetPlayerInputData(0).Attack = value;
-            //Debug.Log("KeyboardAttack:" + value);
         }
 
-        public void OnMove(CallbackContext context)
+        public void OnPlayer1Move(CallbackContext context)
         {
             var value = context.ReadValue<Vector2>().ToHorizontalVector3();
             PlayerInputManagerHelper.Inst.GetPlayerInputData(0).MoveDir = value;
-            //Debug.Log("KeyboardMove:" + value);
         }
 
-        public void OnRun(CallbackContext context)
+        public void OnPlayer1Run(CallbackContext context)
         {
             var value = !context.ReadValue<float>().ApproximatelyZero();
             PlayerInputManagerHelper.Inst.GetPlayerInputData(0).Run = value;
-            //Debug.Log("KeyboardRun:" + value);
         }
 
-        public void OnUseSkill(CallbackContext context)
+        public void OnPlayer1UseSkill(CallbackContext context)
         {
             var value = !context.ReadValue<float>().ApproximatelyZero();
             PlayerInputManagerHelper.Inst.GetPlayerInputData(0).UseSkill = value;
+        }
+
+        public void OnPlayer2Attack(CallbackContext context)
+        {
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(1).Attack = value;
+        }
+
+        public void OnPlayer2Move(CallbackContext context)
+        {
+            var value = context.ReadValue<Vector2>().ToHorizontalVector3();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(1).MoveDir = value;
+        }
+
+        public void OnPlayer2Run(CallbackContext context)
+        {
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(1).Run = value;
+        }
+
+        public void OnPlayer2UseSkill(CallbackContext context)
+        {
+            var value = !context.ReadValue<float>().ApproximatelyZero();
+            PlayerInputManagerHelper.Inst.GetPlayerInputData(1).UseSkill = value;
         }
     }
 }

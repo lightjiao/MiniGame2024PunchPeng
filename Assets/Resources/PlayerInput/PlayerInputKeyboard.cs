@@ -30,7 +30,7 @@ namespace PunchPeng
             ""id"": ""ee5dc922-dc4c-4ec4-b5f5-f51e493f9907"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""Player1Move"",
                     ""type"": ""Value"",
                     ""id"": ""8c0e95aa-41ef-4f75-a60b-d492e755d5dd"",
                     ""expectedControlType"": ""Vector2"",
@@ -39,7 +39,7 @@ namespace PunchPeng
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""Player1Attack"",
                     ""type"": ""Button"",
                     ""id"": ""717b0e02-1d35-4c61-aa36-7b64970a5ef9"",
                     ""expectedControlType"": ""Button"",
@@ -48,7 +48,7 @@ namespace PunchPeng
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Run"",
+                    ""name"": ""Player1Run"",
                     ""type"": ""Button"",
                     ""id"": ""59835df4-6cfa-4427-973b-bca5aa95e13f"",
                     ""expectedControlType"": ""Button"",
@@ -57,9 +57,45 @@ namespace PunchPeng
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""UseSkill"",
+                    ""name"": ""Player1UseSkill"",
                     ""type"": ""Button"",
                     ""id"": ""c0f1fa9f-0d8d-4340-9e8a-dfd8c9c8eb8c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""17d5c02c-8a31-4b05-af95-5ec7f43057d9"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Player2Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""3cecd80b-9992-4e1a-84b1-f64d9ecab480"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""6bd65686-c88f-4690-a25e-a2d9f7f7af33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Player2UseSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""4260f2e0-d7ac-4b76-87f9-13c1a5793bb3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -74,7 +110,7 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -85,7 +121,7 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -96,7 +132,7 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -107,7 +143,7 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -118,62 +154,7 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""e4ae6cbb-bf2f-40d3-91b1-94332ee29766"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""b901cad9-b3d1-412c-ac2e-bab38eaddc31"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""79ed3bca-106c-4b27-9b42-1afb3a8e457e"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""e3233d04-eb59-4aeb-8a61-7dfb7e79113c"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""eeb869af-3255-43d4-b239-bfe0e2174066"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Player1Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -184,18 +165,18 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""Player1Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""208ad98e-ee1c-416e-9ea9-83fe518d7c2f"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Run"",
+                    ""action"": ""Player1Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -206,7 +187,95 @@ namespace PunchPeng
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""UseSkill"",
+                    ""action"": ""Player1UseSkill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""0f1b7129-57d1-4df1-b1ee-b76f38d44b4c"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""406de486-95be-456f-883d-d74cd7691d62"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""eaca875a-63a3-4255-bde8-92516d8efb9c"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2d55a4ef-21b0-4fd9-9905-19b21d8d5fc0"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""bd414fee-f1d6-48c5-8ef3-3100d0071abb"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56a4ac30-167e-4479-9756-cceca68e36f9"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""20b1e7b4-46c5-4762-baeb-ce317328f671"",
+                    ""path"": ""<Keyboard>/rightShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86b43b28-0c64-4f78-b2f1-22937668dea1"",
+                    ""path"": ""<Keyboard>/numpad1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Player2UseSkill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -217,10 +286,14 @@ namespace PunchPeng
 }");
             // GamePlay
             m_GamePlay = asset.FindActionMap("GamePlay", throwIfNotFound: true);
-            m_GamePlay_Move = m_GamePlay.FindAction("Move", throwIfNotFound: true);
-            m_GamePlay_Attack = m_GamePlay.FindAction("Attack", throwIfNotFound: true);
-            m_GamePlay_Run = m_GamePlay.FindAction("Run", throwIfNotFound: true);
-            m_GamePlay_UseSkill = m_GamePlay.FindAction("UseSkill", throwIfNotFound: true);
+            m_GamePlay_Player1Move = m_GamePlay.FindAction("Player1Move", throwIfNotFound: true);
+            m_GamePlay_Player1Attack = m_GamePlay.FindAction("Player1Attack", throwIfNotFound: true);
+            m_GamePlay_Player1Run = m_GamePlay.FindAction("Player1Run", throwIfNotFound: true);
+            m_GamePlay_Player1UseSkill = m_GamePlay.FindAction("Player1UseSkill", throwIfNotFound: true);
+            m_GamePlay_Player2Move = m_GamePlay.FindAction("Player2Move", throwIfNotFound: true);
+            m_GamePlay_Player2Attack = m_GamePlay.FindAction("Player2Attack", throwIfNotFound: true);
+            m_GamePlay_Player2Run = m_GamePlay.FindAction("Player2Run", throwIfNotFound: true);
+            m_GamePlay_Player2UseSkill = m_GamePlay.FindAction("Player2UseSkill", throwIfNotFound: true);
         }
 
         ~@PlayerInputKeyboard()
@@ -287,18 +360,26 @@ namespace PunchPeng
         // GamePlay
         private readonly InputActionMap m_GamePlay;
         private List<IGamePlayActions> m_GamePlayActionsCallbackInterfaces = new List<IGamePlayActions>();
-        private readonly InputAction m_GamePlay_Move;
-        private readonly InputAction m_GamePlay_Attack;
-        private readonly InputAction m_GamePlay_Run;
-        private readonly InputAction m_GamePlay_UseSkill;
+        private readonly InputAction m_GamePlay_Player1Move;
+        private readonly InputAction m_GamePlay_Player1Attack;
+        private readonly InputAction m_GamePlay_Player1Run;
+        private readonly InputAction m_GamePlay_Player1UseSkill;
+        private readonly InputAction m_GamePlay_Player2Move;
+        private readonly InputAction m_GamePlay_Player2Attack;
+        private readonly InputAction m_GamePlay_Player2Run;
+        private readonly InputAction m_GamePlay_Player2UseSkill;
         public struct GamePlayActions
         {
             private @PlayerInputKeyboard m_Wrapper;
             public GamePlayActions(@PlayerInputKeyboard wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Move => m_Wrapper.m_GamePlay_Move;
-            public InputAction @Attack => m_Wrapper.m_GamePlay_Attack;
-            public InputAction @Run => m_Wrapper.m_GamePlay_Run;
-            public InputAction @UseSkill => m_Wrapper.m_GamePlay_UseSkill;
+            public InputAction @Player1Move => m_Wrapper.m_GamePlay_Player1Move;
+            public InputAction @Player1Attack => m_Wrapper.m_GamePlay_Player1Attack;
+            public InputAction @Player1Run => m_Wrapper.m_GamePlay_Player1Run;
+            public InputAction @Player1UseSkill => m_Wrapper.m_GamePlay_Player1UseSkill;
+            public InputAction @Player2Move => m_Wrapper.m_GamePlay_Player2Move;
+            public InputAction @Player2Attack => m_Wrapper.m_GamePlay_Player2Attack;
+            public InputAction @Player2Run => m_Wrapper.m_GamePlay_Player2Run;
+            public InputAction @Player2UseSkill => m_Wrapper.m_GamePlay_Player2UseSkill;
             public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -308,34 +389,58 @@ namespace PunchPeng
             {
                 if (instance == null || m_Wrapper.m_GamePlayActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_GamePlayActionsCallbackInterfaces.Add(instance);
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
-                @Attack.started += instance.OnAttack;
-                @Attack.performed += instance.OnAttack;
-                @Attack.canceled += instance.OnAttack;
-                @Run.started += instance.OnRun;
-                @Run.performed += instance.OnRun;
-                @Run.canceled += instance.OnRun;
-                @UseSkill.started += instance.OnUseSkill;
-                @UseSkill.performed += instance.OnUseSkill;
-                @UseSkill.canceled += instance.OnUseSkill;
+                @Player1Move.started += instance.OnPlayer1Move;
+                @Player1Move.performed += instance.OnPlayer1Move;
+                @Player1Move.canceled += instance.OnPlayer1Move;
+                @Player1Attack.started += instance.OnPlayer1Attack;
+                @Player1Attack.performed += instance.OnPlayer1Attack;
+                @Player1Attack.canceled += instance.OnPlayer1Attack;
+                @Player1Run.started += instance.OnPlayer1Run;
+                @Player1Run.performed += instance.OnPlayer1Run;
+                @Player1Run.canceled += instance.OnPlayer1Run;
+                @Player1UseSkill.started += instance.OnPlayer1UseSkill;
+                @Player1UseSkill.performed += instance.OnPlayer1UseSkill;
+                @Player1UseSkill.canceled += instance.OnPlayer1UseSkill;
+                @Player2Move.started += instance.OnPlayer2Move;
+                @Player2Move.performed += instance.OnPlayer2Move;
+                @Player2Move.canceled += instance.OnPlayer2Move;
+                @Player2Attack.started += instance.OnPlayer2Attack;
+                @Player2Attack.performed += instance.OnPlayer2Attack;
+                @Player2Attack.canceled += instance.OnPlayer2Attack;
+                @Player2Run.started += instance.OnPlayer2Run;
+                @Player2Run.performed += instance.OnPlayer2Run;
+                @Player2Run.canceled += instance.OnPlayer2Run;
+                @Player2UseSkill.started += instance.OnPlayer2UseSkill;
+                @Player2UseSkill.performed += instance.OnPlayer2UseSkill;
+                @Player2UseSkill.canceled += instance.OnPlayer2UseSkill;
             }
 
             private void UnregisterCallbacks(IGamePlayActions instance)
             {
-                @Move.started -= instance.OnMove;
-                @Move.performed -= instance.OnMove;
-                @Move.canceled -= instance.OnMove;
-                @Attack.started -= instance.OnAttack;
-                @Attack.performed -= instance.OnAttack;
-                @Attack.canceled -= instance.OnAttack;
-                @Run.started -= instance.OnRun;
-                @Run.performed -= instance.OnRun;
-                @Run.canceled -= instance.OnRun;
-                @UseSkill.started -= instance.OnUseSkill;
-                @UseSkill.performed -= instance.OnUseSkill;
-                @UseSkill.canceled -= instance.OnUseSkill;
+                @Player1Move.started -= instance.OnPlayer1Move;
+                @Player1Move.performed -= instance.OnPlayer1Move;
+                @Player1Move.canceled -= instance.OnPlayer1Move;
+                @Player1Attack.started -= instance.OnPlayer1Attack;
+                @Player1Attack.performed -= instance.OnPlayer1Attack;
+                @Player1Attack.canceled -= instance.OnPlayer1Attack;
+                @Player1Run.started -= instance.OnPlayer1Run;
+                @Player1Run.performed -= instance.OnPlayer1Run;
+                @Player1Run.canceled -= instance.OnPlayer1Run;
+                @Player1UseSkill.started -= instance.OnPlayer1UseSkill;
+                @Player1UseSkill.performed -= instance.OnPlayer1UseSkill;
+                @Player1UseSkill.canceled -= instance.OnPlayer1UseSkill;
+                @Player2Move.started -= instance.OnPlayer2Move;
+                @Player2Move.performed -= instance.OnPlayer2Move;
+                @Player2Move.canceled -= instance.OnPlayer2Move;
+                @Player2Attack.started -= instance.OnPlayer2Attack;
+                @Player2Attack.performed -= instance.OnPlayer2Attack;
+                @Player2Attack.canceled -= instance.OnPlayer2Attack;
+                @Player2Run.started -= instance.OnPlayer2Run;
+                @Player2Run.performed -= instance.OnPlayer2Run;
+                @Player2Run.canceled -= instance.OnPlayer2Run;
+                @Player2UseSkill.started -= instance.OnPlayer2UseSkill;
+                @Player2UseSkill.performed -= instance.OnPlayer2UseSkill;
+                @Player2UseSkill.canceled -= instance.OnPlayer2UseSkill;
             }
 
             public void RemoveCallbacks(IGamePlayActions instance)
@@ -355,10 +460,14 @@ namespace PunchPeng
         public GamePlayActions @GamePlay => new GamePlayActions(this);
         public interface IGamePlayActions
         {
-            void OnMove(InputAction.CallbackContext context);
-            void OnAttack(InputAction.CallbackContext context);
-            void OnRun(InputAction.CallbackContext context);
-            void OnUseSkill(InputAction.CallbackContext context);
+            void OnPlayer1Move(InputAction.CallbackContext context);
+            void OnPlayer1Attack(InputAction.CallbackContext context);
+            void OnPlayer1Run(InputAction.CallbackContext context);
+            void OnPlayer1UseSkill(InputAction.CallbackContext context);
+            void OnPlayer2Move(InputAction.CallbackContext context);
+            void OnPlayer2Attack(InputAction.CallbackContext context);
+            void OnPlayer2Run(InputAction.CallbackContext context);
+            void OnPlayer2UseSkill(InputAction.CallbackContext context);
         }
     }
 }
