@@ -27,6 +27,8 @@ namespace PunchPeng
         public GameObject tree;
         public GameObject two;
         public GameObject one;
+        public TextMeshProUGUI player1CollectScore;
+        public TextMeshProUGUI player2CollectScore;
 
         [Title("GameSubmit")]
         public GameObject submitPanel;

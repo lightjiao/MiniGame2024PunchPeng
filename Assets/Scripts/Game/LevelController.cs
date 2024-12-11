@@ -15,6 +15,9 @@ namespace PunchPeng
         [ReadOnly] public Player m_Player2;
         [ReadOnly] public int CopyPlayerInputAICount;
         [ReadOnly] public IntAsBool DisableAIBevAttack;
+        
+        // 金币列表
+        public Dictionary<int, int> PlayerCoinScores = new();
         [ReadOnly][ShowInInspector] public bool IsBooyah { get; private set; }
 
         public BuffContainer BuffContainer { get; private set; }
@@ -52,6 +55,17 @@ namespace PunchPeng
             var playBGM = AudioManager.Inst.PlayBGM(CurLevelCfg.BGMRes);
             await playBGM;
             await SpawnPlayersAsync();
+            
+            if (CurLevelCfg.Scene != "PunchPeng_Caodi")
+            {
+                UIController.Inst.player1CollectScore.gameObject.SetActiveEx(false);
+                UIController.Inst.player2CollectScore.gameObject.SetActiveEx(false);
+            }
+            else
+            {
+                UIController.Inst.player1CollectScore.gameObject.SetActiveEx(true);
+                UIController.Inst.player2CollectScore.gameObject.SetActiveEx(true);
+            }
 
             foreach (var buffId in CurLevelCfg.LevelBuffs ?? CollectionUtil.EmptyListInt)
             {
@@ -112,6 +126,14 @@ namespace PunchPeng
                     var player = await ResourceManager.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);
                 }
+                
+                if (CurLevelCfg.Scene == "PunchPeng_Caodi")
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        PlayerCoinScores[i + 1] = 0;
+                    }
+                }
 
                 var protectedLoopCnt = 100;
                 m_Player1 = PlayerList.RandomOne();
@@ -152,20 +174,53 @@ namespace PunchPeng
 
         private void PlayerDeadToBooyah(int killer, int deadPlayer)
         {
-            if (deadPlayer <= 0) return;
+            var collectorWinnerID = 0;
+            var isCaodi = false;
+            if (deadPlayer <= 0)
+            {
+                if (CurLevelCfg.Scene == "PunchPeng_Caodi")
+                {
+                    isCaodi = true;
+                    collectorWinnerID = PlayerCollectCoin(killer);
+                }
+            }
 
             if (IsBooyah) return;
+            if (isCaodi && deadPlayer <= 0 && collectorWinnerID == 0)
+            {
+                return;
+            }
+
+            if (!isCaodi && deadPlayer <= 0)
+            {
+                return;
+            }
             IsBooyah = true;
 
             Player winPlayer = null;
-            if (deadPlayer == m_Player1.PlayerId)
+            if (isCaodi)
             {
-                winPlayer = m_Player2;
+                if (collectorWinnerID == m_Player1.PlayerId || deadPlayer == m_Player2.PlayerId)
+                {
+                    winPlayer = m_Player1;
+                }
+                if (collectorWinnerID == m_Player2.PlayerId || deadPlayer == m_Player1.PlayerId)
+                {
+                    winPlayer = m_Player2;
+                }
             }
-            if (deadPlayer == m_Player2.PlayerId)
+            else
             {
-                winPlayer = m_Player1;
+                if (deadPlayer == m_Player1.PlayerId)
+                {
+                    winPlayer = m_Player2;
+                }
+                if (deadPlayer == m_Player2.PlayerId)
+                {
+                    winPlayer = m_Player1;
+                }
             }
+
 
             BuffContainer.RemoveAllBuff();
             VfxManager.Inst.PlayVfx(Config_Global.Inst.data.Vfx.WinnerVfx, winPlayer.Position, 10).Forget();
@@ -175,7 +230,19 @@ namespace PunchPeng
 
             WaitToFinishLevel(winPlayer).Forget();
         }
+        private int PlayerCollectCoin(int collector)
+        {
 
+            if (collector <= 0) return 0;
+
+            PlayerCoinScores[collector]++;
+            GameEvent.Inst.PlayerCollectCoinPostAction?.Invoke(collector);
+
+            if (PlayerCoinScores != null && PlayerCoinScores[collector] < 3) return 0;
+
+            return collector;
+        }
+        
         private async UniTask WaitToFinishLevel(Player winPlayer)
         {
             // wait attack anim to finish

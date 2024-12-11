@@ -15,5 +15,6 @@ namespace PunchPeng
         public Action LevelEndPreAction;
         public Action<int, int> PlayerDeadPreAction;  // <killerId, deadPlayerId>
         public Action<int, int> PlayerDeadPostAction; // <killerId, deadPlayerId>
+        public Action<int> PlayerCollectCoinPostAction; // <collecterId, coinId>
     }
 }
