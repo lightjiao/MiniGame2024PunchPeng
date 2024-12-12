@@ -7,7 +7,6 @@ namespace PunchPeng
     {
         public Dictionary<int, int> m_PlayerScores = new();
         public Dictionary<int, int> m_PlayerCoinScores = new();
-
         public bool HasScore => m_PlayerScores.Count > 0;
 
         protected override void OnInit()
@@ -33,11 +32,9 @@ namespace PunchPeng
 
             UpdateScoreModules();
         }
-        
         private void OnPlayerCollectCoinToChangeScore(int collector)
         {
             if (collector < 0) return;
-
             if (collector == 1)
             {
                 AddPlayerCoinScore(1);
@@ -53,12 +50,9 @@ namespace PunchPeng
                 m_PlayerCoinScores.Clear();
             }
 
-            Debug.Log($"PlayerCoinScores playerId:{collector}, playerScores {m_PlayerCoinScores[collector]}.");
-            
-            // TODO : update coin score
             UpdateCollectScoreModules();
         }
-
+        
         private void AddPlayerScore(int playerId)
         {
             if (!m_PlayerScores.ContainsKey(playerId))
