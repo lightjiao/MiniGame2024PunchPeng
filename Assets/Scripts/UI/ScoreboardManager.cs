@@ -19,13 +19,13 @@ namespace PunchPeng
 
         private void OnPlayerDeadToChangeScore(int attacker, int deadPlayer)
         {
-            if (deadPlayer < 0) return;
+            if (deadPlayer < 0 ) return;
 
-            if (deadPlayer == 1)
+            if (deadPlayer == 1 )
             {
                 AddPlayerScore(2);
             }
-            if (deadPlayer == 2)
+            if (deadPlayer == 2 )
             {
                 AddPlayerScore(1);
             }
@@ -49,18 +49,19 @@ namespace PunchPeng
                 UpdateScoreModules();
                 m_PlayerCoinScores.Clear();
             }
-            Debug.Log($"PlayerCoinScores playerId:{collector}, playerScores {m_PlayerCoinScores[collector]}.");
+
             UpdateCollectScoreModules();
         }
+        
         private void AddPlayerScore(int playerId)
         {
             if (!m_PlayerScores.ContainsKey(playerId))
             {
                 m_PlayerScores[playerId] = 0;
             }
-
             m_PlayerScores[playerId]++;
         }
+        
         private void AddPlayerCoinScore(int playerId)
         {
             if (!m_PlayerCoinScores.ContainsKey(playerId))

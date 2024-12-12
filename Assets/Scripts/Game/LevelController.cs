@@ -11,6 +11,10 @@ namespace PunchPeng
     {
         // 包含了AI与玩家的列表
         [HideInInspector] public List<Player> PlayerList = new();
+        // 金币列表
+        public Dictionary<int, int> PlayerCoinScores = new();
+        public List<int> Thief = new();
+        
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
         [ReadOnly] public int CopyPlayerInputAICount;
@@ -28,6 +32,7 @@ namespace PunchPeng
             Inst = this;
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             GameEvent.Inst.PlayerDeadPostAction += PlayerDeadToBooyah;
+            
             _ = ScoreboardManager.Inst;
             BuffContainer = new BuffContainer(this);
         }
@@ -135,6 +140,14 @@ namespace PunchPeng
                     }
                 }
 
+                if (CurLevelCfg.Scene == "PunchPeng_Caodi")
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        PlayerCoinScores[i + 1] = 0;
+                    }
+                }
+                
                 var protectedLoopCnt = 100;
                 m_Player1 = PlayerList.RandomOne();
                 do
@@ -220,6 +233,7 @@ namespace PunchPeng
                     winPlayer = m_Player1;
                 }
             }
+            
 
 
             BuffContainer.RemoveAllBuff();
@@ -251,6 +265,19 @@ namespace PunchPeng
 
             await UniTask.Delay(5f.ToMilliSec());
             await LevelEnd();
+        }
+        
+        private int PlayerCollectCoin(int collector)
+        {
+            
+            if (collector <= 0) return 0;
+            
+            PlayerCoinScores[collector]++;
+            GameEvent.Inst.PlayerCollectCoinPostAction?.Invoke(collector);
+            
+            if (PlayerCoinScores != null && PlayerCoinScores[collector] < 3) return 0;
+
+            return collector;
         }
     }
 }
