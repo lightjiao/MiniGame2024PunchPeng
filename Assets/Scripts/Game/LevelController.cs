@@ -20,8 +20,6 @@ namespace PunchPeng
         [ReadOnly] public int CopyPlayerInputAICount;
         [ReadOnly] public IntAsBool DisableAIBevAttack;
         
-        // 金币列表
-        public Dictionary<int, int> PlayerCoinScores = new();
         [ReadOnly][ShowInInspector] public bool IsBooyah { get; private set; }
 
         public BuffContainer BuffContainer { get; private set; }
@@ -265,19 +263,6 @@ namespace PunchPeng
 
             await UniTask.Delay(5f.ToMilliSec());
             await LevelEnd();
-        }
-        
-        private int PlayerCollectCoin(int collector)
-        {
-            
-            if (collector <= 0) return 0;
-            
-            PlayerCoinScores[collector]++;
-            GameEvent.Inst.PlayerCollectCoinPostAction?.Invoke(collector);
-            
-            if (PlayerCoinScores != null && PlayerCoinScores[collector] < 3) return 0;
-
-            return collector;
         }
     }
 }
