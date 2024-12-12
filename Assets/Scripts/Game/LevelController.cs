@@ -250,7 +250,7 @@ namespace PunchPeng
             PlayerCoinScores[collector]++;
             GameEvent.Inst.PlayerCollectCoinPostAction?.Invoke(collector);
 
-            if (PlayerCoinScores != null && PlayerCoinScores[collector] < 3) return 0;
+            if (PlayerCoinScores != null && PlayerCoinScores[collector] < 5) return 0;
 
             return collector;
         }

@@ -43,7 +43,7 @@ namespace PunchPeng
             {
                 AddPlayerCoinScore(2);
             }
-            if (m_PlayerCoinScores[collector] >= 3)
+            if (m_PlayerCoinScores[collector] >= 5)
             {
                 AddPlayerScore(collector);
                 UpdateScoreModules();
@@ -100,8 +100,13 @@ namespace PunchPeng
         
         private void UpdateCollectScoreModules()
         {
-            UIController.Inst.player1CollectScore.text = m_PlayerCoinScores.GetValueOrDefault(1).ToString(); ;
-            UIController.Inst.player2CollectScore.text = m_PlayerCoinScores.GetValueOrDefault(2).ToString(); ;
+            System.Text.StringBuilder pb1 = new System.Text.StringBuilder();
+            pb1.Append("Player 1's punch bots: ");
+            System.Text.StringBuilder pb2 = new System.Text.StringBuilder();
+            pb2.Append("Player 2's punch bots: ");
+            
+            UIController.Inst.player1CollectScore.text = pb1.Append(m_PlayerCoinScores.GetValueOrDefault(1).ToString()).ToString();
+            UIController.Inst.player2CollectScore.text = pb2.Append(m_PlayerCoinScores.GetValueOrDefault(2).ToString()).ToString();
         }
     }
 }
