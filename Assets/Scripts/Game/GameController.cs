@@ -29,7 +29,7 @@ namespace PunchPeng
             {
                 Config_Global.Inst.data.LevelCfg.KeysCopyTo(LevelListIdx);
             }
-
+            
             var loopCnt = 100;
             var newLevel = -1;
             do
