@@ -47,7 +47,6 @@ namespace PunchPeng
             {
                 AddPlayerScore(collector);
                 UpdateScoreModules();
-                m_PlayerCoinScores.Clear();
             }
 
             UpdateCollectScoreModules();
@@ -78,9 +77,15 @@ namespace PunchPeng
             m_PlayerCoinScores.Clear();
         }
 
+        public void ResetCollectScore()
+        {
+            m_PlayerCoinScores.Clear();
+            UpdateCollectScoreModules();
+        }
+
         public int GetWinPlayer()
         {
-            var winpoint = ConfigAuto.Config_Global.Inst.data.WinPoint;
+            var winpoint = 6;
             foreach (var kv in m_PlayerScores)
             {
                 if (kv.Value >= winpoint)

@@ -67,7 +67,8 @@ namespace PunchPeng
         public void ShowLoading()
         {
             allowInputGameTime = Time.time + m_CfgInputCD;
-
+            
+            ScoreboardManager.Inst.ResetCollectScore();
             loadingTask = LevelController.Inst.LevelLoad();
             gamePreloadImg.sprite = ResourceManager.Inst.Load<Sprite>(LevelController.Inst.CurLevelCfg.PreloadImg);
 
