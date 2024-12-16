@@ -210,7 +210,10 @@ namespace PunchPeng
                 if (CurLevelCfg.Scene == "PunchPeng_Caodi")
                 {
                     isCaodi = true;
-                    collectorWinnerID = PlayerCollectCoin(killer);
+                    foreach (var tID in Thief.Where(tID => deadPlayer == tID))
+                    {
+                        collectorWinnerID = PlayerCollectCoin(killer);
+                    }
                 }
             }
 
