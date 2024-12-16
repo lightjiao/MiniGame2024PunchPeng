@@ -14,6 +14,7 @@ namespace PunchPeng
         // 金币列表
         public Dictionary<int, int> PlayerCoinScores = new();
         public List<int> Thief = new();
+        private int pickCount = 9;
         
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
@@ -129,20 +130,16 @@ namespace PunchPeng
                     var player = await ResourceManager.Inst.InstantiateAsync<Player>(Config_Global.Inst.data.PlayerPrefab);
                     PlayerList.Add(player);
                 }
-                
-                if (CurLevelCfg.Scene == "PunchPeng_Caodi")
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        PlayerCoinScores[i + 1] = 0;
-                    }
-                }
 
                 if (CurLevelCfg.Scene == "PunchPeng_Caodi")
                 {
                     for (int i = 0; i < 2; i++)
                     {
                         PlayerCoinScores[i + 1] = 0;
+                    }
+                    for (int i = 0; i < pickCount; i++)
+                    {
+                        Thief.Add(0 - i - 1);
                     }
                 }
                 
@@ -179,6 +176,27 @@ namespace PunchPeng
                 else
                 {
                     player.name += $" Player:[{player.PlayerId}]";
+                }
+            }
+
+            if (CurLevelCfg.Scene == "PunchPeng_Caodi")
+            {
+                foreach (var p in PlayerList)
+                {
+                    foreach (var thief in Thief)
+                    {
+                        if (p.PlayerId == thief)
+                        {
+                            Transform childTransform = p.gameObject.transform.GetChild(0).GetChild(0);
+                            if (childTransform != null)
+                            {
+                                var mesh = childTransform.GetComponent<SkinnedMeshRenderer>();
+                                Color newColor = new Color(1f, 0f, 0f);
+                                Material mat = mesh.material;
+                                mat.SetColor("_Color", newColor);
+                            }
+                        }
+                    }
                 }
             }
         }
