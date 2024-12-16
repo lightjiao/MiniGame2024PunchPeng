@@ -85,7 +85,7 @@ namespace PunchPeng
 
         public int GetWinPlayer()
         {
-            var winpoint = 6;
+            var winpoint = 4;
             foreach (var kv in m_PlayerScores)
             {
                 if (kv.Value >= winpoint)

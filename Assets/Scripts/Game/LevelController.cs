@@ -191,7 +191,7 @@ namespace PunchPeng
                             if (childTransform != null)
                             {
                                 var mesh = childTransform.GetComponent<SkinnedMeshRenderer>();
-                                Color newColor = new Color(1f, 0f, 0f);
+                                Color newColor = new Color(1f, 0.4196f, 0f);
                                 Material mat = mesh.material;
                                 mat.SetColor("_Color", newColor);
                             }
