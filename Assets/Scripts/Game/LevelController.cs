@@ -102,6 +102,9 @@ namespace PunchPeng
                 GameObjectUtil.DestroyGo(item.gameObject);
             }
             PlayerList.Clear();
+            PlayerCoinScores.Clear();
+            Thief.Clear();
+            
             await LevelManager.Inst.UnLoadCurLevel();
         }
 
@@ -213,6 +216,7 @@ namespace PunchPeng
                     foreach (var tID in Thief.Where(tID => deadPlayer == tID))
                     {
                         collectorWinnerID = PlayerCollectCoin(killer);
+                        break;
                     }
                 }
             }
