@@ -15,12 +15,12 @@ namespace PunchPeng
         public Dictionary<int, int> PlayerCoinScores = new();
         public List<int> Thief = new();
         private int pickCount = 9;
-        
+
         [ReadOnly] public Player m_Player1;
         [ReadOnly] public Player m_Player2;
         [ReadOnly] public int CopyPlayerInputAICount;
         [ReadOnly] public IntAsBool DisableAIBevAttack;
-        
+
         [ReadOnly][ShowInInspector] public bool IsBooyah { get; private set; }
 
         public BuffContainer BuffContainer { get; private set; }
@@ -31,7 +31,7 @@ namespace PunchPeng
             Inst = this;
             Application.targetFrameRate = Config_Global.Inst.data.TargetFrameRate;
             GameEvent.Inst.PlayerDeadPostAction += PlayerDeadToBooyah;
-            
+
             _ = ScoreboardManager.Inst;
             BuffContainer = new BuffContainer(this);
         }
@@ -52,6 +52,7 @@ namespace PunchPeng
             GameEvent.Inst.LevelLoadPostAction?.Invoke();
         }
 
+        [Button("LevelStartAsync")]
         public async UniTask LevelStart()
         {
             IsBooyah = false;
@@ -59,7 +60,7 @@ namespace PunchPeng
             var playBGM = AudioManager.Inst.PlayBGM(CurLevelCfg.BGMRes);
             await playBGM;
             await SpawnPlayersAsync();
-            
+
             if (CurLevelCfg.Scene != "PunchPeng_Caodi")
             {
                 UIController.Inst.player1CollectScore.gameObject.SetActiveEx(false);
@@ -104,7 +105,7 @@ namespace PunchPeng
             PlayerList.Clear();
             PlayerCoinScores.Clear();
             Thief.Clear();
-            
+
             await LevelManager.Inst.UnLoadCurLevel();
         }
 
@@ -145,7 +146,7 @@ namespace PunchPeng
                         Thief.Add(0 - i - 1);
                     }
                 }
-                
+
                 var protectedLoopCnt = 100;
                 m_Player1 = PlayerList.RandomOne();
                 do
@@ -166,7 +167,7 @@ namespace PunchPeng
             var aiId = -1;
             foreach (var player in PlayerList)
             {
-                player.Position = Vector3Util.RandomRange(LevelArea.Inst.Min, LevelArea.Inst.Max);
+                player.Position = Vector3Util.RandomRange(LevelArea.Inst.MinSpawnPos, LevelArea.Inst.MaxSpawnPos);
                 player.Forward = Vector3Util.Rand2DDir();
 
                 if (player != m_Player1 && player != m_Player2)
@@ -256,7 +257,7 @@ namespace PunchPeng
                     winPlayer = m_Player1;
                 }
             }
-            
+
 
 
             BuffContainer.RemoveAllBuff();
@@ -279,7 +280,7 @@ namespace PunchPeng
 
             return collector;
         }
-        
+
         private async UniTask WaitToFinishLevel(Player winPlayer)
         {
             // wait attack anim to finish

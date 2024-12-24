@@ -14,6 +14,9 @@ namespace PunchPeng
         [ReadOnly] public Vector3 Min;
         [ReadOnly] public Vector3 Max;
 
+        [ReadOnly] public Vector3 MinSpawnPos;
+        [ReadOnly] public Vector3 MaxSpawnPos;
+
         private void Awake()
         {
             Inst = this;
@@ -43,6 +46,8 @@ namespace PunchPeng
             var MaxZ = boxPos.z + halfSize.z;
             Min = new Vector3(MinX, 0, MinZ);
             Max = new Vector3(MaxX, 0, MaxZ);
+            MinSpawnPos = Min + new Vector3(1, 0, 1);
+            MaxSpawnPos = Max - new Vector3(1, 0, 1);
         }
 
         private void OnDrawGizmosSelected()
