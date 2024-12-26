@@ -62,7 +62,8 @@ namespace ConfigAuto
             },
             ColorEgg = new
             {
-                NightMareJoeyPct = 0.5
+                NightMareJoeyPct = 0.5,
+                BBGPct = 0.5
             }
         };
     }

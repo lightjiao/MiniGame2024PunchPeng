@@ -85,6 +85,7 @@ namespace ConfigAuto
 							ColorEgg = new()
 							{
 								NightMareJoeyPct = 0.5f,
+								BBGPct = 0.5f,
 							},
 						},
 					};
@@ -131,6 +132,7 @@ namespace ConfigAuto
 		public partial class ColorEgg
 		{
 			public float NightMareJoeyPct {get;set;}
+			public float BBGPct {get;set;}
 		}
 
     }
