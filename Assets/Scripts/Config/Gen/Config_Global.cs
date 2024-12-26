@@ -82,6 +82,10 @@ namespace ConfigAuto
 								BeHitVfx = @"Vfx/BeHitVfx",
 								WinnerVfx = @"Vfx/WinnderVfx",
 							},
+							ColorEgg = new()
+							{
+								NightMareJoeyPct = 0.5f,
+							},
 						},
 					};
 				return _inst;
@@ -99,6 +103,7 @@ namespace ConfigAuto
 			public List<LevelCfg> LevelCfg {get;set;}
 			public Sfx Sfx {get;set;}
 			public Vfx Vfx {get;set;}
+			public ColorEgg ColorEgg {get;set;}
 		}
 		public partial class LevelCfg
 		{
@@ -122,6 +127,10 @@ namespace ConfigAuto
 		{
 			public String BeHitVfx {get;set;}
 			public String WinnerVfx {get;set;}
+		}
+		public partial class ColorEgg
+		{
+			public float NightMareJoeyPct {get;set;}
 		}
 
     }

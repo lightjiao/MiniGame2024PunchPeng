@@ -32,6 +32,7 @@ namespace PunchPeng
 
             if (cts.IsCancellationRequested) return;
 
+            _ = NightMareJoey.Inst.Jump();
             foreach (var player in LevelController.Inst.PlayerList)
             {
                 if (!player.IsAI) continue;

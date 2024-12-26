@@ -35,6 +35,12 @@ public abstract class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    public Vector3 Position
+    {
+        get => CachedTransform.position;
+        set => CachedTransform.position = value;
+    }
+
     private void Awake()
     {
         Inst = GetComponent<T>();

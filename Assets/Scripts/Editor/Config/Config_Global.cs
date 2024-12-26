@@ -35,14 +35,14 @@ namespace ConfigAuto
                     PreloadImg = "UI/Loading_Gym",
                     BGMRes = "Music/MM/Town.GoodbyeMinchi",
                     PawnCount = 20,
-                    LevelBuffs = new[]{1}, // AI 倒计时一起出拳
+                    LevelBuffs = new[] { 1 }, // AI 倒计时一起出拳
                 },
                 new {
                     Scene = "PunchPeng_Xuedi",
                     PreloadImg = "UI/Loading_Xuedi",
                     BGMRes = "Music/MM/Town.Dance",
                     PawnCount = 20,
-                    PlayerBuffs = new[]{3}, // 冰面移动模拟
+                    PlayerBuffs = new[] { 3 }, // 冰面移动模拟
                     AIAttackPct = 0.2,
                     Locomotion = PlayerLocomotionType.Ice,
                 }
@@ -60,6 +60,10 @@ namespace ConfigAuto
                 BeHitVfx = "Vfx/BeHitVfx",
                 WinnerVfx = "Vfx/WinnderVfx",
             },
+            ColorEgg = new
+            {
+                NightMareJoeyPct = 0.5
+            }
         };
     }
 }
