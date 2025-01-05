@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace PunchPeng
@@ -20,7 +22,6 @@ namespace PunchPeng
 
             m_CurLevelName = levelName;
             await SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
-
             // 这样设置一下避免场景偏黄的问题
             var scene = SceneManager.GetSceneByName(levelName);
             SceneManager.SetActiveScene(scene);
@@ -32,6 +33,11 @@ namespace PunchPeng
             m_CurLevelName = null;
 
             await UniTask.NextFrame();
+
+            await Resources.UnloadUnusedAssets();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }
