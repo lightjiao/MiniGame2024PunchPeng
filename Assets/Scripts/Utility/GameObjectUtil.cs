@@ -5,7 +5,7 @@ using UnityObject = UnityEngine.Object;
 
 public static class GameObjectUtil
 {
-    public static T GetOrAddComponent<T>(this GameObject self, T t) where T : Component
+    public static T GetOrAddComponent<T>(this GameObject self) where T : Component
     {
         if (self == null) return null;
 
