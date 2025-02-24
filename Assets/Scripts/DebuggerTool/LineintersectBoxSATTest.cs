@@ -64,7 +64,7 @@ public class LineintersectBoxSATTest : MonoBehaviour
 
     private void Test()
     {
-        var (worldCenter, boxSize) = m_Box.GetBoxInfo();
+        var (boxCenter, boxSize, boxRot) = m_Box.GetBoxInfo();
 
         var p1 = m_Line.Point1.position;
         var p2 = m_Line.Point2.position;
@@ -73,6 +73,6 @@ public class LineintersectBoxSATTest : MonoBehaviour
         var hitResult = Physics.Raycast(p1, dir.normalized, out var hitInfo, distance);
         m_RayCastRsult = hitResult;// || m_Box.BoxContainsPoint(p1) || m_Box.BoxContainsPoint(p2);
 
-        m_FuncResult = PhysicsUtil.LineintersectBoxSAT(p1, p2, worldCenter, boxSize / 2, m_Box.transform.rotation);
+        m_FuncResult = PhysicsUtil.LineintersectBoxSAT(p1, p2, boxCenter, boxSize / 2, boxRot);
     }
 }

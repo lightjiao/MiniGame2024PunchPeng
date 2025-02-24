@@ -2,22 +2,30 @@ using UnityEngine;
 
 public static class PhysicsUtil
 {
-    public static (Vector3, Vector3) GetBoxInfo(this BoxCollider self)
+    public static (Vector3, Vector3, Quaternion) GetBoxInfo(this BoxCollider self)
     {
-        var boxWorldCenter = self.transform.TransformPoint(self.center);
-        var boxSize = Vector3.Scale(self.size, self.transform.lossyScale);
+        if (self == null) return default;
 
-        return (boxWorldCenter, boxSize);
+        var boxTransform = self.transform;
+
+        var boxWorldCenter = boxTransform.TransformPoint(self.center);
+        var boxSize = Vector3.Scale(self.size, boxTransform.lossyScale);
+
+        return (boxWorldCenter, boxSize, boxTransform.rotation);
     }
 
     public static bool BoxContainsPoint(this BoxCollider self, Vector3 point)
     {
         if (self == null) return false;
 
-        var (worldCenter, boxSize) = self.GetBoxInfo();
-        var rot = self.transform.rotation;
+        var (worldCenter, boxSize, boxRot) = self.GetBoxInfo();
 
-        return IsPointInBox(point, worldCenter, boxSize / 2, rot);
+        return IsPointInBox(point, worldCenter, boxSize / 2, boxRot);
+    }
+
+    public static bool IsPointInBox(Vector3 point, BoxCollider box)
+    {
+        return box.BoxContainsPoint(point);
     }
 
     public static bool IsPointInBox(Vector3 point, Vector3 boxCenter, Vector3 boxHalfSize, Quaternion boxRot)
@@ -27,6 +35,14 @@ public static class PhysicsUtil
         return Mathf.Abs(localPoint.x) <= boxHalfSize.x &&
                Mathf.Abs(localPoint.y) <= boxHalfSize.y &&
                Mathf.Abs(localPoint.z) <= boxHalfSize.z;
+    }
+
+    public static bool LineintersectBoxSAT(Vector3 lineStart, Vector3 lineEnd, BoxCollider box)
+    {
+        if (box == null) return false;
+
+        var (boxCenter, boxSize, boxRot) = box.GetBoxInfo();
+        return LineintersectBoxSAT(lineStart, lineEnd, boxCenter, boxSize / 2, boxRot);
     }
 
     // 判断线段与 Box 是否相交
