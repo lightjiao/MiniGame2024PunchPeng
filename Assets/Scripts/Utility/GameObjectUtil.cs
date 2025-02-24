@@ -102,4 +102,15 @@ public static class GameObjectUtil
         if (obj == null) return;
         GameObject.Destroy(obj);
     }
+
+    public static void DestroyAllChild(this MonoBehaviour self)
+    {
+        if (self == null) return;
+
+        var transform = self.transform;
+        for (var i = transform.childCount - 1; i >= 0; i--)
+        {
+            GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
+        }
+    }
 }

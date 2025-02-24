@@ -136,4 +136,19 @@ public static class Vector3Util
         }
         return self.normalized * clampedMagnitude;
     }
+
+    public static Vector3 TryParse(string str)
+    {
+        var point = str.Split(',');
+        if (point.Length != 3)
+        {
+            Log.Error($"Vector3Util.TryParse: invalid format: {str}");
+            return default;
+        }
+
+        float.TryParse(point[0], out var x);
+        float.TryParse(point[1], out var y);
+        float.TryParse(point[2], out var z);
+        return new Vector3(x, y, z);
+    }
 }
