@@ -36,7 +36,7 @@ public class LineintersectBoxSATTest2 : MonoBehaviour
             {
                 var p1 = m_Points[i - 1];
                 var p2 = m_Points[i];
-                if (PhysicsUtil.LineintersectBoxSAT(p1, p2, box))
+                if (PhysicsUtil.LineIntersectBoxSAT(p1, p2, box))
                 {
                     result.Add((p1, p2));
                     Debug.Log($"{p1}, {p2}, {box.name}");

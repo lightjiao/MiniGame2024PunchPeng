@@ -37,16 +37,16 @@ public static class PhysicsUtil
                Mathf.Abs(localPoint.z) <= boxHalfSize.z;
     }
 
-    public static bool LineintersectBoxSAT(Vector3 lineStart, Vector3 lineEnd, BoxCollider box)
+    public static bool LineIntersectBoxSAT(Vector3 lineStart, Vector3 lineEnd, BoxCollider box)
     {
         if (box == null) return false;
 
         var (boxCenter, boxSize, boxRot) = box.GetBoxInfo();
-        return LineintersectBoxSAT(lineStart, lineEnd, boxCenter, boxSize / 2, boxRot);
+        return LineIntersectBoxSAT(lineStart, lineEnd, boxCenter, boxSize / 2, boxRot);
     }
 
     // 判断线段与 Box 是否相交
-    public static unsafe bool LineintersectBoxSAT(Vector3 lineStart, Vector3 lineEnd, Vector3 boxCenter, Vector3 boxHalfSize, Quaternion boxRot)
+    public static unsafe bool LineIntersectBoxSAT(Vector3 lineStart, Vector3 lineEnd, Vector3 boxCenter, Vector3 boxHalfSize, Quaternion boxRot)
     {
         var localVertices = stackalloc Vector3[8];
         localVertices[0] = new Vector3(-boxHalfSize.x, -boxHalfSize.y, -boxHalfSize.z);

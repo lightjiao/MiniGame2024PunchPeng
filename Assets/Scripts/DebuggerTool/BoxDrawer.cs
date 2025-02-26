@@ -50,7 +50,7 @@ public class BoxDrawer : MonoBehaviour
         Debug.DrawLine(p1, p2, Color.green, 20f);
         Debug.DrawRay(p1, (p2 - p1).normalized, Color.green, 10);
         var box = GetComponent<BoxCollider>();
-        var result = PhysicsUtil.LineintersectBoxSAT(p1, p2, box);
+        var result = PhysicsUtil.LineIntersectBoxSAT(p1, p2, box);
         var boxInfo = box.GetBoxInfo();
         //Log.Info($"{p1}, {p2}, {boxInfo.Item1}, {boxInfo.Item1}, {boxInfo.Item3}");
     }
